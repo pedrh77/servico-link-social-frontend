@@ -1,0 +1,324 @@
+
+body, h1, h2, h3, h4, p, ul, li, a, button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+.landing-page {
+  background-color: #f9fdfb;
+  color: #1e1e1e;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 0 40px;
+  height: 64px;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 6vh;
+  display: block;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav a,
+.nav button.signup {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.nav a {
+  color: #222;
+  background: none;
+  border: none;
+}
+
+.nav a.login {
+  color: #222;
+}
+
+.nav a:hover,
+.nav a.login:hover {
+  color: #174c3c;
+}
+
+.nav button.signup {
+  background-color: #174c3c;
+  color: white;
+  border: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav button.signup:hover {
+  background-color: #123c2e;
+}
+
+
+
+.nav a {
+  color: #222;
+  background: none;
+  border: none;
+}
+
+.nav a.login {
+  color: #222;
+}
+
+.nav a:hover,
+.nav a.login:hover {
+  color: #174c3c;
+}
+
+
+.nav button.signup {
+  background-color: #174c3c;
+  color: white;
+  border: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav button.signup:hover {
+  background-color: #123c2e;
+}
+/* Sobre nós */
+.about {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 40px;
+  gap: 40px;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.about-text p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.about-image {
+  width: 400px;
+  height: auto;
+}
+
+/* Parceiros */
+.partners {
+  padding: 40px;
+  text-align: center;
+}
+
+.partners h3 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.partner-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.partner-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  border-radius: 12px;
+  width: 150px;
+  text-align: center;
+}
+
+.partner-card img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.partner-link {
+  text-decoration: none;
+  color: #1c463a;
+  font-weight: 500;
+}
+
+
+.join {
+  background-color: #eaf6ef;
+  padding: 40px;
+  text-align: center;
+}
+
+.join h4 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.join p {
+  margin-bottom: 20px;
+}
+
+.join-button {
+  background-color: #1c463a;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.benefits {
+  padding: 60px 40px;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.benefits h3 {
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+
+.benefit-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.benefit-card {
+  background-color: #eaf6ef;
+  padding: 20px;
+  border-radius: 10px;
+  width: 250px;
+  text-align: left;
+}
+
+.benefit-card h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #1c463a;
+}
+
+.benefit-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.benefit-card li {
+  margin-bottom: 6px;
+}
+
+.plans {
+  padding: 60px 40px;
+  background-color: #f9fdfb;
+  text-align: center;
+}
+
+.plans h3 {
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+
+.plan-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.plan-card {
+  background-color: #eaf6ef;
+  padding: 20px;
+  border-radius: 10px;
+  width: 220px;
+}
+
+.plan-card h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #1c463a;
+}
+
+.plan-card p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.plan-button {
+  background-color: #1c463a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.footer {
+  background-color: #ffffff;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.footer h4 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.footer p {
+  margin-bottom: 20px;
+}
+
+.donate-button {
+  background-color: #1c463a;
+  color: #ffffff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
