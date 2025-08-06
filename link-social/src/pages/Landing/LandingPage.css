@@ -1,244 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap');
 
-body, h1, h2, h3, h4, p, ul, li, a, button {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+}
+
+.manjari-thin {
+  font-family: 'Manjari', sans-serif;
+  font-weight: 100;
+}
+
+.manjari-regular {
+  font-family: 'Manjari', sans-serif;
+  font-weight: 400;
+}
+
+.manjari-bold {
+  font-family: 'Manjari', sans-serif;
+  font-weight: 700;
+}
+
+body, html {
+  font-family: 'Manjari', sans-serif;
+  color: #333;
+  background-color: #fafafa;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .landing-page {
-  background-color: #f9fdfb;
-  color: #1e1e1e;
+  width: 100%;
 }
 
+/* HEADER */
 .header {
   display: flex;
+  justify-content: center; /* centraliza o conteúdo horizontalmente */
+  background-color: #E7F5EE;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 0; /* remove padding aqui, pois o interno controla */
+}
+
+/* Conteúdo interno do header com largura máxima e espaçamento lateral */
+.header-content {
+  width: 100%;
+  max-width: 1200px; /* largura máxima */
+  padding: 20px 40px; /* espaçamento interno */
+  display: flex;
   align-items: center;
-  justify-content: space-between; 
-  padding: 0 40px;
-  height: 64px;
-  background-color: white;
-  border-bottom: 1px solid #e5e5e5;
+  justify-content: space-between; /* logo esquerda, nav direita */
   box-sizing: border-box;
+}
+
+/* Logo */
+.logo {
+  height: 40px;
+}
+
+/* Navegação */
+.nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav a {
+  font-weight: 500;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: #007acc;
+}
+
+.nav .login {
+  font-weight: 600;
+  color: #2F855A;
+}
+
+.signup {
+  background-color: #2F855A;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup:hover {
+  background-color: #005fa3;
+}
+
+/* Restante do CSS mantido igual */
+
+.about {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 60px 40px;
+  background-color: #f5f5f5;
+  align-items: center;
+}
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: 6vh;
-  display: block;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.nav a,
-.nav button.signup {
-  font-size: 16px;
-  font-weight: 500;
-  padding: 8px 12px;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.nav a {
-  color: #222;
-  background: none;
-  border: none;
-}
-
-.nav a.login {
-  color: #222;
-}
-
-.nav a:hover,
-.nav a.login:hover {
-  color: #174c3c;
-}
-
-.nav button.signup {
-  background-color: #174c3c;
-  color: white;
-  border: none;
-  font-weight: bold;
-  padding: 8px 16px;
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav button.signup:hover {
-  background-color: #123c2e;
-}
-
-
-
-.nav a {
-  color: #222;
-  background: none;
-  border: none;
-}
-
-.nav a.login {
-  color: #222;
-}
-
-.nav a:hover,
-.nav a.login:hover {
-  color: #174c3c;
-}
-
-
-.nav button.signup {
-  background-color: #174c3c;
-  color: white;
-  border: none;
-  font-weight: bold;
-  padding: 8px 16px;
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav button.signup:hover {
-  background-color: #123c2e;
-}
-/* Sobre nós */
-.about {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 60px 40px;
-  gap: 40px;
-}
-
 .about-text {
   flex: 1;
+  min-width: 300px;
 }
 
 .about-text h2 {
-  font-size: 28px;
+  font-size: 32px;
   margin-bottom: 20px;
 }
 
 .about-text p {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   line-height: 1.6;
 }
 
-.about-image {
-  width: 400px;
-  height: auto;
+.about-image img {
+  width: 100%;
+  max-width: 400px;
 }
 
-/* Parceiros */
 .partners {
-  padding: 40px;
-  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f8f8;
 }
 
 .partners h3 {
-  font-size: 24px;
-  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 40px;
 }
 
 .partner-cards {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  justify-content: center;
+  gap: 30px;
 }
 
 .partner-card {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  padding: 20px;
+  width: 220px;
+  background-color: #fff;
   border-radius: 12px;
-  width: 150px;
+  padding: 20px;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.partner-card img {
-  width: 100%;
+.partner-logo-placeholder img {
+  max-width: 100%;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #E7F5EE;
+  color: #2F855A;
+  padding: 8px 16px;
+  border-radius: 999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.estrela {
+  width: 18px;
+  height: 18px;
+}
+
+.badge-text {
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .partner-link {
+  color: #2e7d32;
   text-decoration: none;
-  color: #1c463a;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
+.estrela {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
 
 .join {
-  background-color: #eaf6ef;
-  padding: 40px;
+  padding: 60px 40px;
+  background-color: #E7F5EE;
   text-align: center;
 }
 
 .join h4 {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.join p {
-  margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 12px;
 }
 
 .join-button {
-  background-color: #1c463a;
-  color: #ffffff;
-  border: none;
+  margin-top: 20px;
   padding: 12px 20px;
-  border-radius: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2F855A;
+  color: white;
   font-weight: bold;
   cursor: pointer;
 }
 
+.join-button:hover {
+  background-color: #005fa3;
+}
 
 .benefits {
   padding: 60px 40px;
   background-color: #ffffff;
-  text-align: center;
 }
 
 .benefits h3 {
-  font-size: 24px;
+  text-align: center;
   margin-bottom: 40px;
 }
 
 .benefit-cards {
   display: flex;
-  justify-content: center;
-  gap: 30px;
   flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
 }
 
 .benefit-card {
-  background-color: #eaf6ef;
-  padding: 20px;
-  border-radius: 10px;
-  width: 250px;
-  text-align: left;
+  background-color: #f9f9f9;
+  padding: 24px;
+  border-radius: 8px;
+  width: 280px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
 .benefit-card h4 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #1c463a;
+  margin-bottom: 12px;
 }
 
 .benefit-card ul {
@@ -247,78 +281,132 @@ body, h1, h2, h3, h4, p, ul, li, a, button {
 }
 
 .benefit-card li {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.benefit-card li::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  color: #2F855A;
 }
 
 .plans {
   padding: 60px 40px;
-  background-color: #f9fdfb;
-  text-align: center;
+  background-color: #f5f5f5;
 }
 
 .plans h3 {
-  font-size: 24px;
+  text-align: center;
   margin-bottom: 40px;
 }
 
 .plan-cards {
   display: flex;
-  justify-content: center;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
 }
 
 .plan-card {
-  background-color: #eaf6ef;
-  padding: 20px;
-  border-radius: 10px;
-  width: 220px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 260px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 
 .plan-card h4 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #1c463a;
+  margin-bottom: 12px;
 }
 
 .plan-card p {
   font-size: 14px;
-  margin-bottom: 20px;
-  line-height: 1.4;
+  color: #555;
+  margin-bottom: 16px;
 }
 
 .plan-button {
-  background-color: #1c463a;
-  color: #ffffff;
-  border: none;
+  background-color: #2F855A;
+  color: white;
   padding: 10px 16px;
-  border-radius: 8px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
 
+.plan-button:hover {
+  background-color: #005fa3;
+}
 
 .footer {
-  background-color: #ffffff;
-  padding: 60px 40px;
+  background-color: #2F855A;
+  color: white;
   text-align: center;
+  padding: 40px 20px;
 }
 
 .footer h4 {
-  font-size: 20px;
   margin-bottom: 12px;
+  font-size: 20px;
 }
 
 .footer p {
-  margin-bottom: 20px;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  line-height: 1.5;
 }
 
 .donate-button {
-  background-color: #1c463a;
-  color: #ffffff;
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
   border: none;
-  padding: 14px 24px;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.donate-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+  .header-content {
+    padding: 20px 20px; /* menos padding no mobile */
+    max-width: 100%; /* ocupar toda largura no mobile */
+  }
+
+  .logo {
+    height: 36px; /* logo menor no mobile */
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-image img {
+    margin-top: 20px;
+  }
+
+  .partner-cards,
+  .benefit-cards,
+  .plan-cards {
+    flex-direction: column;
+    align-items: center;
+  }
 }
