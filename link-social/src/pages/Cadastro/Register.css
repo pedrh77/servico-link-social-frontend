@@ -35,7 +35,6 @@
 }
 
 .register-container p {
-  color: #555;
   margin-bottom: 2rem;
   font-size: 0.95rem;
 }
@@ -97,4 +96,13 @@
 
 .login-link a:hover {
   text-decoration: underline;
+}
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
 }

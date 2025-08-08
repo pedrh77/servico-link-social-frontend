@@ -62,7 +62,7 @@ export default function Home() {
       </section>
 
 
-      {/* PARCEIROS DA ONG */}
+
       <section className="partners" id="parceiros">
         <h3 className="manjari-bold">Parceiros Premium</h3>
         <div className="partner-cards">
