@@ -67,11 +67,11 @@ export default function Home() {
         <h3 className="manjari-bold">Parceiros Premium</h3>
         <div className="partner-cards">
           {[
-            { name: "ABRAPEC", logo: "/img/ABRAPEC.svg" },
-            { name: "Obreiros do Bem", logo: "/img/OBREIROS.svg" },
-            { name: "It's Sweet", logo: "/img/ITSWEET.svg" },
-            { name: "Amarello", logo: "/img/CERVEJARIA.svg" },
-            { name: "Adevrip", logo: "/img/ADEVIR.svg" },
+              { name: "ABRAPEC", logo: "/img/partner-01.svg" },
+              { name: "Obreiros do Bem", logo: "/img/partner-02.svg" },
+              { name: "It's Sweet", logo: "/img/partner-03.svg" },
+              { name: "Amarello", logo: "/img/partner-04.svg" },
+              { name: "Adevrip", logo: "/img/partner-05.svg" },
           ].map(({ name, logo }) => (
             <div key={name} className="partner-card">
               <div className="partner-logo-placeholder">
