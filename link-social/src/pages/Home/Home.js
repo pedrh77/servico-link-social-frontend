@@ -1,21 +1,43 @@
-import React from "react";
-import "./LandingPage.css";
+import React, { useEffect } from "react";
+import "./Home.css";
 
-export default function LandingPage() {
+
+
+export default function Home() {
+
+  useEffect(() => {
+  const toggleBtn = document.getElementById("menu-toggle");
+  const navMenu = document.getElementById("nav-menu");
+
+  const toggleMenu = () => {
+    navMenu.classList.toggle("show");
+  };
+
+  toggleBtn.addEventListener("click", toggleMenu);
+
+  
+  return () => {
+    toggleBtn.removeEventListener("click", toggleMenu);
+  };
+}, []);
   return (
     <div className="landing-page manjari-regular">
       <header className="header">
-        <div className="header-left">
-          <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-        </div>
+        <div className="header-content">
+          <div className="header-left">
+            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
+          </div>
 
-        <nav className="nav">
-          <a href="#parceiros">Parceiros</a>
-          <a href="#beneficios">Benefícios</a>
-          <a href="#planos">Planos</a>
-          <a href="#login" className="login">Entrar</a>
-          <button className="signup">Cadastrar</button>
-        </nav>
+          <button className="hamburger" id="menu-toggle">☰</button>
+
+          <nav className="nav" id="nav-menu">
+            <a href="#parceiros">Parceiros</a>
+            <a href="#beneficios">Benefícios</a>
+            <a href="#planos">Planos</a>
+            <a href="#login" className="login">Entrar</a>
+            <button className="signup">Cadastrar</button>
+          </nav>
+        </div>
       </header>
 
       <section className="about" id="sobre">
@@ -46,19 +68,19 @@ export default function LandingPage() {
         <div className="partner-cards">
           {[
             { name: "ABRAPEC", logo: "/img/ABRAPEC.svg" },
-            { name: "Obreiro do Bem", logo: "/img/OBREIROS.svg" },
+            { name: "Obreiros do Bem", logo: "/img/OBREIROS.svg" },
             { name: "It's Sweet", logo: "/img/ITSWEET.svg" },
             { name: "Amarello", logo: "/img/CERVEJARIA.svg" },
             { name: "Adevrip", logo: "/img/ADEVIR.svg" },
           ].map(({ name, logo }) => (
             <div key={name} className="partner-card">
               <div className="partner-logo-placeholder">
-                <img src={logo}/>
+                <img src={logo} alt={name}/>
               </div>
               <div className="badge-container">
                 <div className="badge">
                   <img className="estrela" src="/img/estrela.svg" alt="Estrela" />
-                  <span className="badge-text">15% Lorem Ipsum</span>
+                  <span className="badge-text">Benefício</span>
                 </div>
               </div>
             </div>

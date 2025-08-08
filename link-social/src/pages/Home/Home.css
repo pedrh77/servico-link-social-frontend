@@ -1,31 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  max-width: none;
 }
 
-.manjari-thin {
-  font-family: 'Manjari', sans-serif;
-  font-weight: 100;
-}
-
-.manjari-regular {
-  font-family: 'Manjari', sans-serif;
-  font-weight: 400;
-}
-
-.manjari-bold {
-  font-family: 'Manjari', sans-serif;
-  font-weight: 700;
-}
-
-body, html {
+body,
+html {
   font-family: 'Manjari', sans-serif;
   color: #333;
   background-color: #fafafa;
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 a {
@@ -33,49 +19,50 @@ a {
   color: inherit;
 }
 
+/* GERAL */
 .landing-page {
+  margin: 0;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* HEADER */
 .header {
+  width: 100vw;
   display: flex;
-  justify-content: center; /* centraliza o conteúdo horizontalmente */
+  justify-content: center;
   background-color: #E7F5EE;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 0; /* remove padding aqui, pois o interno controla */
+  padding: 0;
 }
 
-/* Conteúdo interno do header com largura máxima e espaçamento lateral */
 .header-content {
   width: 100%;
-  max-width: 1200px; /* largura máxima */
-  padding: 20px 40px; /* espaçamento interno */
+  padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* logo esquerda, nav direita */
+  justify-content: space-between;
+  flex-wrap: wrap;
   box-sizing: border-box;
 }
 
-/* Logo */
 .logo {
   height: 40px;
 }
 
-/* Navegação */
 .nav {
   display: flex;
   gap: 24px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .nav a {
   font-weight: 500;
   color: #555;
-  text-decoration: none;
   transition: color 0.2s ease;
 }
 
@@ -103,14 +90,25 @@ a {
   background-color: #005fa3;
 }
 
-/* Restante do CSS mantido igual */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #2F855A;
+}
 
+/* SOBRE */
 .about {
   display: flex;
   flex-wrap: wrap;
-  padding: 60px 40px;
+  padding: 60px 5vw;
   background-color: #f5f5f5;
+  justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .about-content {
@@ -118,39 +116,70 @@ a {
   flex-wrap: wrap;
   gap: 40px;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .about-text {
-  flex: 1;
-  min-width: 300px;
+  flex: 1 1 500px;
+  max-width: 700px;
 }
 
 .about-text h2 {
-  font-size: 32px;
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
 .about-text p {
   margin-bottom: 12px;
   line-height: 1.6;
+  font-size: 1.125rem;
+}
+
+.about-image {
+  flex: 1 1 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
 }
 
 .about-image img {
   width: 100%;
-  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #fff;
 }
 
+@media (max-width: 768px) {
+  .about {
+    padding: 40px 4vw;
+  }
+
+  .about-text h2 {
+    font-size: 2rem;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+  }}
+
+/* PARCEIROS */
 .partners {
-  padding: 60px 20px;
+  padding: 60px 0;
   background-color: #f8f8f8;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .partners h3 {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 40px;
+  color: #333;
 }
 
 .partner-cards {
@@ -158,24 +187,39 @@ a {
   flex-wrap: wrap;
   justify-content: center;
   gap: 30px;
+  padding: 0 20px;
 }
 
 .partner-card {
-  width: 220px;
+  width: 240px;
   background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px 20px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.partner-card:hover {
+  transform: translateY(-5px);
+}
+
+.partner-logo-placeholder {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .partner-logo-placeholder img {
   max-width: 100%;
-  height: auto;
-  margin-bottom: 16px;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .badge-container {
@@ -183,6 +227,7 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-top: auto;
 }
 
 .badge {
@@ -195,11 +240,19 @@ a {
   padding: 8px 16px;
   border-radius: 999px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.badge:hover {
+  background-color: #d4f4e4;
 }
 
 .estrela {
-  width: 18px;
-  height: 18px;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
 }
 
 .badge-text {
@@ -209,21 +262,17 @@ a {
 
 .partner-link {
   color: #2e7d32;
-  text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
 }
 
-.estrela {
-  width: 35px;
-  height: 35px;
-  object-fit: contain;
-}
-
+/* JUNTAR */
 .join {
-  padding: 60px 40px;
+  padding: 60px 20px;
   background-color: #E7F5EE;
   text-align: center;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .join h4 {
@@ -233,12 +282,13 @@ a {
 
 .join-button {
   margin-top: 20px;
-  padding: 12px 20px;
+  padding: 14px 24px;
   border: none;
   border-radius: 6px;
   background-color: #2F855A;
   color: white;
   font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
 }
 
@@ -246,9 +296,12 @@ a {
   background-color: #005fa3;
 }
 
+/* BENEFÍCIOS */
 .benefits {
-  padding: 60px 40px;
+  padding: 60px 0;
   background-color: #ffffff;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .benefits h3 {
@@ -261,6 +314,7 @@ a {
   flex-wrap: wrap;
   gap: 32px;
   justify-content: center;
+  padding: 0 20px;
 }
 
 .benefit-card {
@@ -268,7 +322,7 @@ a {
   padding: 24px;
   border-radius: 8px;
   width: 280px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .benefit-card h4 {
@@ -293,9 +347,12 @@ a {
   color: #2F855A;
 }
 
+/* PLANOS */
 .plans {
-  padding: 60px 40px;
+  padding: 60px 0;
   background-color: #f5f5f5;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .plans h3 {
@@ -308,6 +365,7 @@ a {
   flex-wrap: wrap;
   gap: 32px;
   justify-content: center;
+  padding: 0 20px;
 }
 
 .plan-card {
@@ -317,7 +375,7 @@ a {
   width: 260px;
   padding: 24px;
   text-align: center;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
 .plan-card h4 {
@@ -344,11 +402,13 @@ a {
   background-color: #005fa3;
 }
 
+/* RODAPÉ */
 .footer {
   background-color: #2F855A;
   color: white;
   text-align: center;
   padding: 40px 20px;
+  width: 100%;
 }
 
 .footer h4 {
@@ -376,37 +436,45 @@ a {
   background-color: #e0e0e0;
 }
 
-/* ===== MOBILE ===== */
+/* MOBILE */
 @media (max-width: 768px) {
-
-  .header-content {
-    padding: 20px 20px; /* menos padding no mobile */
-    max-width: 100%; /* ocupar toda largura no mobile */
-  }
-
-  .logo {
-    height: 36px; /* logo menor no mobile */
+  .hamburger {
+    display: block;
   }
 
   .nav {
-    flex-wrap: wrap;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+    background-color: #E7F5EE;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav.show {
+    display: flex;
+  }
+
+  .nav a {
+    width: 100%;
+  }
+
+  .header-content {
     justify-content: center;
   }
 
   .about-content {
     flex-direction: column;
-    text-align: center;
+    align-items: center;
   }
 
   .about-image img {
-    margin-top: 20px;
-  }
-
-  .partner-cards,
-  .benefit-cards,
-  .plan-cards {
-    flex-direction: column;
-    align-items: center;
+    max-width: 100%;
+    height: auto;
   }
 }
