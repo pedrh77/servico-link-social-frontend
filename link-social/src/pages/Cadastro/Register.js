@@ -65,10 +65,30 @@ export default function RegisterPage() {
 
         <form className="register-form" onSubmit={handleSubmit}>
           <label>
-            Nome completo
+            Tipo de usuário
+            <select
+              value={tipoUsuario}
+              onChange={(e) => {
+                setTipoUsuario(e.target.value);
+                setCpfCnpj("");
+                setNome("");
+              }}
+              required
+            >
+              <option value="Doador">Doador</option>
+              <option value="ONG">ONG</option>
+            </select>
+          </label>
+
+          <label>
+            {tipoUsuario === "ONG" ? "Nome da ONG" : "Seu nome completo"}
             <input
               type="text"
-              placeholder="Digite seu nome"
+              placeholder={
+                tipoUsuario === "ONG"
+                  ? "Digite o nome da ONG"
+                  : "Digite seu nome"
+              }
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               required
@@ -95,21 +115,6 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </label>
-
-          <label>
-            Tipo de usuário
-            <select
-              value={tipoUsuario}
-              onChange={(e) => {
-                setTipoUsuario(e.target.value);
-                setCpfCnpj("");
-              }}
-              required
-            >
-              <option value="Doador">Doador</option>
-              <option value="ONG">ONG</option>
-            </select>
           </label>
 
           <label>
