@@ -22,7 +22,7 @@ export default function LoginPage() {
           <button type="submit" className="login-button">Entrar</button>
 
           <p className="signup-link">
-            Não tem uma conta? <a href="#">Cadastre-se</a>
+            Não tem uma conta? <a href="/register">Cadastre-se</a>
           </p>
         </form>
       </main>

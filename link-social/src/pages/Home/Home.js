@@ -34,8 +34,8 @@ export default function Home() {
             <a href="#parceiros">Parceiros</a>
             <a href="#beneficios">Benefícios</a>
             <a href="#planos">Planos</a>
-            <a href="#login" className="login">Entrar</a>
-            <button className="signup">Cadastrar</button>
+            <a href="/login" className="login">Entrar</a>
+            <button className="signup"  onClick={() => window.location.href = '/register'}>Cadastrar</button>
           </nav>
         </div>
       </header>
