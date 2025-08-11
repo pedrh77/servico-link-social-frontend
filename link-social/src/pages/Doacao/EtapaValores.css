@@ -1,0 +1,155 @@
+ .container {
+     box-sizing: border-box;
+ }
+
+
+ .grid-cards {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+     gap: 28px 24px;
+     padding: 20px 20px 30px 20px;
+     align-items: stretch;
+ }
+
+
+ .card-doacao {
+     background: #fff;
+     border: 1px solid #eaeaea;
+     border-radius: 8px;
+     padding: 20px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     transition: transform 0.2s ease;
+     height: 100%;
+     box-sizing: border-box;
+ }
+
+ .card-doacao:hover {
+     transform: scale(1.03);
+     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+ }
+
+
+ .acoes-doacao {
+     display: flex;
+     gap: 12px;
+     margin-top: 14px;
+     justify-content: center;
+     width: 100%;
+ }
+
+
+ .btn-escolher {
+     background-color: #247a58;
+     color: white;
+     padding: 10px 20px;
+     border-radius: 24px;
+     border: none;
+     cursor: pointer;
+     font-size: 15px;
+     min-width: 110px;
+     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+     box-shadow: none;
+     user-select: none;
+ }
+
+ .btn-escolher:hover {
+     background-color: #1e6047;
+ }
+
+ .btn-escolher.ativo {
+     background-color: #1b4f3b;
+     box-shadow: 0 0 12px 3px rgba(27, 79, 59, 0.6);
+ }
+
+
+ .opcoes-extra {
+     max-height: 0;
+     overflow: hidden;
+     transition: max-height 280ms ease, opacity 200ms ease;
+     opacity: 0;
+     width: 100%;
+     margin-top: 14px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     pointer-events: none;
+ }
+
+ .opcoes-extra.expandido {
+     opacity: 1;
+     max-height: 220px;
+     pointer-events: auto;
+ }
+
+
+ .texto-meses {
+     font-weight: 600;
+     margin-bottom: 10px;
+     color: #247a58;
+     font-size: 16px;
+     user-select: none;
+ }
+
+
+ .opcoes-meses {
+     display: flex;
+     gap: 12px;
+     flex-wrap: wrap;
+     justify-content: center;
+     width: 100%;
+ }
+
+
+ .btn-extra {
+     background-color: #f2f2f2;
+     color: #247a58;
+     font-size: 14px;
+     padding: 7px 14px;
+     border-radius: 18px;
+     border: 1.5px solid #247a58;
+     cursor: pointer;
+     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+     user-select: none;
+ }
+
+ .btn-extra:hover {
+     background-color: #e8f5f0;
+     box-shadow: 0 0 6px rgba(36, 122, 88, 0.3);
+ }
+
+ .btn-extra.selecionado {
+     background-color: #247a58;
+     color: white;
+     border-color: #1e6047;
+     box-shadow: 0 0 8px #1e6047cc;
+ }
+
+
+ .btn-avancar-container {
+     margin-top: 32px;
+     text-align: center;
+     padding: 20px
+ }
+
+ .botao-avancar {
+     background-color: #247a58;
+     color: white;
+     font-weight: 700;
+     padding: 14px 36px;
+     font-size: 17px;
+     border: none;
+     border-radius: 28px;
+     cursor: pointer;
+     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+     user-select: none;
+     box-shadow: 0 4px 8px rgba(36, 122, 88, 0.5);
+
+ }
+
+ .botao-avancar:hover {
+     background-color: #1e6047;
+     box-shadow: 0 6px 12px rgba(30, 96, 71, 0.8);
+ }

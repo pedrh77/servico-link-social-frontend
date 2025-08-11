@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import LoginPage from './pages/Login/Login';
 import RegisterPage from './pages/Cadastro/Register';
 import EtapaEscolha from './pages/Doacao/EtapaEscolha';
+import EtapaValores from "./pages/Doacao/EtapaValores";
 
 export default function App() {
   return (
@@ -15,7 +16,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/etapa" element={<EtapaEscolha />} />
-
+        <Route path="/valores" element={<EtapaValores />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter >

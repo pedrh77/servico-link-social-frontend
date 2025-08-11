@@ -19,14 +19,14 @@ a {
   color: inherit;
 }
 
-/* GERAL */
+ 
 .landing-page {
   margin: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* HEADER */
+ 
 .header {
   width: 100vw;
   display: flex;
@@ -99,7 +99,7 @@ a {
   color: #2F855A;
 }
 
-/* SOBRE */
+ 
 .about {
   display: flex;
   flex-wrap: wrap;
@@ -167,7 +167,7 @@ a {
     font-size: 1rem;
   }}
 
-/* PARCEIROS */
+ 
 .partners {
   padding: 60px 0;
   background-color: #f8f8f8;
@@ -266,7 +266,7 @@ a {
   font-size: 0.9rem;
 }
 
-/* JUNTAR */
+ 
 .join {
   padding: 60px 20px;
   background-color: #E7F5EE;
@@ -296,7 +296,7 @@ a {
   background-color: #005fa3;
 }
 
-/* BENEFÍCIOS */
+ 
 .benefits {
   padding: 60px 0;
   background-color: #ffffff;
@@ -347,7 +347,7 @@ a {
   color: #2F855A;
 }
 
-/* PLANOS */
+ 
 .plans {
   padding: 60px 0;
   background-color: #f5f5f5;
@@ -402,7 +402,7 @@ a {
   background-color: #005fa3;
 }
 
-/* RODAPÉ */
+ 
 .footer {
   background-color: #2F855A;
   color: white;
@@ -436,7 +436,7 @@ a {
   background-color: #e0e0e0;
 }
 
-/* MOBILE */
+ 
 @media (max-width: 768px) {
   .hamburger {
     display: block;
