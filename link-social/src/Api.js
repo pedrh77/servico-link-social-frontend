@@ -61,16 +61,23 @@ export async function getUsuarioAutenticado() {
   return data;
 }
 
-export async function getComToken(endpoint, options = {}) {
-  const token = getToken();
-  const headers = {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-  return response.json();
+
+export async function getBeneficiosPorOngId(idOng) {
+  try {
+    const response = await fetch(`${API_URL}/api/Beneficio/Ong/${idOng}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar benefícios:", error);
+    return [];
+  }
 }
