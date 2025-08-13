@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { getUsuarioAutenticado, getBeneficiosPorOngId } from "../../Api";
 import "./Usuario.css";
@@ -15,6 +14,8 @@ export default function Usuario() {
   const [showEditarDados, setShowEditarDados] = useState(true);
   const [showCadastroBeneficios, setShowCadastroBeneficios] = useState(false);
   const [showBeneficiosAtivos, setShowBeneficiosAtivos] = useState(false);
+  const [logado, setLogado] = useState(true);
+  const [menuAberto, setMenuAberto] = useState(false);
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -31,6 +32,26 @@ export default function Usuario() {
     carregarUsuario();
   }, []);
 
+const [doacoes, setDoacoes] = useState([]);
+
+// useEffect para carregar doações do usuário (somente tipo 0)
+useEffect(() => {
+  async function carregarDoacoes() {
+    if (tipoUsuario === 0 && dados?.id) {
+      try {
+        // Substitua pelo fetch real das doações
+        const response = await fetch(`https://localhost:7148/api/Doacoes/usuario/${dados.id}`);
+        if (!response.ok) throw new Error("Erro ao carregar doações");
+        const doacoesData = await response.json();
+        setDoacoes(doacoesData);
+      } catch (error) {
+        console.error("Erro ao carregar doações:", error);
+      }
+    }
+  }
+  carregarDoacoes();
+}, [tipoUsuario, dados?.id]);
+
   useEffect(() => {
     let ativo = true;
     async function carregarBeneficios() {
@@ -44,7 +65,9 @@ export default function Usuario() {
       }
     }
     carregarBeneficios();
-    return () => { ativo = false };
+    return () => {
+      ativo = false;
+    };
   }, [tipoUsuario, dados?.id]);
 
   function handleChange(e) {
@@ -58,6 +81,12 @@ export default function Usuario() {
 
   function handleCancelar() {
     setEditando(false);
+  }
+
+  function handleLogout() {
+    sessionStorage.removeItem("token");
+    setLogado(false);
+    window.location.href = "/login";
   }
 
   async function criarBeneficio() {
@@ -97,10 +126,6 @@ export default function Usuario() {
     }
   }
 
-  if (loading) return <p>Carregando dados...</p>;
-  if (error) return <p className="error">{error}</p>;
-  if (!dados) return <p>Dados do usuário não disponíveis</p>;
-
   const toggleSection = (section) => {
     switch (section) {
       case "editarDados":
@@ -117,209 +142,294 @@ export default function Usuario() {
     }
   };
 
+  if (loading) return <p>Carregando dados...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!dados) return <p>Dados do usuário não disponíveis</p>;
+
   return (
-    <div className="usuario-container">
-      <h2 className="usuario-titulo manjari-bold">Minha Conta</h2>
+    <div className="usuario-page">
+      {/* HEADER FIXO */}
+      <header className="header">
+        <div className="header-content">
+          <div className="header-left">
+            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
+          </div>
 
-      <section className="accordion-section">
-        <button
-          className="accordion-header"
-          onClick={() => toggleSection("editarDados")}
-          type="button"
-          aria-expanded={showEditarDados}
-          aria-controls="editarDados-content"
-        >
-          Editar Dados
-          <span className="accordion-icon">{showEditarDados ? "-" : "+"}</span>
-        </button>
-        {showEditarDados && (
-          <form
-            id="editarDados-content"
-            className="form-dados"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSalvar();
-            }}
+          <button
+            className="hamburger"
+            id="menu-toggle"
+            onClick={() => setMenuAberto(!menuAberto)}
           >
-            <label>
-              Nome Completo:
-              <input
-                name="nome"
-                value={dados.nome ?? ""}
-                disabled={!editando}
-                onChange={handleChange}
-                className={`input-dados ${editando ? "input-editando" : ""}`}
-                required
-                autoComplete="name"
-              />
-            </label>
+            ☰
+          </button>
 
-            <label>
-              E-mail:
-              <input
-                name="email"
-                type="email"
-                value={dados.email ?? ""}
-                disabled={!editando}
-                onChange={handleChange}
-                className={`input-dados ${editando ? "input-editando" : ""}`}
-                required
-                autoComplete="email"
-              />
-            </label>
-
-            <label>
-              Telefone:
-              <input
-                name="telefone"
-                value={dados.telefone ?? ""}
-                disabled={!editando}
-                onChange={handleChange}
-                className={`input-dados ${editando ? "input-editando" : ""}`}
-                required
-                autoComplete="tel"
-              />
-            </label>
-
-            {tipoUsuario === 0 && (
-              <label>
-                CPF:
-                <input
-                  name="cpf"
-                  value={dados.cpf ?? ""}
-                  disabled={!editando}
-                  onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""}`}
-                  required
-                  autoComplete="off"
-                />
-              </label>
-            )}
-
-            {tipoUsuario === 1 && (
-              <label>
-                CNPJ:
-                <input
-                  name="cnpj"
-                  value={dados.cnpj ?? ""}
-                  disabled={!editando}
-                  onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""}`}
-                  required
-                  autoComplete="off"
-                />
-              </label>
-            )}
-
-            {!editando ? (
-              <button
-                type="button"
-                className="btn-editar"
-                onClick={() => setEditando(true)}
-              >
-                Editar Dados
-              </button>
+          <nav className={`nav ${menuAberto ? "show" : ""}`} id="nav-menu">
+            {logado ? (
+              <>
+                <button className="logout-button" onClick={handleLogout}>
+                  Sair
+                </button>
+              </>
             ) : (
-              <div className="botoes-salvar-cancelar">
-                <button type="submit" className="btn-salvar">
-                  Salvar
-                </button>
+              <>
+                <a href="/login" className="login">
+                  Entrar
+                </a>
                 <button
-                  type="button"
-                  className="btn-cancelar"
-                  onClick={handleCancelar}
+                  className="signup"
+                  onClick={() => (window.location.href = "/register")}
                 >
-                  Cancelar
+                  Cadastrar
                 </button>
-              </div>
+              </>
             )}
-          </form>
-        )}
-      </section>
+          </nav>
+        </div>
+      </header>
 
-      {tipoUsuario === 1 && (
+      {/* CONTEÚDO */}
+      <div className="usuario-container">
+        {/* EDITAR DADOS */}
         <section className="accordion-section">
           <button
             className="accordion-header"
-            onClick={() => toggleSection("cadastroBeneficios")}
+            onClick={() => toggleSection("editarDados")}
             type="button"
-            aria-expanded={showCadastroBeneficios}
-            aria-controls="cadastroBeneficios-content"
+            aria-expanded={showEditarDados}
+            aria-controls="editarDados-content"
           >
-            Cadastro Benefícios
+            Editar Dados
             <span className="accordion-icon">
-              {showCadastroBeneficios ? "-" : "+"}
+              {showEditarDados ? "-" : "+"}
             </span>
           </button>
-          {showCadastroBeneficios && (
+          {showEditarDados && (
             <form
-              id="cadastroBeneficios-content"
+              id="editarDados-content"
+              className="form-dados"
               onSubmit={(e) => {
                 e.preventDefault();
-                criarBeneficio();
+                handleSalvar();
               }}
-              className="form-beneficio"
             >
               <label>
-                Descrição:
+                Nome Completo:
                 <input
-                  type="text"
-                  value={descricaoBeneficio}
-                  onChange={(e) => setDescricaoBeneficio(e.target.value)}
+                  name="nome"
+                  value={dados.nome ?? ""}
+                  disabled={!editando}
+                  onChange={handleChange}
+                  className={`input-dados ${editando ? "input-editando" : ""
+                    }`}
                   required
                 />
               </label>
+
               <label>
-                Valor:
+                E-mail:
                 <input
-                  type="number"
-                  step="0.01"
-                  value={valorBeneficio}
-                  onChange={(e) => setValorBeneficio(e.target.value)}
+                  name="email"
+                  type="email"
+                  value={dados.email ?? ""}
+                  disabled={!editando}
+                  onChange={handleChange}
+                  className={`input-dados ${editando ? "input-editando" : ""
+                    }`}
                   required
                 />
               </label>
-              <button type="submit" className="btn-criar-beneficio">
-                Criar Benefício
-              </button>
+
+              <label>
+                Telefone:
+                <input
+                  name="telefone"
+                  value={dados.telefone ?? ""}
+                  disabled={!editando}
+                  onChange={handleChange}
+                  className={`input-dados ${editando ? "input-editando" : ""
+                    }`}
+                  required
+                />
+              </label>
+
+              {tipoUsuario === 0 && (
+                <label>
+                  CPF:
+                  <input
+                    name="cpf"
+                    value={dados.cpf ?? ""}
+                    disabled={!editando}
+                    onChange={handleChange}
+                    className={`input-dados ${editando ? "input-editando" : ""
+                      }`}
+                    required
+                  />
+                </label>
+              )}
+
+              {tipoUsuario === 1 && (
+                <label>
+                  CNPJ:
+                  <input
+                    name="cnpj"
+                    value={dados.cnpj ?? ""}
+                    disabled={!editando}
+                    onChange={handleChange}
+                    className={`input-dados ${editando ? "input-editando" : ""
+                      }`}
+                    required
+                  />
+                </label>
+              )}
+
+              {!editando ? (
+                <button
+                  type="button"
+                  className="btn-editar"
+                  onClick={() => setEditando(true)}
+                >
+                  Editar Dados
+                </button>
+              ) : (
+                <div className="botoes-salvar-cancelar">
+                  <button type="submit" className="btn-salvar">
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-cancelar"
+                    onClick={handleCancelar}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
             </form>
           )}
         </section>
-      )}
 
-      {tipoUsuario === 1 && (
-        <section className="accordion-section">
-          <button
-            className="accordion-header"
-            onClick={() => toggleSection("beneficiosAtivos")}
-            type="button"
-            aria-expanded={showBeneficiosAtivos}
-            aria-controls="beneficiosAtivos-content"
-          >
-            Benefícios Ativos
-            <span className="accordion-icon">
-              {showBeneficiosAtivos ? "-" : "+"}
-            </span>
-          </button>
-          {showBeneficiosAtivos && (
-            <div id="beneficiosAtivos-content" className="lista-beneficios-container">
-              {beneficios.length === 0 ? (
-                <p>Você ainda não possui benefícios cadastrados.</p>
+        {/* CADASTRAR BENEFÍCIO */}
+        {tipoUsuario === 1 && (
+          <section className="accordion-section">
+            <button
+              className="accordion-header"
+              onClick={() => toggleSection("cadastroBeneficios")}
+              type="button"
+              aria-expanded={showCadastroBeneficios}
+              aria-controls="cadastroBeneficios-content"
+            >
+              Cadastro Benefícios
+              <span className="accordion-icon">
+                {showCadastroBeneficios ? "-" : "+"}
+              </span>
+            </button>
+            {showCadastroBeneficios && (
+              <form
+                id="cadastroBeneficios-content"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  criarBeneficio();
+                }}
+                className="form-beneficio"
+              >
+                <label>
+                  Descrição:
+                  <input
+                    type="text"
+                    value={descricaoBeneficio}
+                    onChange={(e) => setDescricaoBeneficio(e.target.value)}
+                    required
+                  />
+                </label>
+                <label>
+                  Valor:
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={valorBeneficio}
+                    onChange={(e) => setValorBeneficio(e.target.value)}
+                    required
+                  />
+                </label>
+                <button type="submit" className="btn-criar-beneficio">
+                  Criar Benefício
+                </button>
+              </form>
+            )}
+          </section>
+        )}
+        {tipoUsuario === 0 && (
+          <section className="accordion-section">
+            <button
+              className="accordion-header"
+              type="button"
+              aria-expanded={true}
+              aria-controls="doacoes-content"
+            >
+              Doações em andamento
+            </button>
+            <div id="doacoes-content" className="lista-doacoes-container">
+              {doacoes.length === 0 ? (
+                <p>Você ainda não possui doações em andamento.</p>
               ) : (
-                <ul className="lista-beneficios">
-                  {beneficios.map((b) => (
-                    <li key={b.id} className="card-beneficio">
-                      <div>
-                        <strong>{b.descricao}</strong> - R$ {b.valor.toFixed(2)}
-                      </div>
+                <ul className="lista-doacoes">
+                  {doacoes.map((d) => (
+                    <li key={d.id} className="card-doacao">
+                      <div className="doacao-ong">ONG: {d.ongNome}</div>
+                      <div className="doacao-valor">Valor: R$ {d.valor.toFixed(2)}</div>
+                      <div className="doacao-status">Status: {d.status}</div>
                     </li>
                   ))}
                 </ul>
               )}
+              <button
+                className="btn-nova-doacao"
+                onClick={() => (window.location.href = "/etapa-selecao")}
+              >
+                Nova Doação
+              </button>
             </div>
-          )}
-        </section>
-      )}
+          </section>
+        )}
+        {/* BENEFÍCIOS ATIVOS */}
+        {tipoUsuario === 1 && (
+          <section className="accordion-section">
+            <button
+              className="accordion-header"
+              onClick={() => toggleSection("beneficiosAtivos")}
+              type="button"
+              aria-expanded={showBeneficiosAtivos}
+              aria-controls="beneficiosAtivos-content"
+            >
+              Benefícios Ativos
+              <span className="accordion-icon">
+                {showBeneficiosAtivos ? "-" : "+"}
+              </span>
+            </button>
+            {showBeneficiosAtivos && (
+              <div
+                id="beneficiosAtivos-content"
+                className="lista-beneficios-container"
+              >
+                {beneficios.length === 0 ? (
+                  <p>Você ainda não possui benefícios cadastrados.</p>
+                ) : (
+                  <ul className="lista-beneficios">
+                    {beneficios.map((b) => (
+                      <li key={b.id} className="card-beneficio">
+                        <div className="beneficio-descricao">{b.descricao}</div>
+                        <div className="beneficio-valor">
+                          R$ {b.valor.toFixed(2)}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </section>
+        )}
+      </div>
     </div>
   );
 }

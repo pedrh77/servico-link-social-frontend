@@ -1,21 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./EtapaEscolha.css";
-
-const ongs = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  nome: `ONG ${i + 1}`,
-  porcentagem: "15%",
-}));
+import { getOngs } from "../../Api.js";
 
 export default function EtapaEscolha() {
+  const [usuario, setUsuario] = useState(null);
+  const [ongs, setOngs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [ongSelecionada, setOngSelecionada] = useState(null);
+
+  useEffect(() => {
+    async function fetchDados() {
+      try {
+        const ongsData = await getOngs();
+        setOngs(ongsData);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    }
+    fetchDados();
+  }, []);
+
+  function handleEscolher(ong) {
+    setOngSelecionada(ong);
+  }
+
+  function handleAvancar() {
+    if (!ongSelecionada) {
+      alert("Por favor, selecione uma ONG antes de avançar.");
+      return;
+    }
+    sessionStorage.setItem("ongSelecionada", JSON.stringify(ongSelecionada));
+    window.location.href = "/etapa-valores"; // altere para a rota correta
+  }
+
+  if (loading) return <div className="loading">Carregando...</div>;
+
   return (
     <div className="container" role="main">
+      {/* HEADER */}
       <header className="header">
         <div className="header-container">
           <div className="header-left">
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
-
           <nav className="nav-header" aria-label="Navegação principal">
             <a href="/login" className="login" aria-label="Entrar na conta">
               Entrar
@@ -31,27 +60,42 @@ export default function EtapaEscolha() {
         </div>
       </header>
 
+      {/* TÍTULO */}
       <h1 className="titulo">Escolha uma ONG</h1>
 
+      {/* GRID DE ONGS */}
       <div className="grid-ongs">
         {ongs.map((ong) => (
-          <div key={ong.id} className="card-ong" tabIndex={-1}>
+          <div
+            key={ong.id}
+            className={`card-ong ${ongSelecionada?.id === ong.id ? "selecionada" : ""}`}
+            tabIndex={0}
+          >
             <div className="info-ong">
               <h3>{ong.nome}</h3>
               <div className="tag">
                 <img className="estrela" src="/img/estrela.svg" alt="Estrela" />
                 {ong.porcentagem} Lorem Ipsum
               </div>
-              <button className="btn-escolher" aria-label={`Escolher ${ong.nome}`}>
-                Escolher
+              <button
+                className="btn-escolher"
+                onClick={() => handleEscolher(ong)}
+                aria-label={`Escolher ${ong.nome}`}
+              >
+                {ongSelecionada?.id === ong.id ? "Selecionada" : "Escolher"}
               </button>
             </div>
           </div>
         ))}
       </div>
 
+      {/* BOTÃO AVANÇAR */}
       <div className="btn-avancar-container">
-        <button className="botao-avancar" aria-label="Avançar para próxima etapa">
+        <button
+          className="botao-avancar"
+          onClick={handleAvancar}
+          aria-label="Avançar para próxima etapa"
+        >
           Avançar
         </button>
       </div>

@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
- const API_URL = "https://localhost:7148";
+const API_URL = "https://localhost:7148";
 
 function getToken() {
   return sessionStorage.getItem("token");
@@ -23,7 +23,7 @@ export async function login(email, senha) {
     console.error("Login não retornou token:", data);
   }
 
-  return data; 
+  return data;
 }
 
 
@@ -39,11 +39,11 @@ export async function cadastrarUsuario(dados) {
 
 export async function getUsuarioAutenticado() {
   const token = getToken();
-  console.log("Token do usuário:", token);  
+  console.log("Token do usuário:", token);
   if (!token) throw new Error("Usuário não autenticado");
 
   const decoded = jwtDecode(token);
-  const userId =  decoded.nameid;
+  const userId = decoded.nameid;
   if (!userId) throw new Error("ID do usuário não encontrado no token");
 
   const response = await fetch(`${API_URL}/api/Usuario/${userId}`, {
@@ -64,13 +64,35 @@ export async function getUsuarioAutenticado() {
 
 export async function getBeneficiosPorOngId(idOng) {
   try {
-    const response = await fetch(`${API_URL}/api/Beneficio/Ong/${idOng}`, {
+    const response = await fetch(`${API_URL}/api/Beneficios/Usuario/${idOng}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
       },
     });
 
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar benefícios:", error);
+    return [];
+  }
+}
+
+
+export async function getOngs() {
+  try {
+    const response = await fetch(`${API_URL}/api/Usuario/tipo/1`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
     if (!response.ok) {
       return [];
     }

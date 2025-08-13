@@ -17,9 +17,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/etapa" element={<EtapaEscolha />} />
-        <Route path="/valores" element={<EtapaValores />} />
-        <Route path="/Final" element={<EtapaFinalizacao />} />
+        <Route path="/etapa-selecao" element={<EtapaEscolha />} />
+        <Route path="/etapa-valores" element={<EtapaValores />} />
+        <Route path="/etapa-final" element={<EtapaFinalizacao />} />
         <Route path="/Usuario" element={<Usuario />} />
 
         <Route path="*" element={<Home />} />

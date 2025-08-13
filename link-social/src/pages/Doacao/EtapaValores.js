@@ -1,50 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./EtapaValores.css";
-
-const opcoesDoacao = [
-  {
-    valor: "R$ 5,00",
-    beneficios: [
-      "Desconto de 10% em restaurantes parceiros",
-      "1 café grátis em cafeterias participantes",
-    ],
-    extraMensal: ["3 meses", "6 meses", "12 meses"],
-  },
-  {
-    valor: "R$ 10,00",
-    beneficios: [
-      "Desconto de 15% em restaurantes parceiros",
-      "2 cafés grátis em cafeterias participantes",
-      "Desconto de 10% em lojas parceiras",
-    ],
-    extraMensal: ["3 meses", "6 meses", "12 meses"],
-  },
-  {
-    valor: "R$ 20,00",
-    beneficios: [
-      "Desconto de 20% em restaurantes parceiros",
-      "3 cafés grátis em cafeterias participantes",
-      "Desconto de 15% em lojas parceiras",
-      "1 sessão de cinema grátis",
-    ],
-    extraMensal: ["3 meses", "6 meses", "12 meses"],
-  },
-  {
-    valor: "R$ 50,00",
-    beneficios: [
-      "Desconto de 15% em restaurantes parceiros",
-      "2 cafés grátis em cafeterias participantes",
-      "Desconto de 10% em lojas parceiras",
-    ],
-    extraMensal: ["6 meses", "12 meses"],
-  },
-];
+import { getBeneficiosPorOngId } from "../../Api.js";
 
 export default function EtapaDoacao() {
+  const [beneficios, setBeneficios] = useState([]);
   const [mensalExpandido, setMensalExpandido] = useState(null);
   const [mesesEscolhidos, setMesesEscolhidos] = useState({});
   const [unicaSelecionada, setUnicaSelecionada] = useState(null);
-  const [logado, setLogado] = useState(false);
+  const [logado, setLogado] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchBeneficios() {
+      const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
+      if (!ongSelecionada) {
+        alert("Nenhuma ONG selecionada!");
+        window.location.href = "/etapa-escolha";
+        return;
+      }
+      try {
+        const lista = await getBeneficiosPorOngId(ongSelecionada.id);
+        setBeneficios(lista);
+      } catch (error) {
+        console.error("Erro ao buscar benefícios:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBeneficios();
+  }, []);
 
   function toggleMensal(index) {
     if (mensalExpandido === index) {
@@ -75,8 +62,24 @@ export default function EtapaDoacao() {
       window.location.href = "/login";
       return;
     }
-    alert("Obrigado pela doação!");
+
+    const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
+    if (!ongSelecionada) return;
+
+    const indexSelecionado = unicaSelecionada ?? mensalExpandido;
+    const beneficio = beneficios[indexSelecionado];
+
+    const doacao = {
+      ong: ongSelecionada.nome,
+      valor: beneficio.valor.toFixed(2),
+      tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
+      meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
+    };
+
+    navigate("/final", { state: doacao });
   }
+
+  if (loading) return <div className="loading">Carregando...</div>;
 
   return (
     <div className="container" role="main">
@@ -85,17 +88,9 @@ export default function EtapaDoacao() {
           <div className="header-left">
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
-
-          <nav className="nav-header" aria-label="Navegação principal">
-            <a href="/login" className="login" aria-label="Entrar na conta">
-              Entrar
-            </a>
-            <button
-              type="button"
-              className="signup"
-              onClick={() => (window.location.href = "/register")}
-              aria-label="Cadastrar nova conta"
-            >
+          <nav className="nav-header">
+            <a href="/login" className="login">Entrar</a>
+            <button className="signup" onClick={() => (window.location.href = "/register")}>
               Cadastrar
             </button>
           </nav>
@@ -105,22 +100,17 @@ export default function EtapaDoacao() {
       <h1 className="titulo">Selecione o Valor da Doação</h1>
 
       <div className="grid-cards">
-        {opcoesDoacao.map((item, index) => {
+        {beneficios.map((b, index) => {
           const expandido = mensalExpandido === index;
           const mesSelecionado = mesesEscolhidos[index] || null;
           const unicaAtiva = unicaSelecionada === index;
 
           return (
-            <div key={index} className="card-doacao" aria-labelledby={`valor-${index}`}>
-              <h3 id={`valor-${index}`}>{item.valor}</h3>
+            <div key={b.id} className="card-doacao" aria-labelledby={`valor-${index}`}>
+              <h3 id={`valor-${index}`}>R$ {b.valor.toFixed(2)}</h3>
+              <p>{b.descricao}</p>
 
-              <ul>
-                {item.beneficios.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-
-              <div className="acoes-doacao" role="group" aria-label={`Opções de pagamento para ${item.valor}`}>
+              <div className="acoes-doacao" role="group">
                 <button
                   type="button"
                   className={`btn-escolher ${unicaAtiva ? "ativo" : ""}`}
@@ -128,7 +118,6 @@ export default function EtapaDoacao() {
                 >
                   Única
                 </button>
-
                 <button
                   type="button"
                   className={`btn-escolher ${expandido ? "ativo" : ""}`}
@@ -142,18 +131,16 @@ export default function EtapaDoacao() {
               <div className={`opcoes-extra ${expandido ? "expandido" : ""}`} aria-hidden={!expandido}>
                 <span className="texto-meses">Escolha a duração:</span>
                 <div className="opcoes-meses">
-                  {(item.extraMensal.length ? item.extraMensal : ["3 meses", "6 meses", "12 meses"]).map(
-                    (op, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        className={`btn-extra ${mesSelecionado === op ? "selecionado" : ""}`}
-                        onClick={() => escolherMes(index, op)}
-                      >
-                        {op}
-                      </button>
-                    ) 
-                  )}
+                  {[6, 12].map((mes) => (
+                    <button
+                      key={mes}
+                      type="button"
+                      className={`btn-extra ${mesSelecionado === mes ? "selecionado" : ""}`}
+                      onClick={() => escolherMes(index, mes)}
+                    >
+                      {mes} meses
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -162,7 +149,7 @@ export default function EtapaDoacao() {
       </div>
 
       <div className="btn-avancar-container">
-        <button type="button" className="botao-avancar" onClick={finalizarDoacao}>
+        <button className="botao-avancar" onClick={finalizarDoacao}>
           Finalizar
         </button>
       </div>
