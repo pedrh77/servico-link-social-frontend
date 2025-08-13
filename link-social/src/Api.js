@@ -15,7 +15,7 @@ export async function login(email, senha) {
   if (data.token) {
     sessionStorage.setItem("token", data.token);
   }
-  return data;
+  return response;
 }
 
 
@@ -25,7 +25,7 @@ export async function cadastrarUsuario(dados) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dados),
   });
-  return response.json();
+  return response
 }
 
 // Exemplo de requisição autenticada

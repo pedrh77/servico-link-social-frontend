@@ -15,8 +15,8 @@ export default function LoginPage() {
 
     try {
       const result = await login(email, senha);
-
-      if (result.sucesso) {
+      console.log(result);
+      if (result.status === 200) {
         sessionStorage.setItem("token", result.token);
         window.location.href = "/home";
       } else {

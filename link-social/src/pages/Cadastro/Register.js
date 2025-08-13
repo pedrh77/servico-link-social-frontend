@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import InputMask from "react-input-mask";
 import { cadastrarUsuario } from "../../Api";
 import "./Register.css";
 
@@ -9,7 +10,9 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [senha, setSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
 
@@ -27,7 +30,7 @@ export default function RegisterPage() {
 
     const dados = {
       nome,
-      telefone,
+      telefone, // já vem sem máscara
       email,
       tipoUsuario: tipoUsuarioEnum,
       senha,
@@ -38,7 +41,8 @@ export default function RegisterPage() {
 
     try {
       const resposta = await cadastrarUsuario(dados);
-      if (resposta?.sucesso || resposta?.ok) {
+
+      if (resposta?.sucesso || resposta?.ok || resposta?.status === 201) {
         setSucesso("Cadastro realizado com sucesso!");
         setTimeout(() => {
           window.location.href = "/login";
@@ -50,6 +54,13 @@ export default function RegisterPage() {
       setErro("Erro ao conectar com o servidor.");
     }
   };
+
+  const mascaraCpfCnpj =
+    tipoUsuario === "Doador"
+      ? "999.999.999-99"
+      : "99.999.999/9999-99";
+
+  const removerMascara = (valor) => valor.replace(/\D/g, "");
 
   return (
     <div className="register-page manjari-regular">
@@ -97,11 +108,11 @@ export default function RegisterPage() {
 
           <label>
             Telefone
-            <input
-              type="tel"
+            <InputMask
+              mask="(99) 99999-9999"
               placeholder="Digite seu telefone"
               value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
+              onChange={(e) => setTelefone(removerMascara(e.target.value))}
               required
             />
           </label>
@@ -119,35 +130,64 @@ export default function RegisterPage() {
 
           <label>
             {tipoUsuario === "Doador" ? "CPF" : "CNPJ"}
-            <input
-              type="text"
+            <InputMask
+              mask={mascaraCpfCnpj}
               placeholder={`Digite seu ${tipoUsuario === "Doador" ? "CPF" : "CNPJ"}`}
               value={cpfCnpj}
-              onChange={(e) => setCpfCnpj(e.target.value)}
+              onChange={(e) => setCpfCnpj(removerMascara(e.target.value))}
               required
             />
           </label>
 
+
           <label>
             Senha
-            <input
-              type="password"
-              placeholder="Crie uma senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+            <div className="password-field">
+              <input
+                type={mostrarSenha ? "text" : "password"}
+                placeholder="Crie uma senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                aria-label="Mostrar ou ocultar senha"
+              >
+                {mostrarSenha ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1l22 22" /><path d="M17.94 17.94A10.94 10.94 0 0112 19C7 19 2.73 16.11 1 12c.92-1.84 2.23-3.45 3.8-4.73" /><path d="M9.88 9.88a3 3 0 104.24 4.24" /></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
+                )}
+              </button>
+            </div>
           </label>
 
           <label>
             Confirmar senha
-            <input
-              type="password"
-              placeholder="Confirme sua senha"
-              value={confirmarSenha}
-              onChange={(e) => setConfirmarSenha(e.target.value)}
-              required
-            />
+            <div className="password-field">
+              <input
+                type={mostrarConfirmarSenha ? "text" : "password"}
+                placeholder="Confirme sua senha"
+                value={confirmarSenha}
+                onChange={(e) => setConfirmarSenha(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                aria-label="Mostrar ou ocultar senha"
+              >
+                {mostrarConfirmarSenha ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1l22 22" /><path d="M17.94 17.94A10.94 10.94 0 0112 19C7 19 2.73 16.11 1 12c.92-1.84 2.23-3.45 3.8-4.73" /><path d="M9.88 9.88a3 3 0 104.24 4.24" /></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
+                )}
+              </button>
+            </div>
           </label>
 
           {erro && <p className="error">{erro}</p>}

@@ -18,6 +18,32 @@
   height: 50px;
 }
 
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 38px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password svg {
+  pointer-events: none;
+}
+
 .register-container {
   background-color: #fff;
   padding: 2.5rem;
