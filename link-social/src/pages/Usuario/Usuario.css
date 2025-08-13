@@ -1,0 +1,145 @@
+.usuario-container {
+  max-width: 520px;
+  margin: 40px auto;
+  padding: 32px 28px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.1);
+  font-family: 'Poppins', sans-serif;
+  color: #264d3a;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.usuario-titulo {
+  color: #2a6f4b;
+  font-weight: 700;
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.usuario-dados h3,
+.usuario-assinaturas h3 {
+  color: #2f855a;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.form-dados label {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #264d3a;
+}
+
+.input-dados {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #bbb;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #264d3a;
+  transition: border-color 0.3s ease;
+}
+
+.input-dados:focus {
+  border-color: #2a6f4b;
+  outline: none;
+  background-color: #f0f8f5;
+}
+
+.btn-editar,
+.btn-salvar,
+.btn-cancelar {
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.btn-editar {
+  background-color: #2a6f4b;
+  color: white;
+}
+
+.btn-editar:hover,
+.btn-editar:focus {
+  background-color: #20492f;
+  outline: none;
+}
+
+.btn-salvar {
+  background-color: #247a58;
+  color: white;
+}
+
+.btn-salvar:hover,
+.btn-salvar:focus {
+  background-color: #1b4b33;
+  outline: none;
+}
+
+.btn-cancelar {
+  background-color: #ccc;
+  color: #444;
+  margin-left: 16px;
+}
+
+.btn-cancelar:hover,
+.btn-cancelar:focus {
+  background-color: #aaa;
+  outline: none;
+}
+
+.botoes-salvar-cancelar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.lista-assinaturas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-assinatura {
+  background: #e6f0ea;
+  border-radius: 12px;
+  padding: 18px 28px;
+  color: #264d3a;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.08);
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.status-ativa {
+  color: #2a6f4b;
+  font-weight: 700;
+}
+
+.status-finalizada {
+  color: #777;
+  font-weight: 600;
+}
+
+.ong-nome {
+  font-size: 15px;
+  font-weight: 500;
+  color: #3c5a3d;
+}

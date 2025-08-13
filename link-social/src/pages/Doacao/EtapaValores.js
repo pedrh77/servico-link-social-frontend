@@ -44,13 +44,14 @@ export default function EtapaDoacao() {
   const [mensalExpandido, setMensalExpandido] = useState(null);
   const [mesesEscolhidos, setMesesEscolhidos] = useState({});
   const [unicaSelecionada, setUnicaSelecionada] = useState(null);
+  const [logado, setLogado] = useState(false);
 
   function toggleMensal(index) {
     if (mensalExpandido === index) {
       setMensalExpandido(null);
     } else {
       setMensalExpandido(index);
-  setUnicaSelecionada(null);
+      setUnicaSelecionada(null);
     }
   }
 
@@ -66,7 +67,15 @@ export default function EtapaDoacao() {
       return novo;
     });
     setUnicaSelecionada(index);
-    console.log("Doação única escolhida:", opcoesDoacao[index].valor);
+  }
+
+  function finalizarDoacao() {
+    if (!logado) {
+      alert("Você precisa entrar na sua conta para finalizar a doação.");
+      window.location.href = "/login";
+      return;
+    }
+    alert("Obrigado pela doação!");
   }
 
   return (
@@ -143,7 +152,7 @@ export default function EtapaDoacao() {
                       >
                         {op}
                       </button>
-                    )
+                    ) 
                   )}
                 </div>
               </div>
@@ -153,7 +162,7 @@ export default function EtapaDoacao() {
       </div>
 
       <div className="btn-avancar-container">
-        <button type="button" className="botao-avancar">
+        <button type="button" className="botao-avancar" onClick={finalizarDoacao}>
           Finalizar
         </button>
       </div>

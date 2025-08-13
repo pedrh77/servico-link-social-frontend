@@ -1,0 +1,280 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Container full screen com fundo claro */
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #e6f0ea; /* verde claro suave */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header topo com logo e borda azul */
+.header {
+  background-color: #e6f0ea;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Logo no header */
+.header .logo {
+  height: 48px;
+  width: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Navegação do header - link "Minha Conta" */
+.nav-header {
+  font-weight: 600;
+}
+
+.nav-header a.minha-conta {
+  color: #264d3a;
+  text-decoration: none;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-header a.minha-conta:hover,
+.nav-header a.minha-conta:focus {
+  border-color: #264d3a;
+  outline: none;
+}
+
+/* Container do conteúdo centralizado */
+.final-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 24px;
+  justify-content: center; /* centraliza verticalmente */
+  align-items: center; /* centraliza horizontalmente */
+  text-align: center;
+  gap: 32px;
+  color: #264d3a;
+  background-color: #fff;
+}
+
+/* Títulos principais */
+.final-titulo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #264d3a;
+}
+
+/* Texto informativo */
+.final-info {
+  font-size: 18px;
+  font-weight: 500;
+  color: #264d3a;
+}
+
+/* Botão confirmar */
+.final-botao {
+  margin-top: 24px;
+  background-color: #2a6f4b;
+  color: white;
+  font-weight: 600;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.final-botao:hover,
+.final-botao:focus {
+  background-color: #20492f;
+  outline: none;
+}
+
+/* Container dos cards de resumo - flex em linha */
+.resumo-cards {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Cartões ONG e Valor - tamanho aumentado */
+.card {
+  background: white;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+  border-radius: 8px;
+  padding: 28px 40px;
+  width: 220px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #264d3a;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Texto dentro dos cards */
+.card .logo-ong {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+
+/* Botão dentro do card */
+.card button {
+  background-color: #2a6f4b;
+  border: none;
+  color: white;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  align-self: center;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover,
+.card button:focus {
+  background-color: #20492f;
+  outline: none;
+}
+
+/* Texto pequeno dentro do card valor */
+.valor-mensal {
+  font-weight: 500;
+  font-size: 18px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Container do QrCode e botão copiar */
+.qrcode-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* QrCode estilizado */
+.qrcode-container img {
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
+}
+
+/* Botão copiar link */
+.btn-copiar {
+  background-color: #d7e9db;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #264d3a;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.btn-copiar:hover,
+.btn-copiar:focus {
+  background-color: #c0d5c1;
+  outline: none;
+}
+
+/* Barra de status abaixo */
+.status-validando {
+  margin-top: 32px;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px 40px;
+  border-radius: 20px;
+  box-shadow: 3px 5px 8px rgb(0 0 0 / 0.12);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  max-width: 320px;
+  align-self: center;
+}
+
+/* Área de pagamento após confirmação */
+.final-pagamento {
+  margin-top: 32px;
+  width: 100%;
+  max-width: 600px;
+  color: #264d3a;
+}
+
+.final-subtitulo {
+  font-size: 22px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* Box de pagamento */
+.final-box {
+  border: 2px dashed #bbb;
+  border-radius: 8px;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Responsividade simples */
+@media (max-width: 520px) {
+  .final-container {
+    padding: 20px 16px;
+    gap: 24px;
+  }
+
+  .final-titulo {
+    font-size: 24px;
+  }
+
+  .final-info {
+    font-size: 16px;
+  }
+
+  .final-botao {
+    padding: 12px 28px;
+    font-size: 16px;
+  }
+
+  .header .logo {
+    height: 36px;
+  }
+
+  .resumo-cards {
+    gap: 24px;
+  }
+
+  .card {
+    width: 180px;
+    padding: 24px 28px;
+    gap: 12px;
+  }
+
+  .qrcode-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
