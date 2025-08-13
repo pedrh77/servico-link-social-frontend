@@ -1,25 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 
-
-
 export default function Home() {
+  const [logado, setLogado] = useState(false);
 
   useEffect(() => {
-  const toggleBtn = document.getElementById("menu-toggle");
-  const navMenu = document.getElementById("nav-menu");
+    const token = sessionStorage.getItem("token");
+    setLogado(!!token);
 
-  const toggleMenu = () => {
-    navMenu.classList.toggle("show");
-  };
+    const toggleBtn = document.getElementById("menu-toggle");
+    const navMenu = document.getElementById("nav-menu");
 
-  toggleBtn.addEventListener("click", toggleMenu);
+    const toggleMenu = () => {
+      navMenu.classList.toggle("show");
+    };
 
-  
-  return () => {
-    toggleBtn.removeEventListener("click", toggleMenu);
-  };
-}, []);
+    toggleBtn.addEventListener("click", toggleMenu);
+
+    return () => {
+      toggleBtn.removeEventListener("click", toggleMenu);
+    };
+  }, []);
+
+  function handleLogout() {
+    sessionStorage.removeItem("token");
+    setLogado(false);
+    window.location.href = "/login";
+  }
+
   return (
     <div className="landing-page manjari-regular">
       <header className="header">
@@ -28,14 +36,35 @@ export default function Home() {
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
 
-          <button className="hamburger" id="menu-toggle">☰</button>
+          <button className="hamburger" id="menu-toggle">
+            ☰
+          </button>
 
           <nav className="nav" id="nav-menu">
             <a href="#parceiros">Parceiros</a>
             <a href="#beneficios">Benefícios</a>
             <a href="#planos">Planos</a>
-            <a href="/login" className="login">Entrar</a>
-            <button className="signup"  onClick={() => window.location.href = '/register'}>Cadastrar</button>
+
+            {logado ? (
+              <>
+                <a href="/minha-conta">Minha Conta</a>
+                <button className="logout-button" onClick={handleLogout}>
+                  Sair
+                </button>
+              </>
+            ) : (
+              <>
+                <a href="/login" className="login">
+                  Entrar
+                </a>
+                <button
+                  className="signup"
+                  onClick={() => (window.location.href = "/register")}
+                >
+                  Cadastrar
+                </button>
+              </>
+            )}
           </nav>
         </div>
       </header>

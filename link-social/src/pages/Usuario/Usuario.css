@@ -1,145 +1,173 @@
+.usuario-doar {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.btn-doar {
+  background-color: #ff6f00;
+  color: white;
+  font-weight: 700;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-doar:hover {
+  background-color: #e65c00;
+}
 .usuario-container {
-  max-width: 520px;
+  max-width: 720px;
   margin: 40px auto;
-  padding: 32px 28px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.1);
-  font-family: 'Poppins', sans-serif;
-  color: #264d3a;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
+  padding: 0 20px;
+  font-family: "Manjari", sans-serif;
+  color: #222;
 }
 
 .usuario-titulo {
-  color: #2a6f4b;
-  font-weight: 700;
-  font-size: 32px;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
   text-align: center;
-  margin-bottom: 12px;
 }
 
-.usuario-dados h3,
-.usuario-assinaturas h3 {
-  color: #2f855a;
-  font-weight: 600;
-  font-size: 22px;
-  margin-bottom: 20px;
+.section-title {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 4px;
+  color: #4caf50;
 }
 
 .form-dados label {
   display: block;
+  margin-bottom: 14px;
   font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 12px;
-  color: #264d3a;
 }
 
 .input-dados {
   width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #bbb;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #264d3a;
-  transition: border-color 0.3s ease;
+  padding: 10px 12px;
+  margin-top: 6px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
 }
 
-.input-dados:focus {
-  border-color: #2a6f4b;
-  outline: none;
-  background-color: #f0f8f5;
+.input-dados.input-editando {
+  border-color: #4caf50;
+  background-color: #f9fff9;
+}
+
+.input-dados:disabled {
+  background-color: #eee;
+  color: #555;
 }
 
 .btn-editar,
 .btn-salvar,
 .btn-cancelar {
-  margin-top: 20px;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 12px 32px;
-  border-radius: 8px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  font-weight: 700;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
+  transition: background-color 0.25s ease;
 }
 
 .btn-editar {
-  background-color: #2a6f4b;
+  background-color: #4caf50;
   color: white;
 }
 
-.btn-editar:hover,
-.btn-editar:focus {
-  background-color: #20492f;
-  outline: none;
-}
-
-.btn-salvar {
-  background-color: #247a58;
-  color: white;
-}
-
-.btn-salvar:hover,
-.btn-salvar:focus {
-  background-color: #1b4b33;
-  outline: none;
-}
-
-.btn-cancelar {
-  background-color: #ccc;
-  color: #444;
-  margin-left: 16px;
-}
-
-.btn-cancelar:hover,
-.btn-cancelar:focus {
-  background-color: #aaa;
-  outline: none;
+.btn-editar:hover {
+  background-color: #3b8e40;
 }
 
 .botoes-salvar-cancelar {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-salvar {
+  background-color: #4caf50;
+  color: white;
+  flex: 1;
+}
+
+.btn-salvar:hover {
+  background-color: #3b8e40;
+}
+
+.btn-cancelar {
+  background-color: #f44336;
+  color: white;
+  flex: 1;
+}
+
+.btn-cancelar:hover {
+  background-color: #ba2d25;
+}
+
+.usuario-assinaturas {
+  margin-top: 40px;
 }
 
 .lista-assinaturas {
   list-style: none;
   padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
 .card-assinatura {
-  background: #e6f0ea;
+  background-color: #f0f9f5;
+  padding: 18px 20px;
   border-radius: 12px;
-  padding: 18px 28px;
-  color: #264d3a;
-  box-shadow: 0 3px 8px rgb(0 0 0 / 0.08);
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.1);
+  font-size: 1rem;
+}
+
+.assinatura-header {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #2e7d32;
+}
+
+.tipo-assinatura {
+  font-weight: 500;
+  color: #555;
+}
+
+.assinatura-status {
+  margin-bottom: 6px;
+}
+
+.status {
   font-weight: 600;
-  font-size: 17px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-block;
 }
 
 .status-ativa {
-  color: #2a6f4b;
-  font-weight: 700;
+  background-color: #c8e6c9;
+  color: #2e7d32;
 }
 
 .status-finalizada {
-  color: #777;
-  font-weight: 600;
+  background-color: #ffcdd2;
+  color: #c62828;
 }
 
-.ong-nome {
-  font-size: 15px;
-  font-weight: 500;
-  color: #3c5a3d;
+.assinatura-ong {
+  font-style: italic;
+  color: #444;
 }
