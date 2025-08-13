@@ -1,35 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { getUsuarioAutenticado } from "../../Api";
 import "./Usuario.css";
 
-const assinaturasExemplo = [
-  { id: 1, valor: "R$ 10,00", tipo: "Mensal", status: "Ativa", ong: "ONG Exemplo" },
-  { id: 2, valor: "R$ 5,00", tipo: "Única", status: "Finalizada", ong: "ONG Alegria" },
-];
-
 export default function Usuario() {
+  const assinaturasExemplo = [
+    { id: 1, valor: "R$ 10,00", tipo: "Mensal", status: "Ativa", ong: "ONG Exemplo" },
+    { id: 2, valor: "R$ 5,00", tipo: "Única", status: "Finalizada", ong: "ONG Alegria" },
+  ];
+
   const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [dados, setDados] = useState(null);
+  const [editando, setEditando] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
+    async function carregarUsuario() {
       try {
-        const decoded = jwtDecode(token);
-
-        setTipoUsuario(decoded.tipoUsuario);
+        const usuario = await getUsuarioAutenticado();
+        setDados(usuario);
+        setTipoUsuario(usuario.tipoUsuario);
       } catch (error) {
-        console.error("Token inválido", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     }
+    carregarUsuario();
   }, []);
-
-  const [dados, setDados] = useState({
-    nome: "João da Silva",
-    email: "joao@email.com",
-    telefone: "(11) 99999-9999",
-    endereco: "Rua das Flores, 123, São Paulo - SP",
-  });
-  const [editando, setEditando] = useState(false);
 
   function handleChange(e) {
     setDados({ ...dados, [e.target.name]: e.target.value });
@@ -37,7 +35,6 @@ export default function Usuario() {
 
   function handleSalvar() {
     setEditando(false);
-    // Aqui você pode fazer integração com a API para salvar os dados
     alert("Dados salvos com sucesso!");
   }
 
@@ -46,8 +43,12 @@ export default function Usuario() {
   }
 
   function handleDoar() {
-    window.location.href = "/doar"; // Ajuste a rota para a página de doação que você usar
+    window.location.href = "/doar";
   }
+
+  if (loading) return <p>Carregando dados...</p>;
+  if (error) return <p>{error}</p>;
+  if (!dados) return <p>Dados do usuário não disponíveis</p>;
 
   return (
     <div className="usuario-container">
@@ -99,17 +100,33 @@ export default function Usuario() {
             />
           </label>
 
-          <label>
-            Endereço:
-            <input
-              name="endereco"
-              value={dados.endereco}
-              disabled={!editando}
-              onChange={handleChange}
-              className={`input-dados ${editando ? "input-editando" : ""}`}
-              placeholder="Informe seu endereço completo"
-            />
-          </label>
+          {tipoUsuario === 0 && (
+            <label>
+              CPF:
+              <input
+                name="cpf"
+                value={dados.cpf ?? ""}
+                disabled={!editando}
+                onChange={handleChange}
+                className={`input-dados ${editando ? "input-editando" : ""}`}
+                required={tipoUsuario === 0}
+              />
+            </label>
+          )}
+
+          {tipoUsuario === 1 && (
+            <label>
+              CNPJ:
+              <input
+                name="cnpj"
+                value={dados.cnpj ?? ""}
+                disabled={!editando}
+                onChange={handleChange}
+                className={`input-dados ${editando ? "input-editando" : ""}`}
+                required={tipoUsuario === 1}
+              />
+            </label>
+          )}
 
           {!editando ? (
             <button
@@ -132,7 +149,6 @@ export default function Usuario() {
         </form>
       </section>
 
-      {/* Botão doar só para doadores (tipoUsuario === 0) */}
       {tipoUsuario === 0 && (
         <section className="usuario-doar" style={{ marginTop: "1rem" }}>
           <button className="btn-doar" onClick={handleDoar}>
@@ -140,7 +156,6 @@ export default function Usuario() {
           </button>
         </section>
       )}
-
       <section className="usuario-assinaturas">
         <h3 className="section-title">Minhas Assinaturas</h3>
         {assinaturasExemplo.length === 0 ? (

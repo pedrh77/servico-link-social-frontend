@@ -1,4 +1,6 @@
-const API_URL = "https://localhost:7148";
+import { jwtDecode } from "jwt-decode";
+
+ const API_URL = "https://localhost:7148";
 
 function getToken() {
   return sessionStorage.getItem("token");
@@ -11,11 +13,17 @@ export async function login(email, senha) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, senha }),
   });
+
   const data = await response.json();
+
   if (data.token) {
     sessionStorage.setItem("token", data.token);
+    console.log("Token salvo no sessionStorage:", data.token);
+  } else {
+    console.error("Login não retornou token:", data);
   }
-  return response;
+
+  return data; 
 }
 
 
@@ -28,7 +36,31 @@ export async function cadastrarUsuario(dados) {
   return response
 }
 
-// Exemplo de requisição autenticada
+
+export async function getUsuarioAutenticado() {
+  const token = getToken();
+  console.log("Token do usuário:", token);  
+  if (!token) throw new Error("Usuário não autenticado");
+
+  const decoded = jwtDecode(token);
+  const userId =  decoded.nameid;
+  if (!userId) throw new Error("ID do usuário não encontrado no token");
+
+  const response = await fetch(`${API_URL}/api/Usuario/${userId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Falha ao buscar dados do usuário");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
 export async function getComToken(endpoint, options = {}) {
   const token = getToken();
   const headers = {

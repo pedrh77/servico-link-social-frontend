@@ -32,10 +32,8 @@ export default function Doacao() {
 
   switch (etapa) {
     case 1:
-      // Supondo que EtapaEscolhaOng chama onSelectOng quando uma ONG é escolhida
       return <EtapaEscolhaOng onSelectOng={handleSelectOng} />;
     case 2:
-      // Supondo que EtapaValores chama onSelectValor com os dados da doação
       return <EtapaValores onSelectValor={handleSelectValor} />;
     case 3:
       return (
