@@ -231,6 +231,24 @@ a {
   background-color: #005fa3;
 }
 
+/* BOTÃO NOVA DOAÇÃO */
+.btn-nova-doacao {
+  background-color: #2F855A;
+  color: white;
+  font-weight: 700;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.btn-nova-doacao:hover {
+  background-color: #005fa3;
+}
+
 /* LISTA BENEFÍCIOS */
 .lista-beneficios {
   list-style: none;
@@ -240,6 +258,23 @@ a {
 }
 
 .card-beneficio {
+  background-color: #f0f9f5;
+  padding: 18px 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  font-weight: 600;
+  color: #2F855A;
+}
+
+/* LISTA DOAÇÕES */
+.lista-doacoes {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.card-doacao {
   background-color: #f0f9f5;
   padding: 18px 20px;
   border-radius: 12px;
@@ -295,5 +330,10 @@ a {
   .usuario-container {
     margin: 20px 12px;
     padding: 0 12px;
+  }
+
+  .btn-nova-doacao {
+    width: 100%;
+    text-align: center;
   }
 }

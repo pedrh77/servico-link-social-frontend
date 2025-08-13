@@ -172,10 +172,8 @@
   background-color: #c0d5c1;
   outline: none;
 }
-
 .status-validando {
-  margin-top: 32px;
-  background-color: #f8d7da;
+  background-color: #f8d7da; /* Vermelho para erros */
   color: #721c24;
   padding: 12px 40px;
   border-radius: 20px;
@@ -185,6 +183,23 @@
   text-align: center;
   max-width: 320px;
   align-self: center;
+}
+
+.finalizacao-sucesso {
+  background-color: #e6f8ed; /* Verde claro para sucesso */
+  border: 1px solid #a8e1b8;
+  padding: 20px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.finalizacao-sucesso h3 {
+  color: #2a6f4b;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 @media (max-width: 520px) {

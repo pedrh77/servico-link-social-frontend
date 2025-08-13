@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUsuarioAutenticado, getBeneficiosPorOngId } from "../../Api";
+import { getUsuarioAutenticado, getBeneficiosPorOngId, GetDoacoesByDoadorId } from "../../Api";
 import "./Usuario.css";
 
 export default function Usuario() {
@@ -16,6 +16,7 @@ export default function Usuario() {
   const [showBeneficiosAtivos, setShowBeneficiosAtivos] = useState(false);
   const [logado, setLogado] = useState(true);
   const [menuAberto, setMenuAberto] = useState(false);
+  const [doacoes, setDoacoes] = useState([]);
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -23,8 +24,7 @@ export default function Usuario() {
         const usuario = await getUsuarioAutenticado();
         setDados(usuario);
         setTipoUsuario(usuario.tipoUsuario);
-
-       sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+        sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -33,18 +33,16 @@ export default function Usuario() {
     }
     carregarUsuario();
   }, []);
-  const [doacoes, setDoacoes] = useState([]);
 
   useEffect(() => {
     async function carregarDoacoes() {
       if (tipoUsuario === 0 && dados?.id) {
         try {
-          const response = await fetch(`https://localhost:7148/api/Doacoes/usuario/${dados.id}`);
-          if (!response.ok) throw new Error("Erro ao carregar doações");
-          const doacoesData = await response.json();
+          const doacoesData = await GetDoacoesByDoadorId(dados.id);
           setDoacoes(doacoesData);
         } catch (error) {
           console.error("Erro ao carregar doações:", error);
+          setDoacoes([]);
         }
       }
     }
@@ -141,6 +139,16 @@ export default function Usuario() {
     }
   };
 
+  const tipoDoacaoTexto = (tipo) => {
+    const mapa = { 1: "Única", 2: "Mensal - 6x", 3: "Mensal - 12x" };
+    return mapa[tipo] || "Desconhecido";
+  };
+
+  const statusTexto = (status) => {
+    const mapa = { 0: "Pendente", 1: "Pago", 2: "Cancelado" };
+    return mapa[status] ?? "Desconhecido";
+  };
+
   if (loading) return <p>Carregando dados...</p>;
   if (error) return <p className="error">{error}</p>;
   if (!dados) return <p>Dados do usuário não disponíveis</p>;
@@ -163,20 +171,13 @@ export default function Usuario() {
 
           <nav className={`nav ${menuAberto ? "show" : ""}`} id="nav-menu">
             {logado ? (
-              <>
-                <button className="logout-button" onClick={handleLogout}>
-                  Sair
-                </button>
-              </>
+              <button className="logout-button" onClick={handleLogout}>
+                Sair
+              </button>
             ) : (
               <>
-                <a href="/login" className="login">
-                  Entrar
-                </a>
-                <button
-                  className="signup"
-                  onClick={() => (window.location.href = "/register")}
-                >
+                <a href="/login" className="login">Entrar</a>
+                <button className="signup" onClick={() => (window.location.href = "/register")}>
                   Cadastrar
                 </button>
               </>
@@ -186,6 +187,7 @@ export default function Usuario() {
       </header>
 
       <div className="usuario-container">
+        {/* Editar Dados */}
         <section className="accordion-section">
           <button
             className="accordion-header"
@@ -195,9 +197,7 @@ export default function Usuario() {
             aria-controls="editarDados-content"
           >
             Editar Dados
-            <span className="accordion-icon">
-              {showEditarDados ? "-" : "+"}
-            </span>
+            <span className="accordion-icon">{showEditarDados ? "-" : "+"}</span>
           </button>
           {showEditarDados && (
             <form
@@ -215,12 +215,10 @@ export default function Usuario() {
                   value={dados.nome ?? ""}
                   disabled={!editando}
                   onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""
-                    }`}
+                  className={`input-dados ${editando ? "input-editando" : ""}`}
                   required
                 />
               </label>
-
               <label>
                 E-mail:
                 <input
@@ -229,12 +227,10 @@ export default function Usuario() {
                   value={dados.email ?? ""}
                   disabled={!editando}
                   onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""
-                    }`}
+                  className={`input-dados ${editando ? "input-editando" : ""}`}
                   required
                 />
               </label>
-
               <label>
                 Telefone:
                 <input
@@ -242,13 +238,11 @@ export default function Usuario() {
                   value={dados.telefone ?? ""}
                   disabled={!editando}
                   onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""
-                    }`}
+                  className={`input-dados ${editando ? "input-editando" : ""}`}
                   required
                 />
               </label>
-
-              {tipoUsuario === 0 && (
+              {tipoUsuario === 0 ? (
                 <label>
                   CPF:
                   <input
@@ -256,14 +250,11 @@ export default function Usuario() {
                     value={dados.cpf ?? ""}
                     disabled={!editando}
                     onChange={handleChange}
-                    className={`input-dados ${editando ? "input-editando" : ""
-                      }`}
+                    className={`input-dados ${editando ? "input-editando" : ""}`}
                     required
                   />
                 </label>
-              )}
-
-              {tipoUsuario === 1 && (
+              ) : (
                 <label>
                   CNPJ:
                   <input
@@ -271,31 +262,20 @@ export default function Usuario() {
                     value={dados.cnpj ?? ""}
                     disabled={!editando}
                     onChange={handleChange}
-                    className={`input-dados ${editando ? "input-editando" : ""
-                      }`}
+                    className={`input-dados ${editando ? "input-editando" : ""}`}
                     required
                   />
                 </label>
               )}
 
               {!editando ? (
-                <button
-                  type="button"
-                  className="btn-editar"
-                  onClick={() => setEditando(true)}
-                >
+                <button type="button" className="btn-editar" onClick={() => setEditando(true)}>
                   Editar Dados
                 </button>
               ) : (
                 <div className="botoes-salvar-cancelar">
-                  <button type="submit" className="btn-salvar">
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-cancelar"
-                    onClick={handleCancelar}
-                  >
+                  <button type="submit" className="btn-salvar">Salvar</button>
+                  <button type="button" className="btn-cancelar" onClick={handleCancelar}>
                     Cancelar
                   </button>
                 </div>
@@ -304,6 +284,7 @@ export default function Usuario() {
           )}
         </section>
 
+        {/* Benefícios ONG */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
             <button
@@ -314,9 +295,7 @@ export default function Usuario() {
               aria-controls="cadastroBeneficios-content"
             >
               Cadastro Benefícios
-              <span className="accordion-icon">
-                {showCadastroBeneficios ? "-" : "+"}
-              </span>
+              <span className="accordion-icon">{showCadastroBeneficios ? "-" : "+"}</span>
             </button>
             {showCadastroBeneficios && (
               <form
@@ -353,6 +332,8 @@ export default function Usuario() {
             )}
           </section>
         )}
+
+        {/* Histórico de Doações */}
         {tipoUsuario === 0 && (
           <section className="accordion-section">
             <button
@@ -370,9 +351,11 @@ export default function Usuario() {
                 <ul className="lista-doacoes">
                   {doacoes.map((d) => (
                     <li key={d.id} className="card-doacao">
-                      <div className="doacao-ong">ONG: {d.ongNome}</div>
-                      <div className="doacao-valor">Valor: R$ {d.valor.toFixed(2)}</div>
-                      <div className="doacao-status">Status: {d.status}</div>
+                      <div className="doacao-ong">ONG: {d.nomeOng ?? "Desconhecida"}</div>
+                      <div className="doacao-beneficio">Benefício: {d.descricaoBeneficio ?? "-"}</div>
+                      <div className="doacao-valor">Valor: R$ {(d.valor ?? 0).toFixed(2)}</div>
+                      <div className="doacao-tipo">Tipo: {tipoDoacaoTexto(d.tipoDoacao)}</div>
+                      <div className="doacao-status">Status: {statusTexto(d.statusPagamento)}</div>
                     </li>
                   ))}
                 </ul>
@@ -386,6 +369,8 @@ export default function Usuario() {
             </div>
           </section>
         )}
+
+        {/* Benefícios Ativos ONG */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
             <button
@@ -396,15 +381,10 @@ export default function Usuario() {
               aria-controls="beneficiosAtivos-content"
             >
               Benefícios Ativos
-              <span className="accordion-icon">
-                {showBeneficiosAtivos ? "-" : "+"}
-              </span>
+              <span className="accordion-icon">{showBeneficiosAtivos ? "-" : "+"}</span>
             </button>
             {showBeneficiosAtivos && (
-              <div
-                id="beneficiosAtivos-content"
-                className="lista-beneficios-container"
-              >
+              <div id="beneficiosAtivos-content" className="lista-beneficios-container">
                 {beneficios.length === 0 ? (
                   <p>Você ainda não possui benefícios cadastrados.</p>
                 ) : (
@@ -412,9 +392,7 @@ export default function Usuario() {
                     {beneficios.map((b) => (
                       <li key={b.id} className="card-beneficio">
                         <div className="beneficio-descricao">{b.descricao}</div>
-                        <div className="beneficio-valor">
-                          R$ {b.valor.toFixed(2)}
-                        </div>
+                        <div className="beneficio-valor">R$ {b.valor.toFixed(2)}</div>
                       </li>
                     ))}
                   </ul>

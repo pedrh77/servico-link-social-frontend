@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "./EtapaFinalizacao.css";
 import { NovaDoacao } from "../../Api";
 
@@ -9,105 +10,102 @@ export default function EtapaFinalizacao() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [sucesso, setSucesso] = useState(false);
+  const [mensagemErro, setMensagemErro] = useState("");
 
   const [usuario, setUsuario] = useState(null);
   const [ong, setOng] = useState(null);
   const [doacao, setDoacao] = useState(null);
 
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
+
+      if (decoded.exp && decoded.exp < now) {
+        sessionStorage.clear();
+        setMensagemErro("Sua sessão expirou. Redirecionando para login...");
+        setTimeout(() => navigate("/login"), 2000);
+        return;
+      }
+    } catch (err) {
+      sessionStorage.clear();
+      navigate("/login");
+      return;
+    }
+
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
     const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada") || "null");
     const doacaoSelecionada = JSON.parse(sessionStorage.getItem("doacaoSelecionada") || "null");
 
-    console.log("Usuário logado:", usuarioLogado);
-    console.log("ONG selecionada:", ongSelecionada);
-    console.log("Doação selecionada:", doacaoSelecionada);
-
     if (!usuarioLogado || !ongSelecionada || !doacaoSelecionada) {
-      console.warn("Dados da doação incompletos. Retornando à seleção.");
       navigate("/etapa-selecao");
       return;
     }
 
-    let tipoValido = doacaoSelecionada.tipo;
+    let tipo = doacaoSelecionada.tipo;
     let meses = doacaoSelecionada.meses || 12;
 
-    if (!["Unica", "Mensal6x", "Mensal12x"].includes(tipoValido)) {
-      console.warn("Tipo de doação inválido. Substituindo por 'Unica'");
-      tipoValido = "Unica";
+    if (!["Unica", "Mensal6x", "Mensal12x"].includes(tipo)) {
+      tipo = "Unica";
       meses = null;
     }
 
     setUsuario(usuarioLogado);
     setOng(ongSelecionada);
-    setDoacao({ ...doacaoSelecionada, tipo: tipoValido, meses });
+    setDoacao({ ...doacaoSelecionada, tipo, meses });
   }, [navigate]);
 
   const sair = () => {
-    sessionStorage.removeItem("token");
-    console.log("Usuário saiu, token removido.");
+    sessionStorage.clear();
     navigate("/login");
   };
 
-  const editarOng = () => {
-    console.log("Editar ONG:", ong);
-    navigate("/etapa-selecao");
-  };
-
-  const editarValor = () => {
-    console.log("Editar valor da doação:", doacao);
-    navigate("/etapa-valores");
-  };
+  const editarOng = () => navigate("/etapa-selecao");
+  const editarValor = () => navigate("/etapa-valores");
 
   const tipoDoacaoParaNumero = (tipo) => {
-    switch (tipo) {
-      case "Unica": return 1;
-      case "Mensal6x": return 2;
-      case "Mensal12x": return 3;
-      default: return 1;
-    }
+    const mapa = { Unica: 1, Mensal6x: 2, Mensal12x: 3 };
+    return mapa[tipo] || 1;
   };
 
   const tipoDoacaoTexto = (tipo) => {
-    switch (tipo) {
-      case "Unica": return "Única";
-      case "Mensal6x": return "Mensal - 6x";
-      case "Mensal12x": return "Mensal - 12x";
-      default: return tipo;
-    }
+    const mapa = { Unica: "Única", Mensal6x: "Mensal - 6x", Mensal12x: "Mensal - 12x" };
+    return mapa[tipo] || tipo;
   };
 
   const confirmarDoacao = async () => {
-    console.log("Confirmando doação com os dados:", { usuario, ong, doacao });
-
     if (!usuario?.id || !ong?.id || !doacao?.beneficioId) {
-      setStatus("Dados incompletos para a doação.");
-      console.error("Dados incompletos:", { usuario, ong, doacao });
+      setMensagemErro("Dados incompletos para a doação.");
       return;
     }
 
     setLoading(true);
-    setStatus("");
+    setMensagemErro("");
     setSucesso(false);
 
     try {
-      const tipoEnumNumero = tipoDoacaoParaNumero(doacao.tipo);
-
       await NovaDoacao({
         DoadorId: usuario.id,
         OngId: ong.id,
         BeneficioId: doacao.beneficioId,
         Valor: parseFloat(doacao.valor),
-        TipoDoacao: tipoEnumNumero,
+        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo),
         Comentario: "",
       });
 
-      setStatus("Doação confirmada com sucesso!");
+      setStatus("Doação registrada com sucesso!");
       setSucesso(true);
-      console.log("Doação confirmada com sucesso!");
+
+      setTimeout(() => navigate("/usuario"), 5000);
     } catch (err) {
-      console.error("Erro ao confirmar a doação:", err);
-      setStatus("Erro ao confirmar a doação. Tente novamente.");
+      setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -122,9 +120,7 @@ export default function EtapaFinalizacao() {
           <img src="/img/logo-link.svg" alt="Logo" className="logo" />
         </div>
         <nav className="nav-header">
-          <button onClick={sair} className="minha-conta" style={{ cursor: "pointer" }}>
-            Sair
-          </button>
+          <button onClick={sair} className="minha-conta">Sair</button>
         </nav>
       </header>
 
@@ -133,7 +129,7 @@ export default function EtapaFinalizacao() {
 
         <div className="resumo-cards">
           <div className="card">
-            <div className="logo-ong">{ong.nome || "Nome ONG"}</div>
+            <div className="logo-ong">{ong.nome}</div>
             <button className="btn-editar" onClick={editarOng}>Editar</button>
           </div>
 
@@ -147,31 +143,41 @@ export default function EtapaFinalizacao() {
           </div>
         </div>
 
-        {status && <div className="status-validando">{status}</div>}
-
-        {!sucesso && (
-          <button className="final-botao" onClick={confirmarDoacao} disabled={loading}>
-            {loading ? <div className="spinner"></div> : "Confirmar Doação"}
-          </button>
-        )}
+        {mensagemErro && <div className="status-erro">{mensagemErro}</div>}
 
         {sucesso && (
-          <div className="finalizacao-pagamento">
-            <h3>Faça o pagamento através do QR Code abaixo</h3>
-            <div className="qrcode-container">
-              <img src="/img/qrcode-exemplo.png" alt="QR Code" className="finalizacao-qrcode" />
-              <button
-                className="btn-copiar"
-                onClick={() => {
-                  navigator.clipboard.writeText("link-pagamento");
-                  console.log("Link de pagamento copiado!");
-                }}
-              >
-                Copiar link
-              </button>
+          <div className="finalizacao-bloco">
+            <div className="finalizacao-sucesso">
+              <h3>🎉 {status}</h3>
+              <p>Obrigado por apoiar a ONG <strong>{ong.nome}</strong>.</p>
+              <p className="info-pagamento">
+                No momento ainda não temos meios de pagamento integrados.<br />
+                Você será redirecionado em instantes...
+              </p>
+            </div>
+
+            <div className="finalizacao-pagamento">
+              <h3>Faça o pagamento através do QR Code abaixo</h3>
+              <div className="qrcode-container">
+                <img src="/img/qrcode-exemplo.png" alt="QR Code" className="finalizacao-qrcode" />
+                <button
+                  className="btn-copiar"
+                  onClick={() => navigator.clipboard.writeText("link-pagamento")}
+                >
+                  Copiar link
+                </button>
+              </div>
             </div>
           </div>
         )}
+
+        {!sucesso && !loading && (
+          <button className="btn-confirmar" onClick={confirmarDoacao}>
+            Confirmar Doação
+          </button>
+        )}
+
+        {loading && <div className="status-validando">Processando doação...</div>}
       </main>
     </div>
   );

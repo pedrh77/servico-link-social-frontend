@@ -6,7 +6,6 @@ function getToken() {
   return sessionStorage.getItem("token");
 }
 
-
 export async function login(email, senha) {
   const response = await fetch(`${API_URL}/api/Auth/login`, {
     method: "POST",
@@ -26,16 +25,14 @@ export async function login(email, senha) {
   return data;
 }
 
-
 export async function cadastrarUsuario(dados) {
   const response = await fetch(`${API_URL}/api/Usuario`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dados),
   });
-  return response
+  return response;
 }
-
 
 export async function getUsuarioAutenticado() {
   const token = getToken();
@@ -61,7 +58,6 @@ export async function getUsuarioAutenticado() {
   return data;
 }
 
-
 export async function getBeneficiosPorOngId(idOng) {
   try {
     const response = await fetch(`${API_URL}/api/Beneficios/Usuario/${idOng}`, {
@@ -83,7 +79,6 @@ export async function getBeneficiosPorOngId(idOng) {
   }
 }
 
-
 export async function getOngs() {
   try {
     const response = await fetch(`${API_URL}/api/Usuario/tipo/1`, {
@@ -99,11 +94,10 @@ export async function getOngs() {
 
     return await response.json();
   } catch (error) {
-    console.error("Erro ao buscar benefícios:", error);
+    console.error("Erro ao buscar ONGs:", error);
     return [];
   }
 }
-
 
 export async function NovaDoacao(dados) {
   try {
@@ -123,5 +117,27 @@ export async function NovaDoacao(dados) {
   } catch (err) {
     console.error("Erro na NovaDoacao:", err);
     throw err;
+  }
+}
+
+export async function GetDoacoesByDoadorId(id) {
+  try {
+    const response = await fetch(`${API_URL}/api/Doacoes/Doador/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    console.log("Response doações:", response);
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar doações");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar doações:", error);
+    return [];
   }
 }
