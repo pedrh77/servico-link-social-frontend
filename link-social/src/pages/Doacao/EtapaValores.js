@@ -57,29 +57,48 @@ export default function EtapaDoacao() {
   }
 
   function finalizarDoacao() {
-    if (!logado) {
-      alert("Você precisa entrar na sua conta para finalizar a doação.");
-      window.location.href = "/login";
-      return;
-    }
-
-    const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
-    if (!ongSelecionada) return;
-
-    const indexSelecionado = unicaSelecionada ?? mensalExpandido;
-    const beneficio = beneficios[indexSelecionado];
-
-    const doacao = {
-      ong: ongSelecionada.nome,
-      valor: beneficio.valor.toFixed(2),
-      tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
-      meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
-    };
-
-    navigate("/final", { state: doacao });
+  const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+  
+  if (!usuarioLogado) {
+    sessionStorage.setItem("retornoAposLogin", window.location.pathname);
+    alert("Você precisa entrar na sua conta para finalizar a doação.");
+    window.location.href = "/login"; // redireciona para login
+    return;
   }
 
-  if (loading) return <div className="loading">Carregando...</div>;
+  const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
+  if (!ongSelecionada) return;
+
+  const indexSelecionado = unicaSelecionada ?? mensalExpandido;
+  const beneficio = beneficios[indexSelecionado];
+
+  if (!beneficio) {
+    alert("Selecione um benefício antes de continuar.");
+    return;
+  }
+
+  const doacao = {
+    ong: ongSelecionada.nome,
+    ongId: ongSelecionada.id,
+    valor: beneficio.valor.toFixed(2),
+    tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
+    meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
+    beneficioId: beneficio.id,
+    doadorId: usuarioLogado.id,
+  };
+
+  sessionStorage.setItem("doacaoSelecionada", JSON.stringify(doacao));
+  console.log("Doação selecionada:", doacao);
+
+  navigate("/etapa-final");
+}
+
+  if (loading)
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+      </div>
+    );
 
   return (
     <div className="container" role="main">
@@ -89,7 +108,9 @@ export default function EtapaDoacao() {
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
           <nav className="nav-header">
-            <a href="/login" className="login">Entrar</a>
+            <a href="/login" className="login">
+              Entrar
+            </a>
             <button className="signup" onClick={() => (window.location.href = "/register")}>
               Cadastrar
             </button>

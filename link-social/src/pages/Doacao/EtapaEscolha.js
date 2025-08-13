@@ -32,14 +32,12 @@ export default function EtapaEscolha() {
       return;
     }
     sessionStorage.setItem("ongSelecionada", JSON.stringify(ongSelecionada));
-    window.location.href = "/etapa-valores"; // altere para a rota correta
+    window.location.href = "/etapa-valores";
   }
 
-  if (loading) return <div className="loading">Carregando...</div>;
 
   return (
     <div className="container" role="main">
-      {/* HEADER */}
       <header className="header">
         <div className="header-container">
           <div className="header-left">
@@ -89,7 +87,6 @@ export default function EtapaEscolha() {
         ))}
       </div>
 
-      {/* BOTÃO AVANÇAR */}
       <div className="btn-avancar-container">
         <button
           className="botao-avancar"

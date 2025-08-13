@@ -103,3 +103,25 @@ export async function getOngs() {
     return [];
   }
 }
+
+
+export async function NovaDoacao(dados) {
+  try {
+    const response = await fetch(`${API_URL}/api/Doacoes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erro ao processar a doação");
+    }
+
+    const result = await response.json();
+    return result; 
+  } catch (err) {
+    console.error("Erro na NovaDoacao:", err);
+    throw err;
+  }
+}

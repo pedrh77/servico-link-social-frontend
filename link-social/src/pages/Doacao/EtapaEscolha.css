@@ -1,4 +1,4 @@
-/* Reset e fontes já definidos */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,9 +6,9 @@
   font-family: 'Manjari', sans-serif;
 }
 
-/* Container principal */
 .container {
-  background-color: #ffffff;
+  background: #fff;
+  background-color: #fff;
   min-height: 100vh;
   width: 100vw;   
   margin: 0 auto;
@@ -16,7 +16,7 @@
   flex-direction: column;
 }
 
-/* Header */
+
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -42,11 +42,10 @@
 }
 
 .header-container nav::-webkit-scrollbar-thumb {
-  background: rgba(47, 133, 90, 0.5);
+  background: rgba(255, 255, 255);
   border-radius: 3px;
 }
 
-/* Botões de login/cadastro */
 .login,
 .signup {
   white-space: nowrap;
@@ -88,7 +87,6 @@
   background-color: #1e6047;
 }
 
-/* Título da página */
 .titulo {
   text-align: center;
   margin: 40px 0 30px;
@@ -97,7 +95,6 @@
   width: 100%;
 }
 
-/* Info do usuário */
 .usuario-info {
   margin: 20px auto;
   padding: 15px;
@@ -107,7 +104,6 @@
   width: 90%;
 }
 
-/* Grid de ONGs */
 .grid-ongs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -116,7 +112,6 @@
   width: 100%;
 }
 
-/* Card ONG */
 .card-ong {
   background: #fff;
   border: 1px solid #eaeaea;
@@ -158,7 +153,6 @@
   height: 18px;
 }
 
-/* Botões */
 .btn-escolher {
   background-color: #247a58;
   color: white;
@@ -177,7 +171,6 @@
   background-color: #1e6047;
 }
 
-/* Botão avançar */
 .btn-avancar-container {
   display: flex;
   justify-content: flex-end;
@@ -207,7 +200,6 @@
   background-color: #1e6047;
 }
 
-/* Carregando */
 .loading {
   text-align: center;
   margin-top: 50px;
@@ -215,7 +207,6 @@
   color: #2F855A;
 }
 
-/* RESPONSIVO */
 @media (max-width: 900px) {
   .titulo {
     font-size: 24px;

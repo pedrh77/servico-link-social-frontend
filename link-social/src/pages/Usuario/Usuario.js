@@ -23,6 +23,8 @@ export default function Usuario() {
         const usuario = await getUsuarioAutenticado();
         setDados(usuario);
         setTipoUsuario(usuario.tipoUsuario);
+
+       sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -31,26 +33,23 @@ export default function Usuario() {
     }
     carregarUsuario();
   }, []);
+  const [doacoes, setDoacoes] = useState([]);
 
-const [doacoes, setDoacoes] = useState([]);
-
-// useEffect para carregar doações do usuário (somente tipo 0)
-useEffect(() => {
-  async function carregarDoacoes() {
-    if (tipoUsuario === 0 && dados?.id) {
-      try {
-        // Substitua pelo fetch real das doações
-        const response = await fetch(`https://localhost:7148/api/Doacoes/usuario/${dados.id}`);
-        if (!response.ok) throw new Error("Erro ao carregar doações");
-        const doacoesData = await response.json();
-        setDoacoes(doacoesData);
-      } catch (error) {
-        console.error("Erro ao carregar doações:", error);
+  useEffect(() => {
+    async function carregarDoacoes() {
+      if (tipoUsuario === 0 && dados?.id) {
+        try {
+          const response = await fetch(`https://localhost:7148/api/Doacoes/usuario/${dados.id}`);
+          if (!response.ok) throw new Error("Erro ao carregar doações");
+          const doacoesData = await response.json();
+          setDoacoes(doacoesData);
+        } catch (error) {
+          console.error("Erro ao carregar doações:", error);
+        }
       }
     }
-  }
-  carregarDoacoes();
-}, [tipoUsuario, dados?.id]);
+    carregarDoacoes();
+  }, [tipoUsuario, dados?.id]);
 
   useEffect(() => {
     let ativo = true;
@@ -148,7 +147,6 @@ useEffect(() => {
 
   return (
     <div className="usuario-page">
-      {/* HEADER FIXO */}
       <header className="header">
         <div className="header-content">
           <div className="header-left">
@@ -187,9 +185,7 @@ useEffect(() => {
         </div>
       </header>
 
-      {/* CONTEÚDO */}
       <div className="usuario-container">
-        {/* EDITAR DADOS */}
         <section className="accordion-section">
           <button
             className="accordion-header"
@@ -308,7 +304,6 @@ useEffect(() => {
           )}
         </section>
 
-        {/* CADASTRAR BENEFÍCIO */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
             <button
@@ -391,7 +386,6 @@ useEffect(() => {
             </div>
           </section>
         )}
-        {/* BENEFÍCIOS ATIVOS */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
             <button

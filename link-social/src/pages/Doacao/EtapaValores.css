@@ -11,7 +11,26 @@
      align-items: stretch;
  }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
 
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #2c7a50; 
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
  .card-doacao {
      background: #fff;
      border: 1px solid #eaeaea;

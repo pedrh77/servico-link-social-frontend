@@ -18,7 +18,7 @@ export default function LoginPage() {
       if (result.status === 200 || result.token) {
         console.log("Login bem-sucedido:", result);
         sessionStorage.setItem("token", result.token);
-        window.location.href = "/usuario"; 
+        window.location.href = "/usuario";
       } else {
         setErro(result.mensagem || "Login falhou");
       }

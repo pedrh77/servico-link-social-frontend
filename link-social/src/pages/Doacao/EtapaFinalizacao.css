@@ -1,4 +1,3 @@
-/* Reset básico */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,16 +5,14 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Container full screen com fundo claro */
 .container {
   width: 100vw;
   min-height: 100vh;
-  background-color: #e6f0ea; /* verde claro suave */
+  background-color: #e6f0ea;
   display: flex;
   flex-direction: column;
 }
 
-/* Header topo com logo e borda azul */
 .header {
   background-color: #e6f0ea;
   padding: 12px 24px;
@@ -23,10 +20,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
 }
 
-/* Logo no header */
 .header .logo {
   height: 48px;
   width: auto;
@@ -34,56 +29,32 @@
   border-radius: 4px;
 }
 
-/* Navegação do header - link "Minha Conta" */
-.nav-header {
-  font-weight: 600;
-}
-
 .nav-header a.minha-conta {
   color: #264d3a;
+  font-weight: 600;
   text-decoration: none;
   font-size: 14px;
-  border-bottom: 2px solid transparent;
-  padding-bottom: 2px;
-  transition: border-color 0.3s ease;
-  cursor: pointer;
 }
 
-.nav-header a.minha-conta:hover,
-.nav-header a.minha-conta:focus {
-  border-color: #264d3a;
-  outline: none;
-}
-
-/* Container do conteúdo centralizado */
 .final-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   padding: 40px 24px;
-  justify-content: center; /* centraliza verticalmente */
-  align-items: center; /* centraliza horizontalmente */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   gap: 32px;
   color: #264d3a;
   background-color: #fff;
 }
 
-/* Títulos principais */
 .final-titulo {
   font-size: 28px;
   font-weight: 700;
   color: #264d3a;
 }
 
-/* Texto informativo */
-.final-info {
-  font-size: 18px;
-  font-weight: 500;
-  color: #264d3a;
-}
-
-/* Botão confirmar */
 .final-botao {
   margin-top: 24px;
   background-color: #2a6f4b;
@@ -97,13 +68,32 @@
   transition: background-color 0.3s ease;
 }
 
-.final-botao:hover,
-.final-botao:focus {
+.final-botao:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.final-botao:hover:not(:disabled),
+.final-botao:focus:not(:disabled) {
   background-color: #20492f;
   outline: none;
 }
 
-/* Container dos cards de resumo - flex em linha */
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .resumo-cards {
   display: flex;
   gap: 40px;
@@ -111,7 +101,6 @@
   flex-wrap: wrap;
 }
 
-/* Cartões ONG e Valor - tamanho aumentado */
 .card {
   background: white;
   box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
@@ -127,15 +116,12 @@
   font-size: 16px;
 }
 
-/* Texto dentro dos cards */
 .card .logo-ong {
   font-size: 22px;
   font-weight: 700;
   line-height: 1.3;
 }
 
-
-/* Botão dentro do card */
 .card button {
   background-color: #2a6f4b;
   border: none;
@@ -155,15 +141,6 @@
   outline: none;
 }
 
-/* Texto pequeno dentro do card valor */
-.valor-mensal {
-  font-weight: 500;
-  font-size: 18px;
-  margin-top: 6px;
-  line-height: 1.5;
-}
-
-/* Container do QrCode e botão copiar */
 .qrcode-container {
   display: flex;
   align-items: center;
@@ -171,7 +148,6 @@
   margin-top: 24px;
 }
 
-/* QrCode estilizado */
 .qrcode-container img {
   width: 140px;
   height: 140px;
@@ -179,7 +155,6 @@
   box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
 }
 
-/* Botão copiar link */
 .btn-copiar {
   background-color: #d7e9db;
   border: none;
@@ -190,7 +165,6 @@
   cursor: pointer;
   box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
   transition: background-color 0.3s ease;
-  user-select: none;
 }
 
 .btn-copiar:hover,
@@ -199,7 +173,6 @@
   outline: none;
 }
 
-/* Barra de status abaixo */
 .status-validando {
   margin-top: 32px;
   background-color: #f8d7da;
@@ -214,32 +187,6 @@
   align-self: center;
 }
 
-/* Área de pagamento após confirmação */
-.final-pagamento {
-  margin-top: 32px;
-  width: 100%;
-  max-width: 600px;
-  color: #264d3a;
-}
-
-.final-subtitulo {
-  font-size: 22px;
-  margin-bottom: 16px;
-  font-weight: 600;
-}
-
-/* Box de pagamento */
-.final-box {
-  border: 2px dashed #bbb;
-  border-radius: 8px;
-  padding: 40px 20px;
-  color: #666;
-  font-style: italic;
-  font-size: 14px;
-  width: 100%;
-}
-
-/* Responsividade simples */
 @media (max-width: 520px) {
   .final-container {
     padding: 20px 16px;
@@ -248,10 +195,6 @@
 
   .final-titulo {
     font-size: 24px;
-  }
-
-  .final-info {
-    font-size: 16px;
   }
 
   .final-botao {
