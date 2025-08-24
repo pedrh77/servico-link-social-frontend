@@ -149,7 +149,6 @@ export default function RegisterPage() {
             />
           </label>
 
-          {/* Campo senha */}
           <label>
             Senha
             <div className="password-field">
@@ -171,7 +170,6 @@ export default function RegisterPage() {
             </div>
           </label>
 
-          {/* Confirmar senha */}
           <label>
             Confirmar senha
             <div className="password-field">

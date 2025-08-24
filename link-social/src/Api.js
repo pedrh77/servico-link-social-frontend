@@ -58,6 +58,28 @@ export async function getUsuarioAutenticado() {
   return data;
 }
 
+export async function getBeneficios(idOng) {
+  try {
+    const response = await fetch(`${API_URL}/api/Beneficios`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar benefícios:", error);
+    return [];
+  }
+}
+
+
 export async function getBeneficiosPorOngId(idOng) {
   try {
     const response = await fetch(`${API_URL}/api/Beneficios/Usuario/${idOng}`, {
@@ -78,6 +100,30 @@ export async function getBeneficiosPorOngId(idOng) {
     return [];
   }
 }
+
+export async function criarBeneficio(dados) {
+  try {
+    const response = await fetch(`${API_URL}/api/Beneficios`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify(dados)
+    });
+
+    if (!response.ok) {
+      const erro = await response.text();
+      throw new Error(`Erro ao criar benefício: ${erro}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 
 export async function getOngs() {
   try {

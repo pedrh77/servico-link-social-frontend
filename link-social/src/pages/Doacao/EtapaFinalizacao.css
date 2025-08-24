@@ -160,7 +160,7 @@
   box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
 }
 .logout {
-  background-color: #e74c3c; /* vermelho principal */
+  background-color: #e74c3c; 
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -172,7 +172,7 @@
 }
 
 .logout:hover {
-  background-color: #c0392b; /* vermelho mais escuro no hover */
+  background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
@@ -237,7 +237,6 @@
 
 .status-validando {
   background-color: #f8d7da;
-  /* Vermelho para erros */
   color: #721c24;
   padding: 12px 40px;
   border-radius: 20px;
@@ -251,7 +250,6 @@
 
 .finalizacao-sucesso {
   background-color: #e6f8ed;
-  /* Verde claro para sucesso */
   border: 1px solid #a8e1b8;
   padding: 20px 24px;
   border-radius: 8px;

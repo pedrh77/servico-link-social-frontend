@@ -24,7 +24,7 @@ a {
 }
 
 .logout {
-  background-color: #e74c3c; /* vermelho principal */
+  background-color: #e74c3c; 
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -36,7 +36,7 @@ a {
 }
 
 .logout:hover {
-  background-color: #c0392b; /* vermelho mais escuro no hover */
+  background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
@@ -121,7 +121,6 @@ a {
   color: #2F855A;
 }
 
-/* ABOUT */
 .about {
   display: flex;
   flex-wrap: wrap;
@@ -174,7 +173,6 @@ a {
   background-color: #fff;
 }
 
-/* PARTNERS */
 .partners {
   padding: 60px 0;
   background-color: #f8f8f8;
@@ -227,7 +225,6 @@ a {
   object-fit: contain;
 }
 
-/* JOIN */
 .join {
   padding: 60px 20px;
   background-color: #E7F5EE;
@@ -255,7 +252,6 @@ a {
   background-color: #005fa3;
 }
 
-/* BENEFITS */
 .benefits {
   padding: 60px 0;
   background-color: #ffffff;
@@ -305,7 +301,6 @@ a {
   color: #2F855A;
 }
 
-/* FOOTER */
 .footer {
   background-color: #2F855A;
   color: white;
@@ -339,7 +334,6 @@ a {
   background-color: #e0e0e0;
 }
 
-/* RESPONSIVO */
 @media (max-width: 768px) {
   .hamburger {
     display: block;

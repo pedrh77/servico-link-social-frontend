@@ -1,4 +1,3 @@
-/* RESET E BASE */
 * {
   margin: 0;
   padding: 0;
@@ -19,7 +18,6 @@ a {
   color: inherit;
 }
 
-/* HEADER */
 .header {
   width: 100vw;
   display: flex;
@@ -29,7 +27,6 @@ a {
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 0;
 }
 
 .header-content {
@@ -46,7 +43,6 @@ a {
   width: auto;
 }
 
-/* MENU */
 .nav {
   display: flex;
   gap: 24px;
@@ -80,7 +76,7 @@ a {
 }
 
 .logout {
-  background-color: #e74c3c; /* vermelho principal */
+  background-color: #e74c3c;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -92,7 +88,7 @@ a {
 }
 
 .logout:hover {
-  background-color: #c0392b; /* vermelho mais escuro no hover */
+  background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
@@ -107,7 +103,6 @@ a {
   outline-offset: 2px;
 }
 
-/* HAMBURGER MOBILE */
 .hamburger {
   display: none;
   background: none;
@@ -117,7 +112,6 @@ a {
   color: #2F855A;
 }
 
-/* CONTAINER USUARIO */
 .usuario-container {
   max-width: 720px;
   margin: 40px auto;
@@ -125,14 +119,6 @@ a {
   color: #333;
 }
 
-/* TÍTULO */
-.usuario-titulo {
-  font-size: 2.2rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* ACCORDION */
 .accordion-section {
   margin-bottom: 20px;
   border: 1.5px solid #2F855A;
@@ -156,9 +142,7 @@ a {
   user-select: none;
   transition: background 0.3s ease;
 }
-.accordion-header, .btn-editar, .btn-salvar, .btn-cancelar {
-  user-select: none;
-}
+
 .accordion-header:hover {
   background: linear-gradient(90deg, #276749, #22543d);
 }
@@ -184,7 +168,6 @@ a {
   color: #555;
 }
 
-/* FORMULÁRIOS */
 .form-dados, .form-beneficio {
   padding: 20px;
   display: flex;
@@ -192,82 +175,54 @@ a {
   gap: 16px;
 }
 
-.form-dados label, .form-beneficio label {
+.form-dados label,
+.form-beneficio label {
+  display: block;
+  margin-bottom: 6px;
   font-weight: 600;
-  font-size: 1rem;
   color: #333;
 }
 
-.input-dados, .form-beneficio input {
-  padding: 10px 12px;
+.input-dados, 
+.form-beneficio input, 
+.textarea-beneficio {
+  width: 100%;
+  padding: 12px 14px;
   font-size: 1rem;
   border: 1.5px solid #ccc;
-  border-radius: 6px;
-  transition: border-color 0.3s;
-  width: 100%;
-}
-
-.input-dados.input-editando, .form-beneficio input:focus {
-  border-color: #2F855A;
-  background-color: #f9fff9;
-  outline: none;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  transition: all 0.25s ease;
+  font-family: 'Manjari', sans-serif;
 }
 
 .input-dados:disabled {
-  background-color: #eee;
-  color: #555;
+  background-color: #f0f0f0;
+  color: #777;
+  cursor: not-allowed;
 }
 
-/* TEXTAREA */
-.textarea-beneficio {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 1rem;
-  border: 1.5px solid #ccc;
-  border-radius: 6px;
-  resize: vertical;
-  min-height: 80px;
-  transition: border-color 0.3s;
-}
-
+.input-dados.input-editando, 
+.form-beneficio input:focus, 
 .textarea-beneficio:focus {
   border-color: #2F855A;
-  background-color: #f9fff9;
+  box-shadow: 0 0 6px rgba(47,133,90,0.3);
   outline: none;
+  background-color: #f9fff9;
 }
 
-/* BOTÕES DE VALORES */
-.valor-opcoes {
-  display: flex;
-  gap: 12px;
-  margin: 10px 0 20px;
-  flex-wrap: wrap;
+.textarea-beneficio {
+  min-height: 100px;
+  resize: vertical;
 }
 
-.valor-btn {
-  flex: 1;
-  min-width: 70px;
-  padding: 12px;
-  font-weight: 700;
-  border-radius: 6px;
-  border: 2px solid #2F855A;
-  background-color: white;
-  color: #2F855A;
-  cursor: pointer;
-  transition: all 0.25s ease;
+.input-dados::placeholder,
+.textarea-beneficio::placeholder {
+  color: #aaa;
+  font-style: italic;
 }
 
-.valor-btn:hover {
-  background-color: #e6f5ec;
-}
-
-.valor-btn.selecionado {
-  background-color: #2F855A;
-  color: white;
-  transform: scale(1.05);
-}
-
-/* BOTÕES */
 .botoes-salvar-cancelar {
   display: flex;
   gap: 12px;
@@ -281,10 +236,10 @@ a {
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.25s ease;
   font-size: 1rem;
   color: white;
   background-color: #2F855A;
+  transition: background-color 0.25s ease;
 }
 
 .btn-editar:hover, .btn-salvar:hover {
@@ -307,7 +262,7 @@ a {
   background-color: #ba2d25;
 }
 
-.btn-criar-beneficio {
+.btn-criar-beneficio, .btn-nova-doacao {
   background-color: #2F855A;
   color: white;
   font-weight: 700;
@@ -316,66 +271,49 @@ a {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.25s ease;
-  align-self: flex-start;
 }
 
-.btn-criar-beneficio:hover {
+.btn-criar-beneficio:hover, .btn-nova-doacao:hover {
   background-color: #005fa3;
 }
 
-/* BOTÃO NOVA DOAÇÃO */
 .btn-nova-doacao {
-  background-color: #2F855A;
-  color: white;
-  font-weight: 700;
-  padding: 12px 28px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.25s ease;
   margin-top: 20px;
   display: inline-block;
 }
 
-.btn-nova-doacao:hover {
-  background-color: #005fa3;
-}
-
-/* LISTA BENEFÍCIOS */
-.lista-beneficios {
+.lista-beneficios, .lista-doacoes {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-}
-
-.card-beneficio {
-  background-color: #f0f9f5;
-  padding: 18px 20px;
-  border-radius: 12px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-  font-weight: 600;
-  color: #2F855A;
-}
-
-/* LISTA DOAÇÕES */
-.lista-doacoes {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr;
   gap: 16px;
 }
 
-.card-doacao {
-  background-color: #f0f9f5;
+.lista-beneficios {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.card-beneficio, .card-doacao {
   padding: 18px 20px;
   border-radius: 12px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.1);
   font-weight: 600;
+}
+
+.card-doacao.doador {
+  background-color: #E0F7FA;
+  color: #006064;
+}
+
+.card-doacao.ong {
+  background-color: #FFF3E0;
+  color: #E65100;
+}
+
+.card-beneficio.empresa {
+  background-color: #F0F9F5;
   color: #2F855A;
 }
 
-/* MENSAGEM DE ERRO */
 .error {
   color: #ba2d25;
   font-weight: 700;
@@ -383,7 +321,6 @@ a {
   margin: 20px 0;
 }
 
-/* RESPONSIVIDADE */
 @media (max-width: 768px) {
   .hamburger {
     display: block;

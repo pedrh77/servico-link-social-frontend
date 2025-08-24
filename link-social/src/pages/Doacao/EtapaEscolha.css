@@ -16,7 +16,7 @@
   flex-direction: column;
 }
 .logout {
-  background-color: #e74c3c; /* vermelho principal */
+  background-color: #e74c3c;  
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -28,7 +28,7 @@
 }
 
 .logout:hover {
-  background-color: #c0392b; /* vermelho mais escuro no hover */
+  background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }

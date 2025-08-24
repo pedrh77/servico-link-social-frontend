@@ -4,12 +4,14 @@ import {
   getBeneficiosPorOngId,
   GetDoacoesByDoadorId,
   GetDoacoesByOngId,
+  criarBeneficio as apiCriarBeneficio,
 } from "../../Api";
 import "./Usuario.css";
 
 export default function Usuario() {
+  // Estados principais
   const [dados, setDados] = useState(null);
-  const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [tipoUsuario, setTipoUsuario] = useState(null); // 0 = Doador, 1 = ONG, 2 = Empresa
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editando, setEditando] = useState(false);
@@ -23,7 +25,7 @@ export default function Usuario() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [doacoes, setDoacoes] = useState([]);
 
-  // Carrega usuário logado
+  // --------- EFEITO: Carrega usuário autenticado ---------
   useEffect(() => {
     async function carregarUsuario() {
       try {
@@ -31,8 +33,8 @@ export default function Usuario() {
         setDados(usuario);
         setTipoUsuario(usuario.tipoUsuario);
         sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
-      } catch (error) {
-        setError(error.message);
+      } catch (err) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -40,9 +42,7 @@ export default function Usuario() {
     carregarUsuario();
   }, []);
 
-
-
-  // Carrega benefícios (apenas para EMPRESA)
+  // --------- EFEITO: Carrega benefícios se for empresa ---------
   useEffect(() => {
     let ativo = true;
     async function carregarBeneficios() {
@@ -50,38 +50,32 @@ export default function Usuario() {
         try {
           const lista = await getBeneficiosPorOngId(dados.id);
           if (ativo) setBeneficios(lista);
-        } catch (error) {
-          console.error("Erro ao carregar benefícios:", error);
+        } catch (err) {
+          console.error("Erro ao carregar benefícios:", err);
         }
       }
     }
     carregarBeneficios();
-    return () => {
-      ativo = false;
-    };
+    return () => (ativo = false);
   }, [tipoUsuario, dados?.id]);
 
-  // Handlers gerais
-  function handleChange(e) {
-    setDados({ ...dados, [e.target.name]: e.target.value });
-  }
+  // --------- Funções auxiliares ---------
+  const handleChange = (e) => setDados({ ...dados, [e.target.name]: e.target.value });
 
-  function handleSalvar() {
+  const handleSalvar = () => {
     setEditando(false);
     alert("Dados salvos com sucesso!");
-  }
+  };
 
-  function handleCancelar() {
-    setEditando(false);
-  }
+  const handleCancelar = () => setEditando(false);
 
-  function handleLogout() {
+  const handleLogout = () => {
     sessionStorage.removeItem("token");
     setLogado(false);
     window.location.href = "/login";
-  }
+  };
 
-  async function criarBeneficio() {
+  const criarNovoBeneficio = async () => {
     if (!descricaoBeneficio.trim() || !valorBeneficio) {
       alert("Preencha descrição e valor do benefício.");
       return;
@@ -93,19 +87,8 @@ export default function Usuario() {
         Valor: parseFloat(valorBeneficio),
       };
 
-      const token = sessionStorage.getItem("token");
-      const response = await fetch("https://localhost:7148/api/Beneficios", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(novoBeneficio),
-      });
-
-      if (!response.ok) {
-        throw new Error("Falha ao criar benefício");
-      }
+      const response = await apiCriarBeneficio(novoBeneficio);
+      if (!response.ok) throw new Error("Falha ao criar benefício");
 
       const listaAtualizada = await getBeneficiosPorOngId(dados.id);
       setBeneficios(listaAtualizada);
@@ -113,10 +96,10 @@ export default function Usuario() {
       setDescricaoBeneficio("");
       setValorBeneficio("");
       alert("Benefício criado com sucesso!");
-    } catch (error) {
-      alert("Erro ao criar benefício: " + error.message);
+    } catch (err) {
+      alert("Erro ao criar benefício: " + err.message);
     }
-  }
+  };
 
   const toggleSection = (section) => {
     switch (section) {
@@ -134,16 +117,11 @@ export default function Usuario() {
     }
   };
 
-  const tipoDoacaoTexto = (tipo) => {
-    const mapa = { 1: "Única", 2: "Mensal - 6x", 3: "Mensal - 12x" };
-    return mapa[tipo] || "Desconhecido";
-  };
+  const tipoDoacaoTexto = (tipo) => ({ 1: "Única", 2: "Mensal - 6x", 3: "Mensal - 12x" }[tipo] || "Desconhecido");
 
-  const statusTexto = (status) => {
-    const mapa = { 0: "Pendente", 1: "Pago", 2: "Cancelado" };
-    return mapa[status] ?? "Desconhecido";
-  };
+  const statusTexto = (status) => ({ 0: "Pendente", 1: "Pago", 2: "Cancelado" }[status] ?? "Desconhecido");
 
+  // --------- Loading/Error ---------
   if (loading) return <p>Carregando dados...</p>;
   if (error) return <p className="error">{error}</p>;
   if (!dados) return <p>Dados do usuário não disponíveis</p>;
@@ -156,30 +134,17 @@ export default function Usuario() {
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
 
-          <button
-            className="hamburger"
-            id="menu-toggle"
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
+          <button className="hamburger" id="menu-toggle" onClick={() => setMenuAberto(!menuAberto)}>
             ☰
           </button>
 
           <nav className={`nav ${menuAberto ? "show" : ""}`} id="nav-menu">
             {logado ? (
-              <button className="logout" onClick={handleLogout}>
-                Sair
-              </button>
+              <button className="logout" onClick={handleLogout}>Sair</button>
             ) : (
               <>
-                <a href="/login" className="login">
-                  Entrar
-                </a>
-                <button
-                  className="signup"
-                  onClick={() => (window.location.href = "/register")}
-                >
-                  Cadastrar
-                </button>
+                <a href="/login" className="login">Entrar</a>
+                <button className="signup" onClick={() => (window.location.href = "/register")}>Cadastrar</button>
               </>
             )}
           </nav>
@@ -187,7 +152,6 @@ export default function Usuario() {
       </header>
 
       <div className="usuario-container">
-        {/* Editar Dados */}
         <section className="accordion-section">
           <button
             className="accordion-header"
@@ -203,177 +167,76 @@ export default function Usuario() {
             <form
               id="editarDados-content"
               className="form-dados"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSalvar();
-              }}
+              onSubmit={(e) => { e.preventDefault(); handleSalvar(); }}
             >
               <label>
                 Nome Completo:
-                <input
-                  name="nome"
-                  value={dados.nome ?? ""}
-                  disabled={!editando}
-                  onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""}`}
-                  required
-                />
+                <input name="nome" value={dados.nome ?? ""} disabled={!editando} onChange={handleChange} required />
               </label>
               <label>
                 E-mail:
-                <input
-                  name="email"
-                  type="email"
-                  value={dados.email ?? ""}
-                  disabled={!editando}
-                  onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""}`}
-                  required
-                />
+                <input name="email" type="email" value={dados.email ?? ""} disabled={!editando} onChange={handleChange} required />
               </label>
               <label>
                 Telefone:
-                <input
-                  name="telefone"
-                  value={dados.telefone ?? ""}
-                  disabled={!editando}
-                  onChange={handleChange}
-                  className={`input-dados ${editando ? "input-editando" : ""}`}
-                  required
-                />
+                <input name="telefone" value={dados.telefone ?? ""} disabled={!editando} onChange={handleChange} required />
               </label>
               {tipoUsuario === 0 ? (
-                <label>
-                  CPF:
-                  <input
-                    name="cpf"
-                    value={dados.cpf ?? ""}
-                    disabled={!editando}
-                    onChange={handleChange}
-                    className={`input-dados ${editando ? "input-editando" : ""}`}
-                    required
-                  />
-                </label>
+                <label>CPF: <input name="cpf" value={dados.cpf ?? ""} disabled={!editando} onChange={handleChange} required /></label>
               ) : (
-                <label>
-                  CNPJ:
-                  <input
-                    name="cnpj"
-                    value={dados.cnpj ?? ""}
-                    disabled={!editando}
-                    onChange={handleChange}
-                    className={`input-dados ${editando ? "input-editando" : ""}`}
-                    required
-                  />
-                </label>
+                <label>CNPJ: <input name="cnpj" value={dados.cnpj ?? ""} disabled={!editando} onChange={handleChange} required /></label>
               )}
-
               {!editando ? (
-                <button
-                  type="button"
-                  className="btn-editar"
-                  onClick={() => setEditando(true)}
-                >
-                  Editar Dados
-                </button>
+                <button type="button" onClick={() => setEditando(true)}>Editar Dados</button>
               ) : (
                 <div className="botoes-salvar-cancelar">
-                  <button type="submit" className="btn-salvar">
-                    Salvar
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-cancelar"
-                    onClick={handleCancelar}
-                  >
-                    Cancelar
-                  </button>
+                  <button type="submit">Salvar</button>
+                  <button type="button" onClick={handleCancelar}>Cancelar</button>
                 </div>
               )}
             </form>
           )}
         </section>
 
-        {/* Doações - DOADOR */}
         {tipoUsuario === 0 && (
           <section className="accordion-section">
-            <button
-              className="accordion-header"
-              type="button"
-              aria-expanded={true}
-              aria-controls="doacoes-content"
-            >
+            <button className="accordion-header" type="button" aria-expanded={true}>
               Minhas Doações
             </button>
-            <div id="doacoes-content" className="lista-doacoes-container">
-              {doacoes.length === 0 ? (
-                <p>Você ainda não possui doações.</p>
-              ) : (
+            <div className="lista-doacoes-container">
+              {doacoes.length === 0 ? <p>Você ainda não possui doações.</p> : (
                 <ul className="lista-doacoes">
                   {doacoes.map((d) => (
-                    <li key={d.id} className="card-doacao">
-                      <div className="doacao-ong">
-                        ONG: {d.nomeOng ?? "Desconhecida"}
-                      </div>
-                      <div className="doacao-beneficio">
-                        Benefício: {d.descricaoBeneficio ?? "-"}
-                      </div>
-                      <div className="doacao-valor">
-                        Valor: R$ {(d.valor ?? 0).toFixed(2)}
-                      </div>
-                      <div className="doacao-tipo">
-                        Tipo: {tipoDoacaoTexto(d.tipoDoacao)}
-                      </div>
-                      <div className="doacao-status">
-                        Status: {statusTexto(d.statusPagamento)}
-                      </div>
+                    <li key={d.id}>
+                      <p>ONG: {d.nomeOng ?? "Desconhecida"}</p>
+                      <p>Benefício: {d.descricaoBeneficio ?? "-"}</p>
+                      <p>Valor: R$ {(d.valor ?? 0).toFixed(2)}</p>
+                      <p>Tipo: {tipoDoacaoTexto(d.tipoDoacao)}</p>
+                      <p>Status: {statusTexto(d.statusPagamento)}</p>
                     </li>
                   ))}
                 </ul>
               )}
-              <button
-                className="btn-nova-doacao"
-                onClick={() => (window.location.href = "/etapa-selecao")}
-              >
-                Nova Doação
-              </button>
+              <button onClick={() => (window.location.href = "/etapa-selecao")}>Nova Doação</button>
             </div>
           </section>
         )}
 
-        {/* Doações recebidas - ONG */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
-            <button
-              className="accordion-header"
-              type="button"
-              aria-expanded={true}
-              aria-controls="doacoesOng-content"
-            >
+            <button className="accordion-header" type="button" aria-expanded={true}>
               Doações Recebidas
             </button>
-            <div id="doacoesOng-content" className="lista-doacoes-container">
-              {doacoes.length === 0 ? (
-                <p>Sua ONG ainda não recebeu doações.</p>
-              ) : (
+            <div className="lista-doacoes-container">
+              {doacoes.length === 0 ? <p>Sua ONG ainda não recebeu doações.</p> : (
                 <ul className="lista-doacoes">
                   {doacoes.map((d) => (
-                    <li key={d.id} className="card-doacao">
-                      <div className="doacao-doador">
-                        Doador: {d.nomeDoador ?? "Anônimo"}
-                      </div>
-                      <div className="doacao-beneficio">
-                        Benefício: {d.descricaoBeneficio ?? "-"}
-                      </div>
-                      <div className="doacao-valor">
-                        Valor: R$ {(d.valor ?? 0).toFixed(2)}
-                      </div>
-                      <div className="doacao-tipo">
-                        Tipo: {tipoDoacaoTexto(d.tipoDoacao)}
-                      </div>
-                      <div className="doacao-status">
-                        Status: {statusTexto(d.statusPagamento)}
-                      </div>
+                    <li key={d.id}>
+                      <p>Doador: {d.nomeDoador ?? "Anônimo"}</p>
+                      <p>Benefício: {d.descricaoBeneficio ?? "-"}</p>
+                      <p>Valor: R$ {(d.valor ?? 0).toFixed(2)}</p>
+                      <p>Tipo: {tipoDoacaoTexto(d.tipoDoacao)}</p>
+                      <p>Status: {statusTexto(d.statusPagamento)}</p>
                     </li>
                   ))}
                 </ul>
@@ -382,96 +245,43 @@ export default function Usuario() {
           </section>
         )}
 
-        {/* Benefícios - EMPRESA */}
         {tipoUsuario === 2 && (
           <>
             <section className="accordion-section">
-              <button
-                className="accordion-header"
-                onClick={() => toggleSection("cadastroBeneficios")}
-                type="button"
-                aria-expanded={showCadastroBeneficios}
-                aria-controls="cadastroBeneficios-content"
-              >
+              <button className="accordion-header" onClick={() => toggleSection("cadastroBeneficios")}>
                 Cadastro de Benefícios
-                <span className="accordion-icon">
-                  {showCadastroBeneficios ? "-" : "+"}
-                </span>
+                <span>{showCadastroBeneficios ? "-" : "+"}</span>
               </button>
               {showCadastroBeneficios && (
-                <form
-                  id="cadastroBeneficios-content"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    criarBeneficio();
-                  }}
-                  className="form-beneficio"
-                >
+                <form onSubmit={(e) => { e.preventDefault(); criarNovoBeneficio(); }}>
                   <label>
                     Descrição:
-                    <textarea
-                      rows="4"
-                      value={descricaoBeneficio}
-                      onChange={(e) => setDescricaoBeneficio(e.target.value)}
-                      placeholder="Descreva o benefício..."
-                      required
-                      className="textarea-beneficio"
-                    />
+                    <textarea value={descricaoBeneficio} onChange={(e) => setDescricaoBeneficio(e.target.value)} rows="4" required />
                   </label>
-
                   <label>Valor:</label>
-                  <div className="valor-opcoes">
-                    {[5, 10, 20, 50].map((valor) => (
-                      <button
-                        key={valor}
-                        type="button"
-                        className={`valor-btn ${
-                          valorBeneficio == valor ? "selecionado" : ""
-                        }`}
-                        onClick={() => setValorBeneficio(valor)}
-                      >
-                        R$ {valor}
-                      </button>
+                  <div>
+                    {[5, 10, 20, 50].map((v) => (
+                      <button key={v} type="button" className={valorBeneficio == v ? "selecionado" : ""} onClick={() => setValorBeneficio(v)}>R$ {v}</button>
                     ))}
                   </div>
-
-                  <button type="submit" className="btn-criar-beneficio">
-                    Criar Benefício
-                  </button>
+                  <button type="submit">Criar Benefício</button>
                 </form>
               )}
             </section>
 
             <section className="accordion-section">
-              <button
-                className="accordion-header"
-                onClick={() => toggleSection("beneficiosAtivos")}
-                type="button"
-                aria-expanded={showBeneficiosAtivos}
-                aria-controls="beneficiosAtivos-content"
-              >
+              <button className="accordion-header" onClick={() => toggleSection("beneficiosAtivos")}>
                 Benefícios Ativos
-                <span className="accordion-icon">
-                  {showBeneficiosAtivos ? "-" : "+"}
-                </span>
+                <span>{showBeneficiosAtivos ? "-" : "+"}</span>
               </button>
               {showBeneficiosAtivos && (
-                <div
-                  id="beneficiosAtivos-content"
-                  className="lista-beneficios-container"
-                >
-                  {beneficios.length === 0 ? (
-                    <p>Você ainda não possui benefícios cadastrados.</p>
-                  ) : (
-                    <ul className="lista-beneficios">
+                <div>
+                  {beneficios.length === 0 ? <p>Você ainda não possui benefícios cadastrados.</p> : (
+                    <ul>
                       {beneficios.map((b) => (
-                        <li key={b.id} className="card-beneficio">
-                          <div className="beneficio-descricao">
-                            {b.descricao}
-                          </div>
-                          <div className="beneficio-valor">
-                            R$ {b.valor.toFixed(2)}
-                          </div>
+                        <li key={b.id}>
+                          <p>{b.descricao}</p>
+                          <p>R$ {b.valor.toFixed(2)}</p>
                         </li>
                       ))}
                     </ul>

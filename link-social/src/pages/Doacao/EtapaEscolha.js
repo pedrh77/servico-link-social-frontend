@@ -73,10 +73,8 @@ export default function EtapaEscolha() {
         </div>
       </header>
 
-      {/* TÍTULO */}
       <h1 className="titulo">Escolha uma ONG</h1>
 
-      {/* GRID DE ONGS */}
       <div className="grid-ongs">
         {ongs.map((ong) => (
           <div

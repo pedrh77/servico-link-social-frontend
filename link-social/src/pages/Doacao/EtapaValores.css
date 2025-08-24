@@ -1,15 +1,22 @@
- .container {
-     box-sizing: border-box;
- }
+.container {
+  box-sizing: border-box;
+  font-family: 'Manjari', sans-serif;
+  background-color: #e6f0eb; 
+}
 
+.titulo {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1e6047;
+}
 
- .grid-cards {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-     gap: 28px 24px;
-     padding: 20px 20px 30px 20px;
-     align-items: stretch;
- }
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  align-items: stretch;
+}
 
 .loading-container {
   display: flex;
@@ -20,7 +27,7 @@
 
 .loader {
   border: 8px solid #f3f3f3;
-  border-top: 8px solid #2c7a50; 
+  border-top: 8px solid #2c7a50;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -31,144 +38,132 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
- .card-doacao {
-     background: #fff;
-     border: 1px solid #eaeaea;
-     border-radius: 8px;
-     padding: 20px;
-     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     transition: transform 0.2s ease;
-     height: 100%;
-     box-sizing: border-box;
- }
 
- .card-doacao:hover {
-     transform: scale(1.03);
-     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
- }
+.card-doacao {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
 
+.card-doacao:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
 
- .acoes-doacao {
-     display: flex;
-     gap: 12px;
-     margin-top: 14px;
-     justify-content: center;
-     width: 100%;
- }
+.card-doacao.selecionado {
+  border: 2px solid #247a58;
+  box-shadow: 0 8px 16px rgba(36,122,88,0.3);
+}
 
+.card-doacao h3 {
+  font-size: 22px;
+  color: #247a58;
+  margin: 0 0 8px 0;
+}
 
- .btn-escolher {
-     background-color: #247a58;
-     color: white;
-     padding: 10px 20px;
-     border-radius: 24px;
-     border: none;
-     cursor: pointer;
-     font-size: 15px;
-     min-width: 110px;
-     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-     box-shadow: none;
-     user-select: none;
- }
+.beneficios-extra{
+  width: 100%;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 16px;
+}
 
- .btn-escolher:hover {
-     background-color: #1e6047;
- }
+.expandido {
+  max-height: 1000px; 
+  opacity: 1;
+  padding: 14px 16px;
+}
 
- .btn-escolher.ativo {
-     background-color: #1b4f3b;
-     box-shadow: 0 0 12px 3px rgba(27, 79, 59, 0.6);
- }
+.beneficios-extra p {
+  font-size: 15px;
+  color: #1e6047;
+  margin-bottom: 8px;
+}
 
+.beneficios-extra ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
 
- .opcoes-extra {
-     max-height: 0;
-     overflow: hidden;
-     transition: max-height 280ms ease, opacity 200ms ease;
-     opacity: 0;
-     width: 100%;
-     margin-top: 14px;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     pointer-events: none;
- }
+.beneficios-extra li {
+  font-size: 14px;
+  color: #247a58;
+  margin-bottom: 4px;
+}
 
- .opcoes-extra.expandido {
-     opacity: 1;
-     max-height: 220px;
-     pointer-events: auto;
- }
+.card-doacao .beneficios-extra input[type="radio"] {
+  display: none;
+}
 
+.card-doacao .beneficios-extra label {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-right: 10px;
+  border: 2px solid #247a58;
+  border-radius: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #247a58;
+  transition: all 0.3s ease;
+  user-select: none;
+}
 
- .texto-meses {
-     font-weight: 600;
-     margin-bottom: 10px;
-     color: #247a58;
-     font-size: 16px;
-     user-select: none;
- }
+.card-doacao .beneficios-extra input[type="radio"]:checked + label {
+  background-color: #247a58;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(36, 122, 88, 0.5);
+}
 
+.card-doacao .beneficios-extra input[type="radio"]:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
- .opcoes-meses {
-     display: flex;
-     gap: 12px;
-     flex-wrap: wrap;
-     justify-content: center;
-     width: 100%;
- }
+.card-doacao .beneficios-extra div {
+  margin-top: 10px;
+}
 
+@media (max-width: 480px) {
+  .card-doacao .beneficios-extra label {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
 
- .btn-extra {
-     background-color: #f2f2f2;
-     color: #247a58;
-     font-size: 14px;
-     padding: 7px 14px;
-     border-radius: 18px;
-     border: 1.5px solid #247a58;
-     cursor: pointer;
-     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-     user-select: none;
- }
+.btn-avancar-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding: 20px;
+}
 
- .btn-extra:hover {
-     background-color: #e8f5f0;
-     box-shadow: 0 0 6px rgba(36, 122, 88, 0.3);
- }
+.botao-avancar {
+  background-color: #247a58;
+  color: white;
+  font-weight: 700;
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(36,122,88,0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
- .btn-extra.selecionado {
-     background-color: #247a58;
-     color: white;
-     border-color: #1e6047;
-     box-shadow: 0 0 8px #1e6047cc;
- }
+.botao-avancar:hover {
+  background-color: #1e6047;
+  box-shadow: 0 6px 12px rgba(30,96,71,0.8);
+}
 
-
- .btn-avancar-container {
-     margin-top: 32px;
-     text-align: center;
-     padding: 20px
- }
-
- .botao-avancar {
-     background-color: #247a58;
-     color: white;
-     font-weight: 700;
-     padding: 14px 36px;
-     font-size: 17px;
-     border: none;
-     border-radius: 28px;
-     cursor: pointer;
-     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-     user-select: none;
-     box-shadow: 0 4px 8px rgba(36, 122, 88, 0.5);
-
- }
-
- .botao-avancar:hover {
-     background-color: #1e6047;
-     box-shadow: 0 6px 12px rgba(30, 96, 71, 0.8);
- }
+html {
+  scroll-behavior: smooth;
+}

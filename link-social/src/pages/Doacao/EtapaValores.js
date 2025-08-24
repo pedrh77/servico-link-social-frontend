@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EtapaValores.css";
-import { getBeneficiosPorOngId } from "../../Api.js";
+import { getBeneficios } from "../../Api.js";
 
 export default function EtapaDoacao() {
   const [beneficios, setBeneficios] = useState([]);
-  const [mensalExpandido, setMensalExpandido] = useState(null);
-  const [mesesEscolhidos, setMesesEscolhidos] = useState({});
-  const [unicaSelecionada, setUnicaSelecionada] = useState(null);
+  const [beneficioSelecionado, setBeneficioSelecionado] = useState(null);
+  const [tipoDoacao, setTipoDoacao] = useState("Única");
+  const [meses, setMeses] = useState(null);
   const [loading, setLoading] = useState(true);
   const [usuario, setUsuario] = useState(null);
 
@@ -25,7 +25,7 @@ export default function EtapaDoacao() {
         return;
       }
       try {
-        const lista = await getBeneficiosPorOngId(ongSelecionada.id);
+        const lista = await getBeneficios();
         setBeneficios(lista);
       } catch (error) {
         console.error("Erro ao buscar benefícios:", error);
@@ -36,69 +36,56 @@ export default function EtapaDoacao() {
     fetchBeneficios();
   }, []);
 
-  function toggleMensal(index) {
-    if (mensalExpandido === index) {
-      setMensalExpandido(null);
+  function selecionarBeneficio(index) {
+    if (beneficioSelecionado === index) {
+      setBeneficioSelecionado(null);
+      setTipoDoacao("Única");
+      setMeses(null);
     } else {
-      setMensalExpandido(index);
-      setUnicaSelecionada(null);
+      setBeneficioSelecionado(index);
+      setTipoDoacao("Única");
+      setMeses(null);
+
+      // Scroll suave até o cartão expandido
+      setTimeout(() => {
+        const element = document.getElementById(`card-${index}`);
+        if (element) element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
     }
   }
 
-  function escolherMes(index, mes) {
-    setMesesEscolhidos((prev) => ({ ...prev, [index]: mes }));
-  }
-
-  function escolherUnica(index) {
-    setMensalExpandido(null);
-    setMesesEscolhidos((prev) => {
-      const novo = { ...prev };
-      delete novo[index];
-      return novo;
-    });
-    setUnicaSelecionada(index);
-  }
-
-  function finalizarDoacao() {
+  function finalizarDoacao(index) {
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
-
     if (!usuarioLogado) {
       sessionStorage.setItem("retornoAposLogin", window.location.pathname);
       alert("Você precisa entrar na sua conta para finalizar a doação.");
-      window.location.href = "/login"; // redireciona para login
+      window.location.href = "/login";
       return;
     }
 
-    const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
-    if (!ongSelecionada) return;
-
-    const indexSelecionado = unicaSelecionada ?? mensalExpandido;
-    const beneficio = beneficios[indexSelecionado];
-
+    const beneficio = beneficios[index];
     if (!beneficio) {
       alert("Selecione um benefício antes de continuar.");
       return;
     }
 
+    if (tipoDoacao === "Mensal" && !meses) {
+      alert("Selecione a duração da doação mensal (6 ou 12 meses).");
+      return;
+    }
+
     const doacao = {
-      ong: ongSelecionada.nome,
-      ongId: ongSelecionada.id,
+      ong: beneficio.nomeEmpresa,
+      ongId: beneficio.empresaId,
       valor: beneficio.valor.toFixed(2),
-      tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
-      meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
+      tipo: tipoDoacao,
+      meses: tipoDoacao === "Mensal" ? meses : null,
       beneficioId: beneficio.id,
       doadorId: usuarioLogado.id,
     };
 
     sessionStorage.setItem("doacaoSelecionada", JSON.stringify(doacao));
-    console.log("Doação selecionada:", doacao);
-
     navigate("/etapa-final");
-  }
-
-  function handleSair() {
-    sessionStorage.clear();
-    navigate("/login");
   }
 
   if (loading)
@@ -109,85 +96,61 @@ export default function EtapaDoacao() {
     );
 
   return (
-    <div className="container" role="main">
-      <header className="header">
-        <div className="header-container">
-          <div className="header-left">
-            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-          </div>
-          <nav className="nav-header">
-            {usuario ? (
-              <button className="logout" onClick={handleSair}>
-                Sair
-              </button>
-            ) : (
-              <>
-                <a href="/login" className="login">
-                  Entrar
-                </a>
-                <button className="signup" onClick={() => (window.location.href = "/register")}>
-                  Cadastrar
-                </button>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
-
+    <div className="container">
       <h1 className="titulo">Selecione o Valor da Doação</h1>
-
       <div className="grid-cards">
-        {beneficios.map((b, index) => {
-          const expandido = mensalExpandido === index;
-          const mesSelecionado = mesesEscolhidos[index] || null;
-          const unicaAtiva = unicaSelecionada === index;
+        {beneficios.map((b, index) => (
+          <div
+            key={b.id}
+            id={`card-${index}`}
+            className={`card-doacao ${beneficioSelecionado === index ? "selecionado" : ""}`}
+          >
+            <h3 onClick={() => selecionarBeneficio(index)}>R$ {b.valor.toFixed(2)}</h3>
 
-          return (
-            <div key={b.id} className="card-doacao" aria-labelledby={`valor-${index}`}>
-              <h3 id={`valor-${index}`}>R$ {b.valor.toFixed(2)}</h3>
-              <p>{b.descricao}</p>
+            {beneficioSelecionado === index && (
+              <div className="beneficios-extra expandido">
+                <p><strong>Você tem direito aos seguintes benefícios:</strong></p>
+                <ul>
+                  <li>{b.nomeEmpresa} - {b.descricao}</li>
+                </ul>
+                <p>Além disso, você terá R$ {(b.valor * 2).toFixed(2)} para usar nos parceiros 💚</p>
 
-              <div className="acoes-doacao" role="group">
-                <button
-                  type="button"
-                  className={`btn-escolher ${unicaAtiva ? "ativo" : ""}`}
-                  onClick={() => escolherUnica(index)}
-                >
-                  Única
-                </button>
-                <button
-                  type="button"
-                  className={`btn-escolher ${expandido ? "ativo" : ""}`}
-                  aria-expanded={expandido}
-                  onClick={() => toggleMensal(index)}
-                >
-                  Mensal
-                </button>
-              </div>
+                <div style={{ marginTop: "10px" }}>
+                  <input type="radio" id={`unica-${index}`} name="tipoDoacao" value="Única"
+                    checked={tipoDoacao === "Única"}
+                    onChange={() => { setTipoDoacao("Única"); setMeses(null); }} />
+                  <label htmlFor={`unica-${index}`}>Única</label>
 
-              <div className={`opcoes-extra ${expandido ? "expandido" : ""}`} aria-hidden={!expandido}>
-                <span className="texto-meses">Escolha a duração:</span>
-                <div className="opcoes-meses">
-                  {[6, 12].map((mes) => (
-                    <button
-                      key={mes}
-                      type="button"
-                      className={`btn-extra ${mesSelecionado === mes ? "selecionado" : ""}`}
-                      onClick={() => escolherMes(index, mes)}
-                    >
-                      {mes} meses
-                    </button>
-                  ))}
+                  <input type="radio" id={`mensal-${index}`} name="tipoDoacao" value="Mensal"
+                    checked={tipoDoacao === "Mensal"}
+                    onChange={() => setTipoDoacao("Mensal")} />
+                  <label htmlFor={`mensal-${index}`}>Mensal</label>
                 </div>
+
+                {tipoDoacao === "Mensal" && (
+                  <div style={{ marginTop: "10px" }}>
+                    <input type="radio" id={`6meses-${index}`} name="meses" value={6}
+                      checked={meses === 6} onChange={() => setMeses(6)} />
+                    <label htmlFor={`6meses-${index}`}>6 meses</label>
+
+                    <input type="radio" id={`12meses-${index}`} name="meses" value={12}
+                      checked={meses === 12} onChange={() => setMeses(12)} />
+                    <label htmlFor={`12meses-${index}`}>12 meses</label>
+                  </div>
+                )}
               </div>
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
 
       <div className="btn-avancar-container">
-        <button className="botao-avancar" onClick={finalizarDoacao}>
-          Finalizar
+        <button
+          className="botao-avancar"
+          disabled={beneficioSelecionado === null || (tipoDoacao === "Mensal" && !meses)}
+          onClick={() => finalizarDoacao(beneficioSelecionado)}
+        >
+          Finalizar Doação
         </button>
       </div>
     </div>
