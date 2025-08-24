@@ -90,8 +90,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .resumo-cards {
@@ -154,6 +159,63 @@
   border-radius: 4px;
   box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
 }
+.logout {
+  background-color: #e74c3c; /* vermelho principal */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #c0392b; /* vermelho mais escuro no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.logout:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.logout:focus {
+  outline: 2px solid #e74c3c;
+  outline-offset: 2px;
+}
+.btn-confirmar {
+  margin-top: 24px;
+  background: linear-gradient(135deg, #2a6f4b, #3d8c61);
+  color: #fff;
+  font-weight: 600;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn-confirmar:hover {
+  background: linear-gradient(135deg, #20492f, #2a6f4b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.btn-confirmar:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-confirmar:disabled {
+  background: #9db7a6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
 
 .btn-copiar {
   background-color: #d7e9db;
@@ -172,8 +234,10 @@
   background-color: #c0d5c1;
   outline: none;
 }
+
 .status-validando {
-  background-color: #f8d7da; /* Vermelho para erros */
+  background-color: #f8d7da;
+  /* Vermelho para erros */
   color: #721c24;
   padding: 12px 40px;
   border-radius: 20px;
@@ -186,11 +250,12 @@
 }
 
 .finalizacao-sucesso {
-  background-color: #e6f8ed; /* Verde claro para sucesso */
+  background-color: #e6f8ed;
+  /* Verde claro para sucesso */
   border: 1px solid #a8e1b8;
   padding: 20px 24px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   text-align: center;
   max-width: 400px;
   margin: 0 auto;

@@ -19,14 +19,37 @@ a {
   color: inherit;
 }
 
- 
 .landing-page {
-  margin: 0;
   width: 100%;
-  box-sizing: border-box;
 }
 
- 
+.logout {
+  background-color: #e74c3c; /* vermelho principal */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #c0392b; /* vermelho mais escuro no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.logout:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.logout:focus {
+  outline: 2px solid #e74c3c;
+  outline-offset: 2px;
+}
 .header {
   width: 100vw;
   display: flex;
@@ -46,7 +69,6 @@ a {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  box-sizing: border-box;
 }
 
 .logo {
@@ -99,7 +121,7 @@ a {
   color: #2F855A;
 }
 
- 
+/* ABOUT */
 .about {
   display: flex;
   flex-wrap: wrap;
@@ -107,8 +129,6 @@ a {
   background-color: #f5f5f5;
   justify-content: space-between;
   align-items: center;
-  box-sizing: border-box;
-  width: 100%;
 }
 
 .about-content {
@@ -154,24 +174,10 @@ a {
   background-color: #fff;
 }
 
-@media (max-width: 768px) {
-  .about {
-    padding: 40px 4vw;
-  }
-
-  .about-text h2 {
-    font-size: 2rem;
-  }
-
-  .about-text p {
-    font-size: 1rem;
-  }}
-
- 
+/* PARTNERS */
 .partners {
   padding: 60px 0;
   background-color: #f8f8f8;
-  box-sizing: border-box;
   width: 100%;
 }
 
@@ -198,7 +204,7 @@ a {
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   transition: transform 0.2s ease;
 }
@@ -213,7 +219,6 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .partner-logo-placeholder img {
@@ -222,57 +227,11 @@ a {
   object-fit: contain;
 }
 
-.badge-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-}
-
-.badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background-color: #E7F5EE;
-  color: #2F855A;
-  padding: 8px 16px;
-  border-radius: 999px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.badge:hover {
-  background-color: #d4f4e4;
-}
-
-.estrela {
-  width: 35px;
-  height: 35px;
-  object-fit: contain;
-}
-
-.badge-text {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.partner-link {
-  color: #2e7d32;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
- 
+/* JOIN */
 .join {
   padding: 60px 20px;
   background-color: #E7F5EE;
   text-align: center;
-  box-sizing: border-box;
-  width: 100%;
 }
 
 .join h4 {
@@ -296,11 +255,10 @@ a {
   background-color: #005fa3;
 }
 
- 
+/* BENEFITS */
 .benefits {
   padding: 60px 0;
   background-color: #ffffff;
-  box-sizing: border-box;
   width: 100%;
 }
 
@@ -347,62 +305,7 @@ a {
   color: #2F855A;
 }
 
- 
-.plans {
-  padding: 60px 0;
-  background-color: #f5f5f5;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.plans h3 {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.plan-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: center;
-  padding: 0 20px;
-}
-
-.plan-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 260px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-}
-
-.plan-card h4 {
-  margin-bottom: 12px;
-}
-
-.plan-card p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 16px;
-}
-
-.plan-button {
-  background-color: #2F855A;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.plan-button:hover {
-  background-color: #005fa3;
-}
-
- 
+/* FOOTER */
 .footer {
   background-color: #2F855A;
   color: white;
@@ -436,7 +339,7 @@ a {
   background-color: #e0e0e0;
 }
 
- 
+/* RESPONSIVO */
 @media (max-width: 768px) {
   .hamburger {
     display: block;

@@ -49,17 +49,9 @@ export default function EtapaFinalizacao() {
       return;
     }
 
-    let tipo = doacaoSelecionada.tipo;
-    let meses = doacaoSelecionada.meses || 12;
-
-    if (!["Unica", "Mensal6x", "Mensal12x"].includes(tipo)) {
-      tipo = "Unica";
-      meses = null;
-    }
-
     setUsuario(usuarioLogado);
     setOng(ongSelecionada);
-    setDoacao({ ...doacaoSelecionada, tipo, meses });
+    setDoacao(doacaoSelecionada);
   }, [navigate]);
 
   const sair = () => {
@@ -70,14 +62,19 @@ export default function EtapaFinalizacao() {
   const editarOng = () => navigate("/etapa-selecao");
   const editarValor = () => navigate("/etapa-valores");
 
-  const tipoDoacaoParaNumero = (tipo) => {
-    const mapa = { Unica: 1, Mensal6x: 2, Mensal12x: 3 };
-    return mapa[tipo] || 1;
+  // 🔥 agora mapeia com base em tipo + meses
+  const tipoDoacaoParaNumero = (tipo, meses) => {
+    if (tipo === "Unica") return 1;
+    if (tipo === "Mensal" && meses === 6) return 2;
+    if (tipo === "Mensal" && meses === 12) return 3;
+    return 1;
   };
 
-  const tipoDoacaoTexto = (tipo) => {
-    const mapa = { Unica: "Única", Mensal6x: "Mensal - 6x", Mensal12x: "Mensal - 12x" };
-    return mapa[tipo] || tipo;
+  const tipoDoacaoTexto = (tipo, meses) => {
+    if (tipo === "Unica") return "Única";
+    if (tipo === "Mensal" && meses === 6) return "Mensal";
+    if (tipo === "Mensal" && meses === 12) return "Mensal - 12x";
+    return "Única";
   };
 
   const confirmarDoacao = async () => {
@@ -96,7 +93,7 @@ export default function EtapaFinalizacao() {
         OngId: ong.id,
         BeneficioId: doacao.beneficioId,
         Valor: parseFloat(doacao.valor),
-        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo),
+        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
         Comentario: "",
       });
 
@@ -120,7 +117,7 @@ export default function EtapaFinalizacao() {
           <img src="/img/logo-link.svg" alt="Logo" className="logo" />
         </div>
         <nav className="nav-header">
-          <button onClick={sair} className="minha-conta">Sair</button>
+          <button onClick={sair} className="logout">Sair</button>
         </nav>
       </header>
 
@@ -135,8 +132,10 @@ export default function EtapaFinalizacao() {
 
           <div className="card">
             <div className="valor">{`R$ ${doacao.valor}`}</div>
-            <div className="tipo-doacao">{tipoDoacaoTexto(doacao.tipo)}</div>
-            {doacao.tipo !== "Unica" && (
+            <div className="tipo-doacao">
+              {doacao.tipo}
+            </div>
+            {doacao.tipo === "Mensal" && (
               <div className="meses">Duração: {doacao.meses} meses</div>
             )}
             <button className="btn-editar" onClick={editarValor}>Editar</button>

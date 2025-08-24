@@ -43,12 +43,11 @@ export default function Home() {
           <nav className="nav" id="nav-menu">
             <a href="#parceiros">Parceiros</a>
             <a href="#beneficios">Benefícios</a>
-            <a href="#planos">Planos</a>
 
             {logado ? (
               <>
-                <a href="/minha-conta">Minha Conta</a>
-                <button className="logout-button" onClick={handleLogout}>
+                <a href="/usuario">Minha Conta</a>
+                <button className="logout" onClick={handleLogout}>
                   Sair
                 </button>
               </>
@@ -90,27 +89,19 @@ export default function Home() {
         </div>
       </section>
 
-
-
       <section className="partners" id="parceiros">
         <h3 className="manjari-bold">Parceiros Premium</h3>
         <div className="partner-cards">
           {[
-              { name: "ABRAPEC", logo: "/img/partner-01.svg" },
-              { name: "Obreiros do Bem", logo: "/img/partner-02.svg" },
-              { name: "It's Sweet", logo: "/img/partner-03.svg" },
-              { name: "Amarello", logo: "/img/partner-04.svg" },
-              { name: "Adevrip", logo: "/img/partner-05.svg" },
+            { name: "ABRAPEC", logo: "/img/partner-01.svg" },
+            { name: "Obreiros do Bem", logo: "/img/partner-02.svg" },
+            { name: "It's Sweet", logo: "/img/partner-03.svg" },
+            { name: "Amarello", logo: "/img/partner-04.svg" },
+            { name: "Adevrip", logo: "/img/partner-05.svg" },
           ].map(({ name, logo }) => (
             <div key={name} className="partner-card">
               <div className="partner-logo-placeholder">
-                <img src={logo} alt={name}/>
-              </div>
-              <div className="badge-container">
-                <div className="badge">
-                  <img className="estrela" src="/img/estrela.svg" alt="Estrela" />
-                  <span className="badge-text">Benefício</span>
-                </div>
+                <img src={logo} alt={name} />
               </div>
             </div>
           ))}
@@ -120,37 +111,41 @@ export default function Home() {
       <section className="join">
         <h4 className="manjari-bold">Seja um parceiro</h4>
         <p>Junte-se à nossa rede de transformação social e aproveite todos os benefícios como os comunicados acima.</p>
-        <button className="join-button">Quero ser um Parceiro!</button>
+        <button className="join-button" onClick={() => window.location.href = "/register"}>Quero ser um Parceiro!</button>
       </section>
 
       <section className="benefits" id="beneficios">
         <h3 className="manjari-bold">Benefícios do Link Social</h3>
         <div className="benefit-cards">
-          {[{
-            title: "Para Doadores",
-            items: [
-              "Validação de ONGs",
-              "Histórico de doações",
-              "Relatórios de impacto",
-              "Controle financeiro de doações",
-            ],
-          }, {
-            title: "Para Estabelecimentos",
-            items: [
-              "Aumento de base de clientes",
-              "Marketing social",
-              "Engajamento com a comunidade",
-              "Melhora da reputação",
-            ],
-          }, {
-            title: "Para ONGs",
-            items: [
-              "Mais visibilidade e arrecadação",
-              "Captação facilitada",
-              "Gestão simplificada",
-              "Transparência para doadores",
-            ],
-          }].map(({ title, items }) => (
+          {[
+            {
+              title: "Para Doadores",
+              items: [
+                "Validação de ONGs",
+                "Histórico de doações",
+                "Relatórios de impacto",
+                "Controle financeiro de doações",
+              ],
+            },
+            {
+              title: "Para Estabelecimentos",
+              items: [
+                "Aumento de base de clientes",
+                "Marketing social",
+                "Engajamento com a comunidade",
+                "Melhora da reputação",
+              ],
+            },
+            {
+              title: "Para ONGs",
+              items: [
+                "Mais visibilidade e arrecadação",
+                "Captação facilitada",
+                "Gestão simplificada",
+                "Transparência para doadores",
+              ],
+            }
+          ].map(({ title, items }) => (
             <div key={title} className="benefit-card">
               <h4 className="manjari-bold">{title}</h4>
               <ul>
@@ -163,25 +158,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="plans" id="planos">
-        <h3 className="manjari-bold">Planos</h3>
-        <div className="plan-cards">
-          {["Básico", "Intermediário", "Avançado", "Personalizado"].map((plan) => (
-            <div key={plan} className="plan-card">
-              <h4 className="manjari-bold">{plan}</h4>
-              <p>
-                Escolha o plano ideal para sua necessidade e conte com recursos exclusivos para maximizar seu impacto social.
-              </p>
-              <button className="plan-button">Assinar</button>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <footer className="footer">
         <h4 className="manjari-bold">Faça Parte dessa Corrente do Bem</h4>
         <p>Junte-se a nós e fortaleça todo o nosso terceiro setor, conectando doadores, ONGs e estabelecimentos.</p>
-        <button className="donate-button">Comece a Doar &rarr;</button>
+        <button
+          className="donate-button"
+          onClick={() => window.location.href = "/etapa-selecao"}
+        >
+          Comece a Doar &rarr;
+        </button>
       </footer>
     </div>
   );

@@ -9,13 +9,16 @@ export default function EtapaEscolha() {
   const [ongSelecionada, setOngSelecionada] = useState(null);
 
   useEffect(() => {
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
+    setUsuario(usuarioLogado);
+
     async function fetchDados() {
       try {
         const ongsData = await getOngs();
         setOngs(ongsData);
-        setLoading(false);
       } catch (error) {
         console.error(error);
+      } finally {
         setLoading(false);
       }
     }
@@ -35,6 +38,10 @@ export default function EtapaEscolha() {
     window.location.href = "/etapa-valores";
   }
 
+  function handleSair() {
+    sessionStorage.clear();
+    window.location.href = "/login";
+  }
 
   return (
     <div className="container" role="main">
@@ -44,16 +51,24 @@ export default function EtapaEscolha() {
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
           <nav className="nav-header" aria-label="Navegação principal">
-            <a href="/login" className="login" aria-label="Entrar na conta">
-              Entrar
-            </a>
-            <button
-              className="signup"
-              onClick={() => (window.location.href = "/register")}
-              aria-label="Cadastrar nova conta"
-            >
-              Cadastrar
-            </button>
+            {usuario ? (
+              <button className="logout" onClick={handleSair} aria-label="Sair da conta">
+                Sair
+              </button>
+            ) : (
+              <>
+                <a href="/login" className="login" aria-label="Entrar na conta">
+                  Entrar
+                </a>
+                <button
+                  className="signup"
+                  onClick={() => (window.location.href = "/register")}
+                  aria-label="Cadastrar nova conta"
+                >
+                  Cadastrar
+                </button>
+              </>
+            )}
           </nav>
         </div>
       </header>

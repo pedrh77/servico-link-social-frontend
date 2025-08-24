@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getUsuarioAutenticado, getBeneficiosPorOngId, GetDoacoesByDoadorId } from "../../Api";
+import {
+  getUsuarioAutenticado,
+  getBeneficiosPorOngId,
+  GetDoacoesByDoadorId,
+  GetDoacoesByOngId,
+} from "../../Api";
 import "./Usuario.css";
 
 export default function Usuario() {
@@ -18,6 +23,7 @@ export default function Usuario() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [doacoes, setDoacoes] = useState([]);
 
+  // Carrega usuário logado
   useEffect(() => {
     async function carregarUsuario() {
       try {
@@ -34,25 +40,13 @@ export default function Usuario() {
     carregarUsuario();
   }, []);
 
-  useEffect(() => {
-    async function carregarDoacoes() {
-      if (tipoUsuario === 0 && dados?.id) {
-        try {
-          const doacoesData = await GetDoacoesByDoadorId(dados.id);
-          setDoacoes(doacoesData);
-        } catch (error) {
-          console.error("Erro ao carregar doações:", error);
-          setDoacoes([]);
-        }
-      }
-    }
-    carregarDoacoes();
-  }, [tipoUsuario, dados?.id]);
 
+
+  // Carrega benefícios (apenas para EMPRESA)
   useEffect(() => {
     let ativo = true;
     async function carregarBeneficios() {
-      if (tipoUsuario === 1 && dados?.id) {
+      if (tipoUsuario === 2 && dados?.id) {
         try {
           const lista = await getBeneficiosPorOngId(dados.id);
           if (ativo) setBeneficios(lista);
@@ -67,6 +61,7 @@ export default function Usuario() {
     };
   }, [tipoUsuario, dados?.id]);
 
+  // Handlers gerais
   function handleChange(e) {
     setDados({ ...dados, [e.target.name]: e.target.value });
   }
@@ -171,13 +166,18 @@ export default function Usuario() {
 
           <nav className={`nav ${menuAberto ? "show" : ""}`} id="nav-menu">
             {logado ? (
-              <button className="logout-button" onClick={handleLogout}>
+              <button className="logout" onClick={handleLogout}>
                 Sair
               </button>
             ) : (
               <>
-                <a href="/login" className="login">Entrar</a>
-                <button className="signup" onClick={() => (window.location.href = "/register")}>
+                <a href="/login" className="login">
+                  Entrar
+                </a>
+                <button
+                  className="signup"
+                  onClick={() => (window.location.href = "/register")}
+                >
                   Cadastrar
                 </button>
               </>
@@ -269,13 +269,23 @@ export default function Usuario() {
               )}
 
               {!editando ? (
-                <button type="button" className="btn-editar" onClick={() => setEditando(true)}>
+                <button
+                  type="button"
+                  className="btn-editar"
+                  onClick={() => setEditando(true)}
+                >
                   Editar Dados
                 </button>
               ) : (
                 <div className="botoes-salvar-cancelar">
-                  <button type="submit" className="btn-salvar">Salvar</button>
-                  <button type="button" className="btn-cancelar" onClick={handleCancelar}>
+                  <button type="submit" className="btn-salvar">
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-cancelar"
+                    onClick={handleCancelar}
+                  >
                     Cancelar
                   </button>
                 </div>
@@ -284,56 +294,7 @@ export default function Usuario() {
           )}
         </section>
 
-        {/* Benefícios ONG */}
-        {tipoUsuario === 1 && (
-          <section className="accordion-section">
-            <button
-              className="accordion-header"
-              onClick={() => toggleSection("cadastroBeneficios")}
-              type="button"
-              aria-expanded={showCadastroBeneficios}
-              aria-controls="cadastroBeneficios-content"
-            >
-              Cadastro Benefícios
-              <span className="accordion-icon">{showCadastroBeneficios ? "-" : "+"}</span>
-            </button>
-            {showCadastroBeneficios && (
-              <form
-                id="cadastroBeneficios-content"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  criarBeneficio();
-                }}
-                className="form-beneficio"
-              >
-                <label>
-                  Descrição:
-                  <input
-                    type="text"
-                    value={descricaoBeneficio}
-                    onChange={(e) => setDescricaoBeneficio(e.target.value)}
-                    required
-                  />
-                </label>
-                <label>
-                  Valor:
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={valorBeneficio}
-                    onChange={(e) => setValorBeneficio(e.target.value)}
-                    required
-                  />
-                </label>
-                <button type="submit" className="btn-criar-beneficio">
-                  Criar Benefício
-                </button>
-              </form>
-            )}
-          </section>
-        )}
-
-        {/* Histórico de Doações */}
+        {/* Doações - DOADOR */}
         {tipoUsuario === 0 && (
           <section className="accordion-section">
             <button
@@ -342,20 +303,30 @@ export default function Usuario() {
               aria-expanded={true}
               aria-controls="doacoes-content"
             >
-              Doações em andamento
+              Minhas Doações
             </button>
             <div id="doacoes-content" className="lista-doacoes-container">
               {doacoes.length === 0 ? (
-                <p>Você ainda não possui doações em andamento.</p>
+                <p>Você ainda não possui doações.</p>
               ) : (
                 <ul className="lista-doacoes">
                   {doacoes.map((d) => (
                     <li key={d.id} className="card-doacao">
-                      <div className="doacao-ong">ONG: {d.nomeOng ?? "Desconhecida"}</div>
-                      <div className="doacao-beneficio">Benefício: {d.descricaoBeneficio ?? "-"}</div>
-                      <div className="doacao-valor">Valor: R$ {(d.valor ?? 0).toFixed(2)}</div>
-                      <div className="doacao-tipo">Tipo: {tipoDoacaoTexto(d.tipoDoacao)}</div>
-                      <div className="doacao-status">Status: {statusTexto(d.statusPagamento)}</div>
+                      <div className="doacao-ong">
+                        ONG: {d.nomeOng ?? "Desconhecida"}
+                      </div>
+                      <div className="doacao-beneficio">
+                        Benefício: {d.descricaoBeneficio ?? "-"}
+                      </div>
+                      <div className="doacao-valor">
+                        Valor: R$ {(d.valor ?? 0).toFixed(2)}
+                      </div>
+                      <div className="doacao-tipo">
+                        Tipo: {tipoDoacaoTexto(d.tipoDoacao)}
+                      </div>
+                      <div className="doacao-status">
+                        Status: {statusTexto(d.statusPagamento)}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -370,36 +341,145 @@ export default function Usuario() {
           </section>
         )}
 
-        {/* Benefícios Ativos ONG */}
+        {/* Doações recebidas - ONG */}
         {tipoUsuario === 1 && (
           <section className="accordion-section">
             <button
               className="accordion-header"
-              onClick={() => toggleSection("beneficiosAtivos")}
               type="button"
-              aria-expanded={showBeneficiosAtivos}
-              aria-controls="beneficiosAtivos-content"
+              aria-expanded={true}
+              aria-controls="doacoesOng-content"
             >
-              Benefícios Ativos
-              <span className="accordion-icon">{showBeneficiosAtivos ? "-" : "+"}</span>
+              Doações Recebidas
             </button>
-            {showBeneficiosAtivos && (
-              <div id="beneficiosAtivos-content" className="lista-beneficios-container">
-                {beneficios.length === 0 ? (
-                  <p>Você ainda não possui benefícios cadastrados.</p>
-                ) : (
-                  <ul className="lista-beneficios">
-                    {beneficios.map((b) => (
-                      <li key={b.id} className="card-beneficio">
-                        <div className="beneficio-descricao">{b.descricao}</div>
-                        <div className="beneficio-valor">R$ {b.valor.toFixed(2)}</div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+            <div id="doacoesOng-content" className="lista-doacoes-container">
+              {doacoes.length === 0 ? (
+                <p>Sua ONG ainda não recebeu doações.</p>
+              ) : (
+                <ul className="lista-doacoes">
+                  {doacoes.map((d) => (
+                    <li key={d.id} className="card-doacao">
+                      <div className="doacao-doador">
+                        Doador: {d.nomeDoador ?? "Anônimo"}
+                      </div>
+                      <div className="doacao-beneficio">
+                        Benefício: {d.descricaoBeneficio ?? "-"}
+                      </div>
+                      <div className="doacao-valor">
+                        Valor: R$ {(d.valor ?? 0).toFixed(2)}
+                      </div>
+                      <div className="doacao-tipo">
+                        Tipo: {tipoDoacaoTexto(d.tipoDoacao)}
+                      </div>
+                      <div className="doacao-status">
+                        Status: {statusTexto(d.statusPagamento)}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </section>
+        )}
+
+        {/* Benefícios - EMPRESA */}
+        {tipoUsuario === 2 && (
+          <>
+            <section className="accordion-section">
+              <button
+                className="accordion-header"
+                onClick={() => toggleSection("cadastroBeneficios")}
+                type="button"
+                aria-expanded={showCadastroBeneficios}
+                aria-controls="cadastroBeneficios-content"
+              >
+                Cadastro de Benefícios
+                <span className="accordion-icon">
+                  {showCadastroBeneficios ? "-" : "+"}
+                </span>
+              </button>
+              {showCadastroBeneficios && (
+                <form
+                  id="cadastroBeneficios-content"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    criarBeneficio();
+                  }}
+                  className="form-beneficio"
+                >
+                  <label>
+                    Descrição:
+                    <textarea
+                      rows="4"
+                      value={descricaoBeneficio}
+                      onChange={(e) => setDescricaoBeneficio(e.target.value)}
+                      placeholder="Descreva o benefício..."
+                      required
+                      className="textarea-beneficio"
+                    />
+                  </label>
+
+                  <label>Valor:</label>
+                  <div className="valor-opcoes">
+                    {[5, 10, 20, 50].map((valor) => (
+                      <button
+                        key={valor}
+                        type="button"
+                        className={`valor-btn ${
+                          valorBeneficio == valor ? "selecionado" : ""
+                        }`}
+                        onClick={() => setValorBeneficio(valor)}
+                      >
+                        R$ {valor}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button type="submit" className="btn-criar-beneficio">
+                    Criar Benefício
+                  </button>
+                </form>
+              )}
+            </section>
+
+            <section className="accordion-section">
+              <button
+                className="accordion-header"
+                onClick={() => toggleSection("beneficiosAtivos")}
+                type="button"
+                aria-expanded={showBeneficiosAtivos}
+                aria-controls="beneficiosAtivos-content"
+              >
+                Benefícios Ativos
+                <span className="accordion-icon">
+                  {showBeneficiosAtivos ? "-" : "+"}
+                </span>
+              </button>
+              {showBeneficiosAtivos && (
+                <div
+                  id="beneficiosAtivos-content"
+                  className="lista-beneficios-container"
+                >
+                  {beneficios.length === 0 ? (
+                    <p>Você ainda não possui benefícios cadastrados.</p>
+                  ) : (
+                    <ul className="lista-beneficios">
+                      {beneficios.map((b) => (
+                        <li key={b.id} className="card-beneficio">
+                          <div className="beneficio-descricao">
+                            {b.descricao}
+                          </div>
+                          <div className="beneficio-valor">
+                            R$ {b.valor.toFixed(2)}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </section>
+          </>
         )}
       </div>
     </div>

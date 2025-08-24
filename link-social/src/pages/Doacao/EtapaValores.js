@@ -8,12 +8,15 @@ export default function EtapaDoacao() {
   const [mensalExpandido, setMensalExpandido] = useState(null);
   const [mesesEscolhidos, setMesesEscolhidos] = useState({});
   const [unicaSelecionada, setUnicaSelecionada] = useState(null);
-  const [logado, setLogado] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [usuario, setUsuario] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
+    setUsuario(usuarioLogado);
+
     async function fetchBeneficios() {
       const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
       if (!ongSelecionada) {
@@ -57,41 +60,46 @@ export default function EtapaDoacao() {
   }
 
   function finalizarDoacao() {
-  const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
-  
-  if (!usuarioLogado) {
-    sessionStorage.setItem("retornoAposLogin", window.location.pathname);
-    alert("Você precisa entrar na sua conta para finalizar a doação.");
-    window.location.href = "/login"; // redireciona para login
-    return;
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
+    if (!usuarioLogado) {
+      sessionStorage.setItem("retornoAposLogin", window.location.pathname);
+      alert("Você precisa entrar na sua conta para finalizar a doação.");
+      window.location.href = "/login"; // redireciona para login
+      return;
+    }
+
+    const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
+    if (!ongSelecionada) return;
+
+    const indexSelecionado = unicaSelecionada ?? mensalExpandido;
+    const beneficio = beneficios[indexSelecionado];
+
+    if (!beneficio) {
+      alert("Selecione um benefício antes de continuar.");
+      return;
+    }
+
+    const doacao = {
+      ong: ongSelecionada.nome,
+      ongId: ongSelecionada.id,
+      valor: beneficio.valor.toFixed(2),
+      tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
+      meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
+      beneficioId: beneficio.id,
+      doadorId: usuarioLogado.id,
+    };
+
+    sessionStorage.setItem("doacaoSelecionada", JSON.stringify(doacao));
+    console.log("Doação selecionada:", doacao);
+
+    navigate("/etapa-final");
   }
 
-  const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
-  if (!ongSelecionada) return;
-
-  const indexSelecionado = unicaSelecionada ?? mensalExpandido;
-  const beneficio = beneficios[indexSelecionado];
-
-  if (!beneficio) {
-    alert("Selecione um benefício antes de continuar.");
-    return;
+  function handleSair() {
+    sessionStorage.clear();
+    navigate("/login");
   }
-
-  const doacao = {
-    ong: ongSelecionada.nome,
-    ongId: ongSelecionada.id,
-    valor: beneficio.valor.toFixed(2),
-    tipo: unicaSelecionada === indexSelecionado ? "Única" : "Mensal",
-    meses: mesesEscolhidos[indexSelecionado] || (unicaSelecionada === indexSelecionado ? null : 12),
-    beneficioId: beneficio.id,
-    doadorId: usuarioLogado.id,
-  };
-
-  sessionStorage.setItem("doacaoSelecionada", JSON.stringify(doacao));
-  console.log("Doação selecionada:", doacao);
-
-  navigate("/etapa-final");
-}
 
   if (loading)
     return (
@@ -108,12 +116,20 @@ export default function EtapaDoacao() {
             <img src="/img/logo-link.svg" alt="Logo" className="logo" />
           </div>
           <nav className="nav-header">
-            <a href="/login" className="login">
-              Entrar
-            </a>
-            <button className="signup" onClick={() => (window.location.href = "/register")}>
-              Cadastrar
-            </button>
+            {usuario ? (
+              <button className="logout" onClick={handleSair}>
+                Sair
+              </button>
+            ) : (
+              <>
+                <a href="/login" className="login">
+                  Entrar
+                </a>
+                <button className="signup" onClick={() => (window.location.href = "/register")}>
+                  Cadastrar
+                </button>
+              </>
+            )}
           </nav>
         </div>
       </header>

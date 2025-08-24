@@ -64,7 +64,7 @@ a {
   color: #2F855A;
 }
 
-.signup, .logout-button {
+.signup {
   background-color: #2F855A;
   color: white;
   font-weight: 700;
@@ -75,8 +75,36 @@ a {
   transition: background-color 0.2s ease;
 }
 
-.signup:hover, .logout-button:hover {
+.signup:hover {
   background-color: #005fa3;
+}
+
+.logout {
+  background-color: #e74c3c; /* vermelho principal */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #c0392b; /* vermelho mais escuro no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.logout:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.logout:focus {
+  outline: 2px solid #e74c3c;
+  outline-offset: 2px;
 }
 
 /* HAMBURGER MOBILE */
@@ -115,10 +143,10 @@ a {
 
 .accordion-header {
   width: 100%;
-  background-color: #2F855A;
+  background: linear-gradient(90deg, #2F855A, #276749);
   color: white;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   padding: 14px 20px;
   border: none;
   cursor: pointer;
@@ -126,19 +154,34 @@ a {
   justify-content: space-between;
   align-items: center;
   user-select: none;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 .accordion-header, .btn-editar, .btn-salvar, .btn-cancelar {
   user-select: none;
 }
-.accordion-header:hover{
-  background-color: #2e7d32;
+.accordion-header:hover {
+  background: linear-gradient(90deg, #276749, #22543d);
 }
 
 .accordion-icon {
   font-size: 1.6rem;
   line-height: 1;
   font-weight: 900;
+  margin-left: 10px;
+}
+
+.lista-beneficios-container,
+.lista-doacoes-container {
+  padding: 16px 20px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.lista-beneficios-container p,
+.lista-doacoes-container p {
+  margin: 10px 0;
+  font-size: 0.95rem;
+  color: #555;
 }
 
 /* FORMULÁRIOS */
@@ -173,6 +216,55 @@ a {
 .input-dados:disabled {
   background-color: #eee;
   color: #555;
+}
+
+/* TEXTAREA */
+.textarea-beneficio {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.3s;
+}
+
+.textarea-beneficio:focus {
+  border-color: #2F855A;
+  background-color: #f9fff9;
+  outline: none;
+}
+
+/* BOTÕES DE VALORES */
+.valor-opcoes {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0 20px;
+  flex-wrap: wrap;
+}
+
+.valor-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 2px solid #2F855A;
+  background-color: white;
+  color: #2F855A;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.valor-btn:hover {
+  background-color: #e6f5ec;
+}
+
+.valor-btn.selecionado {
+  background-color: #2F855A;
+  color: white;
+  transform: scale(1.05);
 }
 
 /* BOTÕES */

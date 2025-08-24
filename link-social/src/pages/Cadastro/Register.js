@@ -26,17 +26,19 @@ export default function RegisterPage() {
       return;
     }
 
-    const tipoUsuarioEnum = tipoUsuario === "Doador" ? 0 : 1;
+    let tipoUsuarioEnum = 0;
+    if (tipoUsuario === "ONG") tipoUsuarioEnum = 1;
+    if (tipoUsuario === "Empresa") tipoUsuarioEnum = 2;
 
     const dados = {
       nome,
-      telefone, // já vem sem máscara
+      telefone,
       email,
       tipoUsuario: tipoUsuarioEnum,
       senha,
       confirmaSenha: confirmarSenha,
       cpf: tipoUsuarioEnum === 0 ? cpfCnpj : null,
-      cnpj: tipoUsuarioEnum === 1 ? cpfCnpj : null,
+      cnpj: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? cpfCnpj : null,
     };
 
     try {
@@ -55,10 +57,9 @@ export default function RegisterPage() {
     }
   };
 
+  // Máscaras dinâmicas
   const mascaraCpfCnpj =
-    tipoUsuario === "Doador"
-      ? "999.999.999-99"
-      : "99.999.999/9999-99";
+    tipoUsuario === "Doador" ? "999.999.999-99" : "99.999.999/9999-99";
 
   const removerMascara = (valor) => valor.replace(/\D/g, "");
 
@@ -88,16 +89,23 @@ export default function RegisterPage() {
             >
               <option value="Doador">Doador</option>
               <option value="ONG">ONG</option>
+              <option value="Empresa">Empresa</option>
             </select>
           </label>
 
           <label>
-            {tipoUsuario === "ONG" ? "Nome da ONG" : "Seu nome completo"}
+            {tipoUsuario === "ONG"
+              ? "Nome da ONG"
+              : tipoUsuario === "Empresa"
+              ? "Nome da Empresa"
+              : "Seu nome completo"}
             <input
               type="text"
               placeholder={
                 tipoUsuario === "ONG"
                   ? "Digite o nome da ONG"
+                  : tipoUsuario === "Empresa"
+                  ? "Digite o nome da empresa"
                   : "Digite seu nome"
               }
               value={nome}
@@ -132,14 +140,16 @@ export default function RegisterPage() {
             {tipoUsuario === "Doador" ? "CPF" : "CNPJ"}
             <InputMask
               mask={mascaraCpfCnpj}
-              placeholder={`Digite seu ${tipoUsuario === "Doador" ? "CPF" : "CNPJ"}`}
+              placeholder={`Digite seu ${
+                tipoUsuario === "Doador" ? "CPF" : "CNPJ"
+              }`}
               value={cpfCnpj}
               onChange={(e) => setCpfCnpj(removerMascara(e.target.value))}
               required
             />
           </label>
 
-
+          {/* Campo senha */}
           <label>
             Senha
             <div className="password-field">
@@ -156,15 +166,12 @@ export default function RegisterPage() {
                 onClick={() => setMostrarSenha(!mostrarSenha)}
                 aria-label="Mostrar ou ocultar senha"
               >
-                {mostrarSenha ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1l22 22" /><path d="M17.94 17.94A10.94 10.94 0 0112 19C7 19 2.73 16.11 1 12c.92-1.84 2.23-3.45 3.8-4.73" /><path d="M9.88 9.88a3 3 0 104.24 4.24" /></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
-                )}
+                {mostrarSenha ? "🙈" : "👁️"}
               </button>
             </div>
           </label>
 
+          {/* Confirmar senha */}
           <label>
             Confirmar senha
             <div className="password-field">
@@ -181,11 +188,7 @@ export default function RegisterPage() {
                 onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
                 aria-label="Mostrar ou ocultar senha"
               >
-                {mostrarConfirmarSenha ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1l22 22" /><path d="M17.94 17.94A10.94 10.94 0 0112 19C7 19 2.73 16.11 1 12c.92-1.84 2.23-3.45 3.8-4.73" /><path d="M9.88 9.88a3 3 0 104.24 4.24" /></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
-                )}
+                {mostrarConfirmarSenha ? "🙈" : "👁️"}
               </button>
             </div>
           </label>
