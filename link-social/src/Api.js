@@ -6,6 +6,7 @@ function getToken() {
   return sessionStorage.getItem("token");
 }
 
+// USUARIO
 export async function login(email, senha) {
   const response = await fetch(`${API_URL}/api/Auth/login`, {
     method: "POST",
@@ -58,6 +59,51 @@ export async function getUsuarioAutenticado() {
   return data;
 }
 
+export async function getOngs() {
+  try {
+    const response = await fetch(`${API_URL}/api/Usuario/tipo/1`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar ONGs:", error);
+    return [];
+  }
+}
+
+
+// BENEFICIOS
+
+export async function criarBeneficio(dados) {
+  try {
+    const response = await fetch(`${API_URL}/api/Beneficios`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify(dados)
+    });
+
+    if (!response.ok) {
+      const erro = await response.text();
+      throw new Error(`Erro ao criar benefício: ${erro}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 export async function getBeneficios(idOng) {
   try {
     const response = await fetch(`${API_URL}/api/Beneficios`, {
@@ -101,49 +147,9 @@ export async function getBeneficiosPorOngId(idOng) {
   }
 }
 
-export async function criarBeneficio(dados) {
-  try {
-    const response = await fetch(`${API_URL}/api/Beneficios`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`,
-      },
-      body: JSON.stringify(dados)
-    });
-
-    if (!response.ok) {
-      const erro = await response.text();
-      throw new Error(`Erro ao criar benefício: ${erro}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
 
 
-export async function getOngs() {
-  try {
-    const response = await fetch(`${API_URL}/api/Usuario/tipo/1`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`,
-      },
-    });
-    if (!response.ok) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Erro ao buscar ONGs:", error);
-    return [];
-  }
-}
+// DOAÇÕES
 
 export async function NovaDoacao(dados) {
   try {
@@ -159,14 +165,14 @@ export async function NovaDoacao(dados) {
     }
 
     const result = await response.json();
-    return result; 
+    return result;
   } catch (err) {
     console.error("Erro na NovaDoacao:", err);
     throw err;
   }
 }
 
-export async function GetDoacoesByDoadorId(id) {
+export async function GetDoacoesByOngId(id) {
   try {
     const response = await fetch(`${API_URL}/api/Doacoes/Doador/${id}`, {
       method: "GET",

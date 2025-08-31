@@ -46,7 +46,7 @@ export default function EtapaDoacao() {
       setTipoDoacao("Única");
       setMeses(null);
 
-      // Scroll suave até o cartão expandido
+
       setTimeout(() => {
         const element = document.getElementById(`card-${index}`);
         if (element) element.scrollIntoView({ behavior: "smooth", block: "center" });

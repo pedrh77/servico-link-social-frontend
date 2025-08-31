@@ -62,7 +62,7 @@ export default function EtapaFinalizacao() {
   const editarOng = () => navigate("/etapa-selecao");
   const editarValor = () => navigate("/etapa-valores");
 
-  // 🔥 agora mapeia com base em tipo + meses
+
   const tipoDoacaoParaNumero = (tipo, meses) => {
     if (tipo === "Unica") return 1;
     if (tipo === "Mensal" && meses === 6) return 2;

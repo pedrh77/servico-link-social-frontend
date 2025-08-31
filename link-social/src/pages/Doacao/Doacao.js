@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import EtapaEscolhaOng from './EtapaEscolhaOng'; // Supondo que este componente exista
-import EtapaValores from './EtapaValores'; // Supondo que este componente exista
+import EtapaEscolhaOng from './EtapaEscolhaOng';
+import EtapaValores from './EtapaValores';
 import EtapaFinalizacao from './EtapaFinalizacao';
 
 export default function Doacao() {
