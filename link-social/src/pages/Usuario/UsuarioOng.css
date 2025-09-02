@@ -1,0 +1,311 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  max-width: none;
+}
+
+body, html {
+  font-family: 'Manjari', sans-serif;
+  color: #333;
+  background-color: #fafafa;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Header */
+.header {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  background-color: #E7F5EE;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  width: 100%;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  font-weight: 500;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: #2F855A;
+}
+
+.signup {
+  background-color: #2F855A;
+  color: white;
+  font-weight: 700;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup:hover {
+  background-color: #005fa3;
+}
+
+.logout {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.logout:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.logout:focus {
+  outline: 2px solid #e74c3c;
+  outline-offset: 2px;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #2F855A;
+}
+
+/* Conteúdo usuário */
+.usuario-container {
+  margin: 40px auto;
+  padding: 0 20px;
+  color: #333;
+}
+
+.accordion-section {
+  margin-bottom: 20px;
+  border: 1.5px solid #2F855A;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.accordion-header {
+  width: 100%;
+  background: linear-gradient(90deg, #2F855A, #276749);
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.accordion-header:hover {
+  background: linear-gradient(90deg, #276749, #22543d);
+}
+
+.accordion-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 900;
+  margin-left: 10px;
+}
+
+/* Lista de Doações Compacta */
+.lista-doacoes-container {
+  padding: 20px 30px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lista-doacoes-compacta {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-doacao {
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-doacao:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.doacao-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.doacao-summary p {
+  margin: 0 12px 0 0;
+}
+
+.expand-icon {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2F855A;
+}
+
+.doacao-detalhes {
+  padding: 12px 18px 16px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.card-doacao.expanded .doacao-detalhes {
+  display: flex;
+}
+
+/* Status */
+.status-pendente {
+  color: #d97706; /* laranja */
+  font-weight: 700;
+}
+
+.status-pago {
+  color: #065f46; /* verde escuro */
+  font-weight: 700;
+}
+
+.status-cancelado {
+  color: #c0392b; /* vermelho */
+  font-weight: 700;
+}
+
+/* Comentário */
+.card-doacao .comentario {
+  background: #f0fff4;
+  padding: 10px 12px;
+  border-left: 4px solid #2F855A;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #065f46;
+}
+
+/* Card ONG */
+.card-doacao.ong {
+  background: #fff;
+  border-left: 5px solid #317b34;
+}
+
+/* Card Doador */
+.card-doacao.doador {
+  background: #ecfdf5;
+  border-left: 5px solid #10b981;
+  color: #065f46;
+}
+
+/* Card Benefício */
+.card-beneficio.empresa {
+  background-color: #fff;
+  color: #317b34;
+}
+
+/* Erro */
+.error {
+  color: #ba2d25;
+  font-weight: 700;
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #E7F5EE;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  .nav.show {
+    display: flex;
+  }
+
+  .nav a {
+    width: 100%;
+  }
+
+  .usuario-container {
+    margin: 20px 12px;
+    padding: 0 12px;
+  }
+
+  .btn-nova-doacao {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -40,37 +40,11 @@ export default function Usuario() {
   if (!dados) return <p>Dados do usuário não disponíveis</p>;
 
   return (
-    <div className="usuario-page">
-      <header className="header">
-        <div className="header-content">
-          <div className="header-left">
-            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-          </div>
-
-          <button className="hamburger" id="menu-toggle" onClick={() => setMenuAberto(!menuAberto)}>
-            ☰
-          </button>
-
-          <nav className={`nav ${menuAberto ? "show" : ""}`} id="nav-menu">
-            {logado ? (
-              <button className="logout" onClick={handleLogout}>Sair</button>
-            ) : (
-              <>
-                <a href="/login" className="login">Entrar</a>
-                <button className="signup" onClick={() => (window.location.href = "/register")}>
-                  Cadastrar
-                </button>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
-
+   
       <div className="usuario-container">
         {tipoUsuario === 0 && <DoadorUsuario dados={dados} />}
         {tipoUsuario === 1 && <OngUsuario dados={dados} />}
         {tipoUsuario === 2 && <EmpresaUsuario dados={dados} />}
       </div>
-    </div>
   );
 }
