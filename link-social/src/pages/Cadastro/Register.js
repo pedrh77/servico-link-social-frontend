@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
+import { Eye, EyeOff } from "lucide-react";
 import { cadastrarUsuario } from "../../Api";
 import "./Register.css";
 
@@ -56,7 +57,6 @@ export default function RegisterPage() {
       setErro("Erro ao conectar com o servidor.");
     }
   };
-
 
   const mascaraCpfCnpj =
     tipoUsuario === "Doador" ? "999.999.999-99" : "99.999.999/9999-99";
@@ -165,7 +165,7 @@ export default function RegisterPage() {
                 onClick={() => setMostrarSenha(!mostrarSenha)}
                 aria-label="Mostrar ou ocultar senha"
               >
-                {mostrarSenha ? "🙈" : "👁️"}
+                {mostrarSenha ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </label>
@@ -186,7 +186,11 @@ export default function RegisterPage() {
                 onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
                 aria-label="Mostrar ou ocultar senha"
               >
-                {mostrarConfirmarSenha ? "🙈" : "👁️"}
+                {mostrarConfirmarSenha ? (
+                  <EyeOff size={15} />
+                ) : (
+                  <Eye size={15} />
+                )}
               </button>
             </div>
           </label>

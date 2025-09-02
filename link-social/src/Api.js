@@ -172,9 +172,32 @@ export async function NovaDoacao(dados) {
   }
 }
 
-export async function GetDoacoesByOngId(id) {
+export async function GetDoacoesByDoador(id) {
   try {
     const response = await fetch(`${API_URL}/api/Doacoes/Doador/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    console.log("Response doações:", response);
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar doações");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar doações:", error);
+    return [];
+  }
+}
+
+
+export async function GetDoacoesByOngId(id) {
+  try {
+    const response = await fetch(`${API_URL}/api/Doacoes/ong/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
