@@ -1,4 +1,4 @@
-/* Reset */
+/* ==== RESET GLOBAL ==== */
 * {
   margin: 0;
   padding: 0;
@@ -19,7 +19,7 @@ a {
   color: inherit;
 }
 
-/* Header */
+/* ==== HEADER ==== */
 .header {
   width: 100vw;
   display: flex;
@@ -114,13 +114,15 @@ a {
   color: #2F855A;
 }
 
-/* Conteúdo usuário */
+/* ==== CONTAINER PRINCIPAL ==== */
 .usuario-container {
+  max-width: 900px;
   margin: 40px auto;
   padding: 0 20px;
   color: #333;
 }
 
+/* ==== ACCORDION ==== */
 .accordion-section {
   margin-bottom: 20px;
   border: 1.5px solid #2F855A;
@@ -151,12 +153,11 @@ a {
 
 .accordion-icon {
   font-size: 1.6rem;
-  line-height: 1;
   font-weight: 900;
   margin-left: 10px;
 }
 
-/* Lista de Doações Compacta */
+/* ==== LISTA DE DOAÇÕES COMPACTA ==== */
 .lista-doacoes-container {
   padding: 20px 30px;
   background-color: #fff;
@@ -195,10 +196,6 @@ a {
   font-weight: 500;
 }
 
-.doacao-summary p {
-  margin: 0 12px 0 0;
-}
-
 .expand-icon {
   font-weight: 700;
   font-size: 1.1rem;
@@ -208,7 +205,7 @@ a {
 .doacao-detalhes {
   padding: 12px 18px 16px;
   border-top: 1px solid #e0e0e0;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 8px;
   font-size: 0.9rem;
@@ -218,7 +215,7 @@ a {
   display: flex;
 }
 
-/* Status */
+/* ==== STATUS ==== */
 .status-pendente {
   color: #d97706; /* laranja */
   font-weight: 700;
@@ -234,7 +231,7 @@ a {
   font-weight: 700;
 }
 
-/* Comentário */
+/* ==== COMENTÁRIO ==== */
 .card-doacao .comentario {
   background: #f0fff4;
   padding: 10px 12px;
@@ -244,26 +241,24 @@ a {
   color: #065f46;
 }
 
-/* Card ONG */
+/* ==== TIPOS DE CARD ==== */
 .card-doacao.ong {
-  background: #fff;
   border-left: 5px solid #317b34;
 }
 
-/* Card Doador */
 .card-doacao.doador {
   background: #ecfdf5;
   border-left: 5px solid #10b981;
   color: #065f46;
 }
 
-/* Card Benefício */
 .card-beneficio.empresa {
   background-color: #fff;
+  border-left: 5px solid #2F855A;
   color: #317b34;
 }
 
-/* Erro */
+/* ==== ERRO ==== */
 .error {
   color: #ba2d25;
   font-weight: 700;
@@ -271,7 +266,7 @@ a {
   margin: 20px 0;
 }
 
-/* Responsivo */
+/* ==== RESPONSIVIDADE ==== */
 @media (max-width: 768px) {
   .hamburger {
     display: block;
@@ -293,10 +288,6 @@ a {
 
   .nav.show {
     display: flex;
-  }
-
-  .nav a {
-    width: 100%;
   }
 
   .usuario-container {

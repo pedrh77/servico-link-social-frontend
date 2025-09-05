@@ -7,12 +7,18 @@ export default function DoadorUsuario({ dados }) {
 
   React.useEffect(() => {
     async function carregarDoacoes() {
-      if (dados?.id) {
+      try {
         const lista = await GetDoacoesByOngId(dados.id);
-        setDoacoes(lista);
+        if (!cancelado) setDoacoes(lista);
+      } catch (err) {
+        if (!cancelado) setError(err.message);
+      } finally {
+        if (!cancelado) setLoading(false);
       }
     }
+    let cancelado = false;
     carregarDoacoes();
+    return () => { cancelado = true; };
   }, [dados?.id]);
 
   const tipoDoacaoTexto = (tipo) =>

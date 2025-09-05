@@ -9,15 +9,17 @@ export default function EmpresaUsuario({ dados }) {
   const [showCadastroBeneficios, setShowCadastroBeneficios] = useState(false);
   const [showBeneficiosAtivos, setShowBeneficiosAtivos] = useState(false);
 
-  useEffect(() => {
-    async function carregarBeneficios() {
-      if (dados?.id) {
-        const lista = await getBeneficiosPorOngId(dados.id);
-        setBeneficios(lista);
+    useEffect(() => {
+      let cancelado = false;
+      async function carregarBeneficios() {
+        if (dados?.id) {
+          const lista = await getBeneficiosPorOngId(dados.id);
+          if (!cancelado) setBeneficios(lista);
+        }
       }
-    }
-    carregarBeneficios();
-  }, [dados?.id]);
+      carregarBeneficios();
+      return () => { cancelado = true; };
+    }, [dados?.id]);
 
   const criarNovoBeneficio = async () => {
     if (!descricaoBeneficio.trim() || !valorBeneficio) {

@@ -9,20 +9,22 @@ export default function EtapaEscolha() {
   const [ongSelecionada, setOngSelecionada] = useState(null);
 
   useEffect(() => {
+    let cancelado = false;
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
     setUsuario(usuarioLogado);
 
     async function fetchDados() {
       try {
         const ongsData = await getOngs();
-        setOngs(ongsData);
+        if (!cancelado) setOngs(ongsData);
       } catch (error) {
-        console.error(error);
+        if (!cancelado) console.error(error);
       } finally {
-        setLoading(false);
+        if (!cancelado) setLoading(false);
       }
     }
     fetchDados();
+    return () => { cancelado = true; };
   }, []);
 
   function handleEscolher(ong) {

@@ -87,7 +87,7 @@
 .register-form select:focus {
   outline: none;
   border-color: #2F855A;
-  box-shadow: 0 0 0 2px rgba(0, 179, 126, 0.2);
+  box-shadow: 0 0 0 2px #00b37e33;
 }
 
 .register-button {

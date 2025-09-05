@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { getUsuarioAutenticado } from "../../Api";
-import DoadorUsuario from "./DoadorUsuario.js";
-import OngUsuario from "./OngUsuario.js";
-import EmpresaUsuario from "./EmpresaUsuario.js";
+import DoadorUsuario from "./DoadorUsuario";
+import OngUsuario from "./OngUsuario";
+import EmpresaUsuario from "./EmpresaUsuario";
+import Header from "../../Components/Header.js";
 import "./Usuario.css";
 
 export default function Usuario() {
   const [dados, setDados] = useState(null);
-  const [tipoUsuario, setTipoUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [logado, setLogado] = useState(true);
-  const [menuAberto, setMenuAberto] = useState(false);
 
   useEffect(() => {
+    let cancelado = false;
     async function carregarUsuario() {
       try {
         const usuario = await getUsuarioAutenticado();
-        setDados(usuario);
-        setTipoUsuario(usuario.tipoUsuario);
-        sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+        if (!cancelado) {
+          setDados(usuario);
+          sessionStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+        }
       } catch (err) {
-        setError(err.message);
+        if (!cancelado) setError(err.message);
       } finally {
-        setLoading(false);
+        if (!cancelado) setLoading(false);
       }
     }
     carregarUsuario();
+    return () => { cancelado = true; };
   }, []);
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
-    setLogado(false);
     window.location.href = "/login";
   };
 
@@ -40,11 +40,15 @@ export default function Usuario() {
   if (!dados) return <p>Dados do usuário não disponíveis</p>;
 
   return (
-   
+    <div className="usuario-page">
+      <Header usuario={dados} onLogout={handleLogout} />
+
       <div className="usuario-container">
-        {tipoUsuario === 0 && <DoadorUsuario dados={dados} />}
-        {tipoUsuario === 1 && <OngUsuario dados={dados} />}
-        {tipoUsuario === 2 && <EmpresaUsuario dados={dados} />}
+        
+        {dados.tipoUsuario === 0 && <DoadorUsuario dados={dados} />}
+        {dados.tipoUsuario === 1 && <OngUsuario dados={dados} />}
+        {dados.tipoUsuario === 2 && <EmpresaUsuario dados={dados} />}
       </div>
+    </div>
   );
 }

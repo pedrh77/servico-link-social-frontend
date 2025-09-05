@@ -17,6 +17,7 @@ export default function EtapaFinalizacao() {
   const [doacao, setDoacao] = useState(null);
 
   useEffect(() => {
+    let cancelado = false;
     const token = sessionStorage.getItem("token");
 
     if (!token) {
@@ -49,9 +50,12 @@ export default function EtapaFinalizacao() {
       return;
     }
 
-    setUsuario(usuarioLogado);
-    setOng(ongSelecionada);
-    setDoacao(doacaoSelecionada);
+    if (!cancelado) {
+      setUsuario(usuarioLogado);
+      setOng(ongSelecionada);
+      setDoacao(doacaoSelecionada);
+    }
+    return () => { cancelado = true; };
   }, [navigate]);
 
   const sair = () => {

@@ -13,14 +13,7 @@
   flex-direction: column;
 }
 
-.header {
-  background-color: #e6f0ea;
-  padding: 12px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
+
 
 .header .logo {
   height: 48px;
