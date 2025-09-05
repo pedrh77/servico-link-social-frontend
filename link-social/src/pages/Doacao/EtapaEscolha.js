@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EtapaEscolha.css";
 import { getOngs } from "../../Api.js";
+import Header from "../../Components/Header.js";
 
 export default function EtapaEscolha() {
   const [usuario, setUsuario] = useState(null);
@@ -43,35 +44,13 @@ export default function EtapaEscolha() {
     window.location.href = "/login";
   }
 
+  const links = [
+    { label: "Inicio", path: "/Home" }
+  ];
+
   return (
     <div className="container" role="main">
-      <header className="header">
-        <div className="header-container">
-          <div className="header-left">
-            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-          </div>
-          <nav className="nav-header" aria-label="Navegação principal">
-            {usuario ? (
-              <button className="logout" onClick={handleSair} aria-label="Sair da conta">
-                Sair
-              </button>
-            ) : (
-              <>
-                <a href="/login" className="login" aria-label="Entrar na conta">
-                  Entrar
-                </a>
-                <button
-                  className="signup"
-                  onClick={() => (window.location.href = "/register")}
-                  aria-label="Cadastrar nova conta"
-                >
-                  Cadastrar
-                </button>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+      <Header links={links} />
 
       <h1 className="titulo">Escolha uma ONG</h1>
 

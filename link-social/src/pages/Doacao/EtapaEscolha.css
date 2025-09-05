@@ -1,10 +1,4 @@
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Manjari', sans-serif;
-}
 
 .container {
   background: #fff;
@@ -41,35 +35,6 @@
 .logout:focus {
   outline: 2px solid #e74c3c;
   outline-offset: 2px;
-}
-
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 12px 0;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.header-container nav {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-left: auto;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-
-.header-container nav::-webkit-scrollbar {
-  height: 6px;
-}
-
-.header-container nav::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255);
-  border-radius: 3px;
 }
 
 .login,
@@ -262,18 +227,7 @@
     width: 100vw;
     padding: 12px 0;
   }
-  .header-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .header-container nav {
-    width: 100%;
-    justify-content: flex-end;
-    gap: 12px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
+
   .login,
   .signup {
     max-width: 130px;

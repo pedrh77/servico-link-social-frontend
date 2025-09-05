@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./EtapaFinalizacao.css";
 import { NovaDoacao } from "../../Api";
+import Header from "../../Components/Header";
 
 export default function EtapaFinalizacao() {
   const navigate = useNavigate();
@@ -109,17 +110,12 @@ export default function EtapaFinalizacao() {
   };
 
   if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
-
+const links = [
+    { label: "Inicio", path: "/Home" }
+  ];
   return (
     <div className="container">
-      <header className="header">
-        <div className="header-left">
-          <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-        </div>
-        <nav className="nav-header">
-          <button onClick={sair} className="logout">Sair</button>
-        </nav>
-      </header>
+       <Header links={links} />
 
       <main className="final-container">
         <h2 className="final-titulo">Resumo da Doação</h2>

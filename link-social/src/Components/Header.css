@@ -1,0 +1,118 @@
+
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #E7F5EE;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  width: 100%;
+  padding: 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.header-left .logo {
+  height: 50px;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  font-weight: 500;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: #2F855A;
+}
+
+.logout {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.signup {
+  background-color: #2F855A;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signup:hover {
+  background-color: #005fa3;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #2F855A;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #E7F5EE;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  .nav.show {
+    display: flex;
+  }
+
+  .nav a,
+  .nav .logout,
+  .nav .signup {
+    width: 100%;
+  }
+
+  .header-content {
+    justify-content: center;
+  }
+}

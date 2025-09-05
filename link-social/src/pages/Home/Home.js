@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
+import Header from "../../Components/Header.js";
 
 export default function Home() {
   const [logado, setLogado] = useState(false);
@@ -7,66 +8,17 @@ export default function Home() {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setLogado(!!token);
-
-    const toggleBtn = document.getElementById("menu-toggle");
-    const navMenu = document.getElementById("nav-menu");
-
-    const toggleMenu = () => {
-      navMenu.classList.toggle("show");
-    };
-
-    toggleBtn.addEventListener("click", toggleMenu);
-
-    return () => {
-      toggleBtn.removeEventListener("click", toggleMenu);
-    };
   }, []);
 
-  function handleLogout() {
-    sessionStorage.removeItem("token");
-    setLogado(false);
-    window.location.href = "/login";
-  }
+  const links = [
+    { label: "Parceiros", path: "/#parceiros" },
+    { label: "Benefícios", path: "/#beneficios" }
+  ];
 
   return (
     <div className="landing-page manjari-regular">
-      <header className="header">
-        <div className="header-content">
-          <div className="header-left">
-            <img src="/img/logo-link.svg" alt="Logo" className="logo" />
-          </div>
-
-          <button className="hamburger" id="menu-toggle">
-            ☰
-          </button>
-
-          <nav className="nav" id="nav-menu">
-            <a href="#parceiros">Parceiros</a>
-            <a href="#beneficios">Benefícios</a>
-
-            {logado ? (
-              <>
-                <a href="/usuario">Minha Conta</a>
-                <button className="logout" onClick={handleLogout}>
-                  Sair
-                </button>
-              </>
-            ) : (
-              <>
-                <a href="/login" className="login">
-                  Entrar
-                </a>
-                <button
-                  className="signup"
-                  onClick={() => (window.location.href = "/register")}
-                >
-                  Cadastrar
-                </button>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+    
+      <Header links={links} />
 
       <section className="about" id="sobre">
         <div className="about-content">

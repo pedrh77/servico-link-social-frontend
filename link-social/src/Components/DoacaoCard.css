@@ -1,0 +1,103 @@
+.card-doacao {
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 12px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.card-doacao.expanded {
+  background-color: #f9fff9;
+}
+
+.doacao-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.expand-icon {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2F855A;
+}
+
+.doacao-detalhes {
+  margin-top: 8px;
+}
+
+.status-pendente {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.status-pago {
+  color: #065f46;
+  font-weight: 700;
+}
+
+.status-cancelado {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.comentario {
+  background: #f0fff4;
+  padding: 10px 12px;
+  border-left: 4px solid #2F855A;
+  border-radius: 6px;
+  color: #065f46;
+  margin-top: 8px;
+}
+
+.botoes-salvar-cancelar {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn-editar,
+.btn-salvar {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  color: white;
+  background: #2F855A;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.btn-editar:hover,
+.btn-salvar:hover {
+  background: #005fa3;
+}
+
+.btn-cancelar {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  color: white;
+  background: #f44336;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.btn-cancelar:hover {
+  background: #ba2d25;
+}
+
+textarea,
+input[type="number"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Manjari', sans-serif;
+}

@@ -1,0 +1,40 @@
+
+.accordion-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  gap: 20px; 
+  background-color: #fafafa; 
+}
+
+.accordion-section {
+  border: 1.5px solid #2F855A;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+}
+
+.accordion-header {
+  width: 100%;
+  background: linear-gradient(90deg, #2F855A, #276749);
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.accordion-header:hover {
+  background: linear-gradient(90deg, #276749, #22543d);
+}
