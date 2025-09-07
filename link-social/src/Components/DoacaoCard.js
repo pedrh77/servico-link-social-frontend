@@ -1,57 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import "./DoacaoCard.css";
 
-export default function CardDoacao({ doacao }) {
-  const [expanded, setExpanded] = useState(false);
-  const [editando, setEditando] = useState(false);
-  const [valor, setValor] = useState(doacao.valor);
-  const [comentario, setComentario] = useState(doacao.comentario || "");
+export default function DoacaoLista({ doacao }) {
 
-  const toggleExpand = () => setExpanded(!expanded);
-  const salvarEdicao = () => {
-    // Salvar na API
-    setEditando(false);
+  const tipoDoacaoTexto = (tipo) => {
+    switch (tipo) {
+      case 1: return "Única";
+      case 2: return "Mensal 6x";
+      case 3: return "Mensal 12x";
+      default: return "-";
+    }
   };
 
-  const statusClasse = (status) =>
-    ({ 0: "status-pendente", 1: "status-pago", 2: "status-cancelado" }[status] || "");
+  const statusDoacaoTexto = (status) => {
+    switch (status) {
+      case 0: return "Pendente";
+      case 1: return "Aprovado";
+      case 2: return "Rejeitado";
+      case 3: return "Pago";
+      case 4: return "Cancelado";
+      case 5: return "Concluído";
+      default: return "-";
+    }
+  };
+
+  const nomeDoador = doacao.anonima || doacao.nomeDoador === "True" || doacao.nomeDoador === "False"
+    ? "Anônimo"
+    : doacao.nomeDoador;
 
   return (
-    <li className={`card-doacao ${expanded ? "expanded" : ""}`}>
-      <div className="doacao-summary" onClick={toggleExpand}>
-        <p><strong>Doador:</strong> {doacao.nomeDoador ?? "Anônimo"}</p>
-        <p><strong>Valor:</strong> R$ {valor.toFixed(2)}</p>
-        <p className={statusClasse(doacao.statusPagamento)}>
-          <strong>Status:</strong> {doacao.statusPagamentoTexto}
-        </p>
-        <span className="expand-icon">{expanded ? "▲" : "▼"}</span>
-      </div>
-
-      {expanded && (
-        <div className="doacao-detalhes">
-          <p><strong>Benefício:</strong> {doacao.descricaoBeneficio ?? "-"}</p>
-          <p><strong>Tipo:</strong> {doacao.tipoDoacaoTexto}</p>
-          {editando ? (
-            <>
-              <input
-                type="number"
-                value={valor}
-                onChange={(e) => setValor(parseFloat(e.target.value))}
-              />
-              <textarea value={comentario} onChange={(e) => setComentario(e.target.value)} />
-              <div className="botoes-salvar-cancelar">
-                <button className="btn-salvar" onClick={salvarEdicao}>Salvar</button>
-                <button className="btn-cancelar" onClick={() => setEditando(false)}>Cancelar</button>
-              </div>
-            </>
-          ) : (
-            <>
-              {comentario && <div className="comentario"><strong>Comentário:</strong> {comentario}</div>}
-              <button className="btn-editar" onClick={() => setEditando(true)}>Editar</button>
-            </>
-          )}
-        </div>
-      )}
+    <li key={doacao.id} className="lista-item">
+      <span>{nomeDoador}</span>
+      <span>R$ {doacao.valor.toFixed(2)}</span>
+      <span>{tipoDoacaoTexto(doacao.tipoDoacao)}</span>
+      <span>{statusDoacaoTexto(doacao.statusPagamento)}</span>
+      <span>{doacao.comentario || "-"}</span>
     </li>
+
   );
 }

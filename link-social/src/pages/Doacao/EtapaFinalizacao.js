@@ -101,8 +101,8 @@ export default function EtapaFinalizacao() {
         OngId: ong.id,
         Valor: parseFloat(doacao.valor),
         TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
-        Anonima: doacao.anonima || false, 
-        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null, 
+        Anonima: doacao.anonima || false,
+        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null,
       });
 
 
@@ -118,8 +118,10 @@ export default function EtapaFinalizacao() {
 
   if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
 
-  const links = [{ label: "Inicio", path: "/Home" }];
-
+   const links = [
+    { label: "Inicio", path: "/Home" },
+    { label: "Meu Perfil", path: "/Usuario" }
+  ];
   return (
     <div className="container">
       <Header links={links} />
