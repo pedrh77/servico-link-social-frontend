@@ -8,26 +8,27 @@ export default function LoginPage() {
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErro("");
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErro("");
+  setLoading(true);
 
-    try {
-      const result = await login(email, senha);
-      if (result.status === 200 || result.token) {
-        console.log("Login bem-sucedido:", result);
-        sessionStorage.setItem("token", result.token);
-        window.location.href = "/usuario";
-      } else {
-        setErro(result.mensagem || "Login falhou");
-      }
-    } catch (error) {
-      setErro("Erro ao conectar com o servidor.");
-    } finally {
-      setLoading(false);
+  try {
+    const result = await login(email, senha);
+
+    if (result.token) {
+      console.log("Login bem-sucedido:", result);
+      window.location.href = "/usuario"; 
+    } else {
+      setErro(result.mensagem || "Login falhou");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setErro("Erro ao conectar com o servidor.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-page manjari-regular">

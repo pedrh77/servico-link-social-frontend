@@ -125,6 +125,42 @@
   outline: none;
 }
 
+
+.anonima-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.btn-group-anonima {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-group-anonima button {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid #2a6f4b;
+  background-color: white;
+  color: #264d3a;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-group-anonima button:hover {
+  background-color: #d7e9db;
+}
+
+.btn-group-anonima .btn-ativo {
+  background-color: #2a6f4b;
+  color: white;
+  border-color: #20492f;
+}
 .qrcode-container {
   display: flex;
   align-items: center;

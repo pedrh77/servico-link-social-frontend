@@ -10,7 +10,7 @@ export default function EtapaEscolha() {
   const [ongSelecionada, setOngSelecionada] = useState(null);
 
   useEffect(() => {
-    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
     setUsuario(usuarioLogado);
 
     async function fetchDados() {
@@ -64,8 +64,8 @@ export default function EtapaEscolha() {
             <div className="info-ong">
               <h3>{ong.nome}</h3>
               <div className="tag">
-                <img className="estrela" src="/img/estrela.svg" alt="Estrela" />
-                {ong.porcentagem} Lorem Ipsum
+                {ong.comentario == null ? <p> Sem descrição</p> : <p> {ong.comentario}</p>}
+
               </div>
               <button
                 className="btn-escolher"

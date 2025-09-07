@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // corrigido
 import "./EtapaFinalizacao.css";
 import { NovaDoacao } from "../../Api";
 import Header from "../../Components/Header";
@@ -17,23 +17,29 @@ export default function EtapaFinalizacao() {
   const [ong, setOng] = useState(null);
   const [doacao, setDoacao] = useState(null);
 
+  const [logado, setLogado] = useState(false);
+
+  // Verifica se existe token
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    setLogado(!!token);
+  }, []);
+
+  // Validação de token e carregamento de dados
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
     try {
-      const decoded = jwtDecode(token);
-      const now = Date.now() / 1000;
+      if (logado && token) {
+        const decoded = jwtDecode(token);
+        const now = Date.now() / 1000;
 
-      if (decoded.exp && decoded.exp < now) {
-        sessionStorage.clear();
-        setMensagemErro("Sua sessão expirou. Redirecionando para login...");
-        setTimeout(() => navigate("/login"), 2000);
-        return;
+        if (decoded.exp && decoded.exp < now) {
+          sessionStorage.clear();
+          setMensagemErro("Sua sessão expirou. Redirecionando para login...");
+          setTimeout(() => navigate("/login"), 2000);
+          return;
+        }
       }
     } catch (err) {
       sessionStorage.clear();
@@ -53,7 +59,7 @@ export default function EtapaFinalizacao() {
     setUsuario(usuarioLogado);
     setOng(ongSelecionada);
     setDoacao(doacaoSelecionada);
-  }, [navigate]);
+  }, [navigate, logado]);
 
   const sair = () => {
     sessionStorage.clear();
@@ -63,7 +69,6 @@ export default function EtapaFinalizacao() {
   const editarOng = () => navigate("/etapa-selecao");
   const editarValor = () => navigate("/etapa-valores");
 
-
   const tipoDoacaoParaNumero = (tipo, meses) => {
     if (tipo === "Unica") return 1;
     if (tipo === "Mensal" && meses === 6) return 2;
@@ -71,15 +76,8 @@ export default function EtapaFinalizacao() {
     return 1;
   };
 
-  const tipoDoacaoTexto = (tipo, meses) => {
-    if (tipo === "Unica") return "Única";
-    if (tipo === "Mensal" && meses === 6) return "Mensal";
-    if (tipo === "Mensal" && meses === 12) return "Mensal - 12x";
-    return "Única";
-  };
-
   const confirmarDoacao = async () => {
-    if (!usuario?.id || !ong?.id || !doacao?.beneficioId) {
+    if (usuario?.id == null || ong?.id == null) {
       setMensagemErro("Dados incompletos para a doação.");
       return;
     }
@@ -89,20 +87,29 @@ export default function EtapaFinalizacao() {
     setSucesso(false);
 
     try {
+      console.log("Dados da doação:", {
+        DoadorId: usuario.id,
+        OngId: ong.id,
+        Valor: parseFloat(doacao.valor),
+        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
+        Anonima: doacao.anonima || false,
+        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null,
+      });
+
       await NovaDoacao({
         DoadorId: usuario.id,
         OngId: ong.id,
-        BeneficioId: doacao.beneficioId,
         Valor: parseFloat(doacao.valor),
         TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
-        Comentario: "",
+        Anonima: doacao.anonima || false, 
+        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null, 
       });
+
 
       setStatus("Doação registrada com sucesso!");
       setSucesso(true);
-
-      setTimeout(() => navigate("/usuario"), 5000);
     } catch (err) {
+      console.log(err);
       setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
     } finally {
       setLoading(false);
@@ -110,12 +117,12 @@ export default function EtapaFinalizacao() {
   };
 
   if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
-const links = [
-    { label: "Inicio", path: "/Home" }
-  ];
+
+  const links = [{ label: "Inicio", path: "/Home" }];
+
   return (
     <div className="container">
-       <Header links={links} />
+      <Header links={links} />
 
       <main className="final-container">
         <h2 className="final-titulo">Resumo da Doação</h2>
@@ -123,20 +130,51 @@ const links = [
         <div className="resumo-cards">
           <div className="card">
             <div className="logo-ong">{ong.nome}</div>
-            <button className="btn-editar" onClick={editarOng}>Editar</button>
+            <button className="btn-editar" onClick={editarOng}>
+              Editar
+            </button>
           </div>
 
           <div className="card">
             <div className="valor">{`R$ ${doacao.valor}`}</div>
-            <div className="tipo-doacao">
-              {doacao.tipo}
-            </div>
-            {doacao.tipo === "Mensal" && (
-              <div className="meses">Duração: {doacao.meses} meses</div>
-            )}
-            <button className="btn-editar" onClick={editarValor}>Editar</button>
+            <div className="tipo-doacao">{doacao.tipo}</div>
+            {doacao.tipo === "Mensal" && <div className="meses">Duração: {doacao.meses} meses</div>}
+            <button className="btn-editar" onClick={editarValor}>
+              Editar
+            </button>
           </div>
         </div>
+
+        <div className="anonima-container">
+          <label>Deseja que a doação seja anônima?</label>
+          <div className="btn-group-anonima">
+            <button
+              className={doacao.anonima ? "btn-ativo" : ""}
+              onClick={() => setDoacao({ ...doacao, anonima: true })}
+            >
+              Sim
+            </button>
+            <button
+              className={!doacao.anonima ? "btn-ativo" : ""}
+              onClick={() => setDoacao({ ...doacao, anonima: false })}
+            >
+              Não
+            </button>
+          </div>
+        </div>
+
+        {!doacao.anonima && (
+          <div className="comentario-container">
+            <label htmlFor="comentario">Mensagem (opcional)</label>
+            <textarea
+              id="comentario"
+              value={doacao.mensagem || ""}
+              onChange={(e) => setDoacao({ ...doacao, mensagem: e.target.value })}
+              placeholder="Escreva uma mensagem para a ONG..."
+              rows={4}
+            />
+          </div>
+        )}
 
         {mensagemErro && <div className="status-erro">{mensagemErro}</div>}
 
@@ -144,9 +182,12 @@ const links = [
           <div className="finalizacao-bloco">
             <div className="finalizacao-sucesso">
               <h3>🎉 {status}</h3>
-              <p>Obrigado por apoiar a ONG <strong>{ong.nome}</strong>.</p>
+              <p>
+                Obrigado por apoiar a ONG <strong>{ong.nome}</strong>.
+              </p>
               <p className="info-pagamento">
-                No momento ainda não temos meios de pagamento integrados.<br />
+                No momento ainda não temos meios de pagamento integrados.
+                <br />
                 Você será redirecionado em instantes...
               </p>
             </div>

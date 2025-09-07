@@ -13,6 +13,7 @@ export default function EtapaDoacao() {
   useEffect(() => {
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
     setUsuario(usuarioLogado);
+    console.log("Usuário logado - tela valores:", usuarioLogado);
 
     const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
     if (!ongSelecionada) {
@@ -86,11 +87,12 @@ export default function EtapaDoacao() {
                 <p><strong>Você escolheu doar:</strong> R$ {valor.toFixed(2)}</p>
                 <p>Com isso, você ainda terá <strong>R$ {(valor * 2).toFixed(2)}</strong> em benefícios 💚</p>
 
-                <div style={{ marginTop: "10px" }}>
+                {/* Radios Única/Mensal */}
+                <div style={{ marginTop: "10px" }} onClick={(e) => e.stopPropagation()}>
                   <input
                     type="radio"
                     id={`unica-${index}`}
-                    name="tipoDoacao"
+                    name={`tipoDoacao-${index}`}
                     value="Única"
                     checked={tipoDoacao === "Única"}
                     onChange={() => { setTipoDoacao("Única"); setMeses(null); }}
@@ -100,7 +102,7 @@ export default function EtapaDoacao() {
                   <input
                     type="radio"
                     id={`mensal-${index}`}
-                    name="tipoDoacao"
+                    name={`tipoDoacao-${index}`}
                     value="Mensal"
                     checked={tipoDoacao === "Mensal"}
                     onChange={() => setTipoDoacao("Mensal")}
@@ -108,12 +110,13 @@ export default function EtapaDoacao() {
                   <label htmlFor={`mensal-${index}`}>Mensal</label>
                 </div>
 
+                {/* Radios 6/12 meses */}
                 {tipoDoacao === "Mensal" && (
-                  <div style={{ marginTop: "10px" }}>
+                  <div style={{ marginTop: "10px" }} onClick={(e) => e.stopPropagation()}>
                     <input
                       type="radio"
                       id={`6meses-${index}`}
-                      name="meses"
+                      name={`meses-${index}`}
                       value={6}
                       checked={meses === 6}
                       onChange={() => setMeses(6)}
@@ -123,7 +126,7 @@ export default function EtapaDoacao() {
                     <input
                       type="radio"
                       id={`12meses-${index}`}
-                      name="meses"
+                      name={`meses-${index}`}
                       value={12}
                       checked={meses === 12}
                       onChange={() => setMeses(12)}

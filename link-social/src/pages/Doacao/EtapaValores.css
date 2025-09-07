@@ -15,7 +15,7 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   padding: 20px;
-  align-items: stretch;
+  align-items: flex-start;
 }
 
 .loading-container {
@@ -57,7 +57,7 @@
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
-.card-doacao.selecionado {
+.selecionado {
   border: 2px solid #247a58;
   box-shadow: 0 8px 16px rgba(36,122,88,0.3);
 }
@@ -68,7 +68,7 @@
   margin: 0 0 8px 0;
 }
 
-.beneficios-extra{
+.beneficios-extra {
   width: 100%;
   overflow: hidden;
   transition: all 0.4s ease;
@@ -100,8 +100,10 @@
   margin-bottom: 4px;
 }
 
+/* Ajuste dos radios para funcionarem */
 .card-doacao .beneficios-extra input[type="radio"] {
-  display: none;
+  position: absolute;
+  left: -9999px; /* esconde fora da tela */
 }
 
 .card-doacao .beneficios-extra label {
@@ -143,7 +145,6 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 30px;
-  padding: 20px;
 }
 
 .botao-avancar {
@@ -164,6 +165,3 @@
   box-shadow: 0 6px 12px rgba(30,96,71,0.8);
 }
 
-html {
-  scroll-behavior: smooth;
-}

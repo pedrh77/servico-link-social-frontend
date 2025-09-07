@@ -7,6 +7,7 @@ function getToken() {
 }
 
 // USUARIO
+// Api.js
 export async function login(email, senha) {
   const response = await fetch(`${API_URL}/api/Auth/login`, {
     method: "POST",
@@ -55,7 +56,9 @@ export async function getUsuarioAutenticado() {
     throw new Error("Falha ao buscar dados do usuário");
   }
 
+
   const data = await response.json();
+  sessionStorage.setItem("usuarioLogado", JSON.stringify(data));
   return data;
 }
 
@@ -159,13 +162,12 @@ export async function NovaDoacao(dados) {
       body: JSON.stringify(dados),
     });
 
+    
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Erro ao processar a doação");
     }
-
-    const result = await response.json();
-    return result;
+    return;
   } catch (err) {
     console.error("Erro na NovaDoacao:", err);
     throw err;
@@ -214,5 +216,27 @@ export async function GetDoacoesByOngId(id) {
   } catch (error) {
     console.error("Erro ao buscar doações:", error);
     return [];
+  }
+}
+
+
+//Carteira
+export async function GetCarteiraByUsuarioId(id) {
+
+  try {
+    const response = await fetch(`${API_URL}/api/Carteira/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+   
+      return await response.json();
+    
+  }
+  catch (error) {
+    console.error("Erro ao buscar carteira:", error);
+    return null;
   }
 }
