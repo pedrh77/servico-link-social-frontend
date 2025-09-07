@@ -10,6 +10,14 @@ export default function Home() {
     setLogado(!!token);
   }, []);
 
+
+
+  function handleredirect() {
+    if (logado) {
+      window.location.href = "/etapa-selecao"
+    } else { window.location.href = "/login" }
+  }
+
   const links = [
     { label: "Parceiros", path: "/#parceiros" },
     { label: "Benefícios", path: "/#beneficios" }
@@ -17,7 +25,7 @@ export default function Home() {
 
   return (
     <div className="landing-page manjari-regular">
-    
+
       <Header links={links} />
 
       <section className="about" id="sobre">
@@ -115,7 +123,7 @@ export default function Home() {
         <p>Junte-se a nós e fortaleça todo o nosso terceiro setor, conectando doadores, ONGs e estabelecimentos.</p>
         <button
           className="donate-button"
-          onClick={() => window.location.href = "/etapa-selecao"}
+          onClick={() => handleredirect()}
         >
           Comece a Doar &rarr;
         </button>
