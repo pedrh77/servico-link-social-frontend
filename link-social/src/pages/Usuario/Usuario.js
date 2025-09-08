@@ -32,8 +32,8 @@ export default function Usuario() {
 
   return (
     <div className="usuario-container">
-      {tipoUsuario === 1 && <OngUsuario dados={dados} />}
-      {tipoUsuario === 0 && <DoadorUsuario dados={dados} />}
+      {tipoUsuario === 0 && <OngUsuario dados={dados} />}
+      {tipoUsuario === 1 && <DoadorUsuario dados={dados} />}
       {tipoUsuario === 2 && <EmpresaUsuario dados={dados} />}
     </div>
   );

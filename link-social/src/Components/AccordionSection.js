@@ -8,7 +8,6 @@ export default function AccordionSection({ title, children, initialExpanded = fa
     <section className="accordion-section">
       <button className="accordion-header" onClick={() => setExpanded(!expanded)}>
         {title}
-        <span>{expanded ? "-" : "+"}</span>
       </button>
       {expanded && <div className="accordion-content">{children}</div>}
     </section>
