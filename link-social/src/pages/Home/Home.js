@@ -1,21 +1,45 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Header from "../../Components/Header.js";
+import { getUsuarioAutenticado } from "../../Api";
 
 export default function Home() {
   const [logado, setLogado] = useState(false);
+
+  const [dados, setDados] = useState(null);
+  const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setLogado(!!token);
   }, []);
 
-
+  useEffect(() => {
+      async function carregarUsuario() {
+        try {
+          const usuario = await getUsuarioAutenticado();
+          setDados(usuario);
+          setTipoUsuario(usuario.tipoUsuario);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+      carregarUsuario();
+    }, []);
 
   function handleredirect() {
     if (logado) {
-      window.location.href = "/etapa-selecao"
+      if (tipoUsuario === 0){
+        window.location.href = "/etapa-selecao"
+      } else{ alert("Doações não permitidas para esse Usuario.")}
     } else { window.location.href = "/login" }
+
+    
   }
 
   const links = [

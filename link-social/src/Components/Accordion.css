@@ -1,14 +1,12 @@
 .accordion-container {
-  height: 100vh;
-  /* ocupa toda a altura da tela */
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  /* centraliza verticalmente */
-  align-items: center;
-  
+  justify-content: center; 
+  align-items: center;     
   gap: 20px;
   background-color: #fafafa;
+  
 }
 
 .accordion-section {
@@ -16,18 +14,17 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  max-width: 900px;
-  width: 90%;
+  width: 80%;         
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  margin:20px ;
+  margin: 20px auto;  
 }
 
 .accordion-header {
-  width: 100%;
+  width: 100%;   
+  margin: 0 auto;
   background: linear-gradient(90deg, #2F855A, #276749);
   color: white;
   font-weight: 700;
@@ -36,7 +33,7 @@
   border: none;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   user-select: none;
   transition: background 0.3s ease;
