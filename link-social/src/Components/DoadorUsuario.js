@@ -5,7 +5,7 @@ import CardDoacao from "./DoacaoCard.js";
 import Header from "./Header.js";
 import "./DoadorUsuario.css";
 
-export default function OngUsuario({ dados }) {
+export default function DoadorUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
   const [carteira, setCarteira] = useState(null);
 

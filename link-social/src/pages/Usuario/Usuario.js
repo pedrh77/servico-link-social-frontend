@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getUsuarioAutenticado } from "../../Api";
-import OngUsuario from "../../Components/DoadorUsuario.js";
+import DoadorUsuario from "../../Components/DoadorUsuario.js";
 import EmpresaUsuario from "../../Components/EmpresaUsuario";
-import DoadorUsuario from "../../Components/OngUsuario";
+import OngUsuario from "../../Components/OngUsuario";
 import "./Usuario.css";
 
 export default function Usuario() {
@@ -32,8 +32,8 @@ export default function Usuario() {
 
   return (
     <div className="usuario-container">
-      {tipoUsuario === 0 && <OngUsuario dados={dados} />}
-      {tipoUsuario === 1 && <DoadorUsuario dados={dados} />}
+      {tipoUsuario === 0 && <DoadorUsuario dados={dados} />}
+      {tipoUsuario === 1 && <OngUsuario dados={dados} />}
       {tipoUsuario === 2 && <EmpresaUsuario dados={dados} />}
     </div>
   );

@@ -7,7 +7,6 @@ function getToken() {
 }
 
 // USUARIO
-// Api.js
 export async function login(email, senha) {
   const response = await fetch(`${API_URL}/api/Auth/login`, {
     method: "POST",
@@ -239,4 +238,24 @@ export async function GetCarteiraByUsuarioId(id) {
     console.error("Erro ao buscar carteira:", error);
     return null;
   }
+}
+
+export async function GetTransacoesRecebidasByEmpresaId(id){
+try {
+    const response = await fetch(`${API_URL}/api/Carteira/Transacao/Recebida?EmpresaId=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+   
+      return await response.json();
+    
+  }
+  catch (error) {
+    console.error("Erro ao buscar transacoes:", error);
+    return null;
+  }
+
 }
