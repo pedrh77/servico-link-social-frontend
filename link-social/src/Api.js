@@ -81,6 +81,26 @@ export async function getOngs() {
   }
 }
 
+export async function getEmpresas() {
+  try {
+    const response = await fetch(`${API_URL}/api/Usuario/tipo/2`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar ONGs:", error);
+    return [];
+  }
+}
+
 
 // BENEFICIOS
 

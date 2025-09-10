@@ -7,8 +7,6 @@
   padding: 2rem;
 }
 
-
-
 .password-field {
   position: relative;
   display: flex;
@@ -65,6 +63,7 @@
 }
 
 .register-form input,
+.register-form textarea,
 .register-form select {
   margin-top: 0.3rem;
   padding: 0.75rem;
@@ -75,10 +74,16 @@
 }
 
 .register-form input:focus,
+.register-form textarea,
 .register-form select:focus {
   outline: none;
   border-color: #2F855A;
   box-shadow: 0 0 0 2px rgba(0, 179, 126, 0.2);
+}
+
+.register-form textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
 .register-button {

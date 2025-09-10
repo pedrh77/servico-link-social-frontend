@@ -9,6 +9,7 @@ import EtapaEscolha from './pages/Doacao/EtapaEscolha';
 import EtapaValores from "./pages/Doacao/EtapaValores";
 import Usuario from "./pages/Usuario/Usuario";
 import EtapaFinalizacao from "./pages/Doacao/EtapaFinalizacao";
+import NovaTransacao from "./pages/Transação/Transação";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/etapa-valores" element={<EtapaValores />} />
         <Route path="/etapa-final" element={<EtapaFinalizacao />} />
         <Route path="/Usuario" element={<Usuario />} />
+        <Route path="/Transacao" element={<NovaTransacao />} />
 
         <Route path="*" element={<Home />} />
       </Routes>

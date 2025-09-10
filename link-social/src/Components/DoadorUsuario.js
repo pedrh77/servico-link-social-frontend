@@ -49,7 +49,7 @@ export default function DoadorUsuario({ dados }) {
               </p>
               <button
                 className="btn-escolher"
-                onClick={() => alert("Abrir modal de Novo Pagamento")}
+                onClick={() => window.location.href = '/Transacao'}
               >
                 Usar Saldo
               </button>
