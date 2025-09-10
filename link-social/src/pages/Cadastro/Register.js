@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
+  const [descricao, setDescricao] = useState("");
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [confirmarSenha, setConfirmarSenha] = useState("");
@@ -38,9 +39,11 @@ export default function RegisterPage() {
       email,
       tipoUsuario: tipoUsuarioEnum,
       senha,
+      comentario: descricao === null ? null : descricao,
       confirmaSenha: confirmarSenha,
       cpf: tipoUsuarioEnum === 0 ? cpfCnpj : null,
       cnpj: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? cpfCnpj : null,
+      descricao: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? descricao : null,
     };
 
     try {
@@ -63,17 +66,12 @@ export default function RegisterPage() {
     tipoUsuario === "Doador" ? "999.999.999-99" : "99.999.999/9999-99";
 
   const removerMascara = (valor) => valor.replace(/\D/g, "");
-  const links = [
-    {}
-  ];
+  const links = [{}];
 
   return (
     <>
-
-
       <Header links={links} />
       <div className="register-page manjari-regular">
-
         <main className="register-container">
           <h2 className="manjari-bold">Crie sua conta</h2>
           <p>Faça parte do Link Social e conecte-se com causas que transformam.</p>
@@ -87,6 +85,7 @@ export default function RegisterPage() {
                   setTipoUsuario(e.target.value);
                   setCpfCnpj("");
                   setNome("");
+                  setDescricao("");
                 }}
                 required
               >
@@ -100,16 +99,16 @@ export default function RegisterPage() {
               {tipoUsuario === "ONG"
                 ? "Nome da ONG"
                 : tipoUsuario === "Empresa"
-                  ? "Nome da Empresa"
-                  : "Seu nome completo"}
+                ? "Nome da Empresa"
+                : "Seu nome completo"}
               <input
                 type="text"
                 placeholder={
                   tipoUsuario === "ONG"
                     ? "Digite o nome da ONG"
                     : tipoUsuario === "Empresa"
-                      ? "Digite o nome da empresa"
-                      : "Digite seu nome"
+                    ? "Digite o nome da empresa"
+                    : "Digite seu nome"
                 }
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
@@ -143,13 +142,28 @@ export default function RegisterPage() {
               {tipoUsuario === "Doador" ? "CPF" : "CNPJ"}
               <InputMask
                 mask={mascaraCpfCnpj}
-                placeholder={`Digite seu ${tipoUsuario === "Doador" ? "CPF" : "CNPJ"
-                  }`}
+                placeholder={`Digite seu ${
+                  tipoUsuario === "Doador" ? "CPF" : "CNPJ"
+                }`}
                 value={cpfCnpj}
                 onChange={(e) => setCpfCnpj(removerMascara(e.target.value))}
                 required
               />
             </label>
+
+            {(tipoUsuario === "ONG" || tipoUsuario === "Empresa") && (
+              <label>
+                Descrição
+                <textarea
+                  placeholder={`Digite uma descrição sobre sua ${
+                    tipoUsuario === "ONG" ? "ONG" : "Empresa"
+                  }`}
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  required
+                />
+              </label>
+            )}
 
             <label>
               Senha
@@ -185,7 +199,9 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   className="toggle-password"
-                  onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                  onClick={() =>
+                    setMostrarConfirmarSenha(!mostrarConfirmarSenha)
+                  }
                   aria-label="Mostrar ou ocultar senha"
                 >
                   {mostrarConfirmarSenha ? (

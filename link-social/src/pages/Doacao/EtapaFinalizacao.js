@@ -19,13 +19,11 @@ export default function EtapaFinalizacao() {
 
   const [logado, setLogado] = useState(false);
 
-  // Verifica se existe token
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setLogado(!!token);
   }, []);
 
-  // Validação de token e carregamento de dados
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
