@@ -27,6 +27,13 @@ export default function Header({ links = [] }) {
   let renderButtons;
   if (logado) {
     renderButtons = <button className="logout" onClick={handleLogout}>Sair</button>;
+    if (currentPath === "/Home") {
+      renderButtons = <>
+        <a href="/usuario" >Meu Perfil</a>
+        <button className="logout" onClick={handleLogout}>Sair</button>
+      </>
+    }
+
   } else if (currentPath !== "/register") {
     renderButtons = (
       <>

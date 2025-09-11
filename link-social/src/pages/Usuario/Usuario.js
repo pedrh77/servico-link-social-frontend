@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getUsuarioAutenticado } from "../../Api";
-import DoadorUsuario from "../../Components/DoadorUsuario.js";
-import EmpresaUsuario from "../../Components/EmpresaUsuario";
-import OngUsuario from "../../Components/OngUsuario";
+import DoadorUsuario from "./DoadorUsuario.js";
+import EmpresaUsuario from "./EmpresaUsuario";
+import OngUsuario from "./OngUsuario.js";
 import "./Usuario.css";
 
 export default function Usuario() {

@@ -1,41 +1,40 @@
 import React from "react";
+import TipoDoacaoRadios from "./TipoDoacaoRadio";
 import "./DoacaoCard.css";
 
-export default function DoacaoLista({ doacao }) {
-
-  const tipoDoacaoTexto = (tipo) => {
-    switch (tipo) {
-      case 1: return "Única";
-      case 2: return "Mensal 6x";
-      case 3: return "Mensal 12x";
-      default: return "-";
-    }
-  };
-
-  const statusDoacaoTexto = (status) => {
-    switch (status) {
-      case 0: return "Pendente";
-      case 1: return "Aprovado";
-      case 2: return "Rejeitado";
-      case 3: return "Pago";
-      case 4: return "Cancelado";
-      case 5: return "Concluído";
-      default: return "-";
-    }
-  };
-
-  const nomeDoador = doacao.anonima || doacao.nomeDoador === "True" || doacao.nomeDoador === "False"
-    ? "Anônimo"
-    : doacao.nomeDoador;
+export default function DoacaoCard({
+  valor,
+  index,
+  selecionado,
+  selecionarValor,
+  tipoDoacao,
+  setTipoDoacao,
+  meses,
+  setMeses,
+}) {
+  const item = { id: index, label: `R$ ${valor.toFixed(2)}` };
 
   return (
-    <li key={doacao.id} className="lista-item">
-      <span>{nomeDoador}</span>
-      <span>R$ {doacao.valor.toFixed(2)}</span>
-      <span>{tipoDoacaoTexto(doacao.tipoDoacao)}</span>
-      <span>{statusDoacaoTexto(doacao.statusPagamento)}</span>
-      <span>{doacao.comentario || "-"}</span>
-    </li>
+    <div
+      className={`card-doacao ${selecionado ? "selecionado" : ""}`}
+      onClick={() => selecionarValor(valor)} // atualiza o pai
+    >
+      <h3>{item.label}</h3>
 
+      {selecionado && (
+        <div className="beneficios-extra expandido">
+          <p><strong>Você escolheu doar:</strong> R$ {valor.toFixed(2)}</p>
+          <p>Com isso, você ainda terá <strong>R$ {(valor * 2).toFixed(2)}</strong> em benefícios 💚</p>
+
+          <TipoDoacaoRadios
+            tipoDoacao={tipoDoacao}
+            setTipoDoacao={setTipoDoacao}
+            meses={meses}
+            setMeses={setMeses}
+            index={index}
+          />
+        </div>
+      )}
+    </div>
   );
 }

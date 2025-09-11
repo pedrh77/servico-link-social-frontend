@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { GetDoacoesByOngId } from "../Api.js";
-import Header from "./Header.js";
-import AccordionSection from "./AccordionSection.js";
-import CardDoacao from "./DoacaoCard.js";
+import { GetDoacoesByOngId } from "../../Api.js";
+import Header from "../../Components/Header.js";
+import AccordionSection from "../../Components/AccordionSection.js";
+import CardDoacao from "../../Components/DoacaoCardList.js";
 
 export default function OngUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);

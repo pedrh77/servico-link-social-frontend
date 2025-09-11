@@ -63,7 +63,7 @@ export default function EtapaEscolha() {
           >
             <div className="info-ong">
               <h3>{ong.nome}</h3>
-              <div className="tag">
+              <div >
                 {ong.comentario == null ? <p> Sem descrição</p> : <p> {ong.comentario}</p>}
 
               </div>

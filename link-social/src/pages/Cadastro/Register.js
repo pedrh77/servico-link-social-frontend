@@ -39,11 +39,10 @@ export default function RegisterPage() {
       email,
       tipoUsuario: tipoUsuarioEnum,
       senha,
-      comentario: descricao === null ? null : descricao,
       confirmaSenha: confirmarSenha,
       cpf: tipoUsuarioEnum === 0 ? cpfCnpj : null,
       cnpj: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? cpfCnpj : null,
-      descricao: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? descricao : null,
+      comentario: tipoUsuarioEnum === 1 || tipoUsuarioEnum === 2 ? descricao : null,
     };
 
     try {

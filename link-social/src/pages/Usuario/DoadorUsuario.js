@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { GetDoacoesByDoador, GetCarteiraByUsuarioId } from "../Api.js";
-import AccordionSection from "./AccordionSection";
-import CardDoacao from "./DoacaoCard.js";
-import Header from "./Header.js";
+import { GetDoacoesByDoador, GetCarteiraByUsuarioId } from "../../Api.js";
+import AccordionSection from "../../Components/AccordionSection.js";
+import CardDoacao from "../../Components/DoacaoCardList.js";
+import Header from "../../Components/Header.js";
 import "./DoadorUsuario.css";
 
 export default function DoadorUsuario({ dados }) {

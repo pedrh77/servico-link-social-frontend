@@ -44,8 +44,7 @@ export default function Home() {
 
   const links = [
     { label: "Parceiros", path: "/#parceiros" },
-    { label: "Benefícios", path: "/#beneficios" },
-    { label: "Meu Perfil", path: "/Usuario" }
+    { label: "Benefícios", path: "/#beneficios" }
   ];
 
   return (

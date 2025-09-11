@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import AccordionSection from "./AccordionSection";
-import Header from "./Header.js";
-import TransacaoCard from "./TransacaoCard.js";
-import { GetTransacoesRecebidasByEmpresaId } from "../Api.js";
+import AccordionSection from "../../Components/AccordionSection.js";
+import Header from "../../Components/Header.js";
+import TransacaoCard from "../../Components/TransacaoCard.js";
+import { GetTransacoesRecebidasByEmpresaId } from "../../Api.js";
 
 export default function EmpresaUsuario({ dados }) {
   const [transacoes, setTransacoes] = useState([]);

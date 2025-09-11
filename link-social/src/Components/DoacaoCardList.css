@@ -1,0 +1,29 @@
+.lista-doacoes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: 'Manjari', sans-serif;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.lista-header,
+.lista-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 3fr; /* Ajuste as proporções */
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+}
+
+.lista-header {
+  font-weight: 700;
+  background-color: #f9f9f9;
+}
+
+.lista-item:nth-child(even) {
+  background-color: #fcfcfc;
+}
+

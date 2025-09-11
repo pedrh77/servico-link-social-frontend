@@ -85,22 +85,14 @@ export default function EtapaFinalizacao() {
     setSucesso(false);
 
     try {
-      console.log("Dados da doação:", {
-        DoadorId: usuario.id,
-        OngId: ong.id,
-        Valor: parseFloat(doacao.valor),
-        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
-        Anonima: doacao.anonima || false,
-        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null,
-      });
-
+      console.log("Enviando doação:", doacao.mensagem);
       await NovaDoacao({
         DoadorId: usuario.id,
         OngId: ong.id,
         Valor: parseFloat(doacao.valor),
         TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
         Anonima: doacao.anonima || false,
-        Comentario: doacao.anonima === false ? doacao.mensagem || "" : null,
+        Comentario:doacao.anonima || !doacao.mensagem ? null : doacao.mensagem,
       });
 
 
@@ -116,7 +108,7 @@ export default function EtapaFinalizacao() {
 
   if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
 
-   const links = [
+  const links = [
     { label: "Inicio", path: "/Home" },
     { label: "Meu Perfil", path: "/Usuario" }
   ];
@@ -163,17 +155,19 @@ export default function EtapaFinalizacao() {
           </div>
         </div>
 
-        {!doacao.anonima && (
+        {!doacao.anonima && (<>
+          <label htmlFor="comentario">Mensagem (opcional)</label>
           <div className="comentario-container">
-            <label htmlFor="comentario">Mensagem (opcional)</label>
             <textarea
               id="comentario"
+              className="comentario-textarea"
               value={doacao.mensagem || ""}
               onChange={(e) => setDoacao({ ...doacao, mensagem: e.target.value })}
               placeholder="Escreva uma mensagem para a ONG..."
               rows={4}
             />
           </div>
+        </>
         )}
 
         {mensagemErro && <div className="status-erro">{mensagemErro}</div>}

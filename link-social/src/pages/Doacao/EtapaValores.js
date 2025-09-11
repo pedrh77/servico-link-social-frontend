@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./EtapaValores.css";
+import DoacaoCard from "../../Components/DoacaoCard";
+import Header from "../../Components/Header";
 
 export default function EtapaDoacao() {
   const [valorSelecionado, setValorSelecionado] = useState(null);
@@ -13,7 +15,6 @@ export default function EtapaDoacao() {
   useEffect(() => {
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
     setUsuario(usuarioLogado);
-    console.log("Usuário logado - tela valores:", usuarioLogado);
 
     const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
     if (!ongSelecionada) {
@@ -70,73 +71,31 @@ export default function EtapaDoacao() {
     navigate("/etapa-final");
   }
 
+  const links = [
+    { label: "Inicio", path: "/Home" },
+    { label: "Meu Perfil", path: "/Usuario" }
+  ];
+
   return (
     <div className="container">
+        <Header links={links} />
       <h1 className="titulo">Selecione o Valor da Doação</h1>
       <div className="grid-cards">
         {valoresFixos.map((valor, index) => (
-          <div
+
+
+          <DoacaoCard
             key={index}
-            className={`card-doacao ${valorSelecionado === valor ? "selecionado" : ""}`}
-            onClick={() => selecionarValor(valor)}
-          >
-            <h3>R$ {valor.toFixed(2)}</h3>
+            valor={valor}
+            index={index}
+            selecionado={valorSelecionado === valor}  // só um card será true
+            selecionarValor={setValorSelecionado}      // atualiza o pai
+            tipoDoacao={tipoDoacao}
+            setTipoDoacao={setTipoDoacao}
+            meses={meses}
+            setMeses={setMeses}
+          />
 
-            {valorSelecionado === valor && (
-              <div className="beneficios-extra expandido">
-                <p><strong>Você escolheu doar:</strong> R$ {valor.toFixed(2)}</p>
-                <p>Com isso, você ainda terá <strong>R$ {(valor * 2).toFixed(2)}</strong> em benefícios 💚</p>
-
-                {/* Radios Única/Mensal */}
-                <div style={{ marginTop: "10px" }} onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="radio"
-                    id={`unica-${index}`}
-                    name={`tipoDoacao-${index}`}
-                    value="Única"
-                    checked={tipoDoacao === "Única"}
-                    onChange={() => { setTipoDoacao("Única"); setMeses(null); }}
-                  />
-                  <label htmlFor={`unica-${index}`}>Única</label>
-
-                  <input
-                    type="radio"
-                    id={`mensal-${index}`}
-                    name={`tipoDoacao-${index}`}
-                    value="Mensal"
-                    checked={tipoDoacao === "Mensal"}
-                    onChange={() => setTipoDoacao("Mensal")}
-                  />
-                  <label htmlFor={`mensal-${index}`}>Mensal</label>
-                </div>
-
-                {/* Radios 6/12 meses */}
-                {tipoDoacao === "Mensal" && (
-                  <div style={{ marginTop: "10px" }} onClick={(e) => e.stopPropagation()}>
-                    <input
-                      type="radio"
-                      id={`6meses-${index}`}
-                      name={`meses-${index}`}
-                      value={6}
-                      checked={meses === 6}
-                      onChange={() => setMeses(6)}
-                    />
-                    <label htmlFor={`6meses-${index}`}>6 meses</label>
-
-                    <input
-                      type="radio"
-                      id={`12meses-${index}`}
-                      name={`meses-${index}`}
-                      value={12}
-                      checked={meses === 12}
-                      onChange={() => setMeses(12)}
-                    />
-                    <label htmlFor={`12meses-${index}`}>12 meses</label>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         ))}
       </div>
 

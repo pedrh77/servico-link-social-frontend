@@ -35,8 +35,7 @@ export default function NovaTransacao() {
             return;
         }
         console.log("Avançando com:", empresaSelecionada);
-        // Exemplo: redirecionar
-        // navigate("/proximaEtapa");
+        //   window.location.href = "/etapa-valores";
     }
 
     const links = [{ label: "Inicio", path: "/Home" }];
