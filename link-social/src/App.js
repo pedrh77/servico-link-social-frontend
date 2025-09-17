@@ -10,7 +10,8 @@ import EtapaValores from "./pages/Doacao/EtapaValores";
 import Usuario from "./pages/Usuario/Usuario";
 import EtapaFinalizacao from "./pages/Doacao/EtapaFinalizacao";
 import NovaTransacao from "./pages/Transação/Transação";
-
+import TransacaoValores from "./pages/Transação/TransacaoValores";
+import ValidacaoTransacao from "./pages/Transação/ValidacaoTransacao";
 export default function App() {
   return (
     <BrowserRouter>
@@ -22,7 +23,10 @@ export default function App() {
         <Route path="/etapa-valores" element={<EtapaValores />} />
         <Route path="/etapa-final" element={<EtapaFinalizacao />} />
         <Route path="/Usuario" element={<Usuario />} />
-        <Route path="/Transacao" element={<NovaTransacao />} />
+        <Route path="/transacao" element={<NovaTransacao />} />
+        <Route path="/transacao-valores" element={<TransacaoValores />} />
+        <Route path="/transacao-validacao" element={<ValidacaoTransacao />} />
+        
 
         <Route path="*" element={<Home />} />
       </Routes>

@@ -181,7 +181,7 @@ export async function NovaDoacao(dados) {
       body: JSON.stringify(dados),
     });
 
-    
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Erro ao processar a doação");
@@ -250,9 +250,9 @@ export async function GetCarteiraByUsuarioId(id) {
         Authorization: `Bearer ${getToken()}`,
       },
     });
-   
-      return await response.json();
-    
+
+    return await response.json();
+
   }
   catch (error) {
     console.error("Erro ao buscar carteira:", error);
@@ -260,8 +260,8 @@ export async function GetCarteiraByUsuarioId(id) {
   }
 }
 
-export async function GetTransacoesRecebidasByEmpresaId(id){
-try {
+export async function GetTransacoesRecebidasByEmpresaId(id) {
+  try {
     const response = await fetch(`${API_URL}/api/Carteira/Transacao/Recebida?EmpresaId=${id}`, {
       method: "GET",
       headers: {
@@ -269,13 +269,56 @@ try {
         Authorization: `Bearer ${getToken()}`,
       },
     });
-   
-      return await response.json();
-    
+
+    return await response.json();
+
   }
   catch (error) {
     console.error("Erro ao buscar transacoes:", error);
     return null;
   }
 
+}
+
+
+export async function GetTransacoesEnviadas(id, status) {
+  try {
+    var complement = status ? `&status=${status}` : "";
+    const response = await fetch(`${API_URL}/api/Carteira/Transacoes/Enviadas?UsuarioId=${id}${complement}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    return await response.json();
+
+  }
+  catch (error) {
+    console.error("Erro ao buscar transacoes:", error);
+    return null;
+  }
+
+}
+
+
+
+//Transações
+export async function NovaTransacao(dados) {
+
+  try {
+    const response = await fetch(`${API_URL}/api/Transacoes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify(dados),
+    });
+  }
+  catch (err) {
+    console.error("Erro na NovaTransacao:", err);
+    throw err;
+  }
 }

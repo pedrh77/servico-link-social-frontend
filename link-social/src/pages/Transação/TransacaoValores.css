@@ -1,0 +1,93 @@
+.transacao-container {
+  max-width: 420px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+.titulo-card {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.card-saldo {
+  background: #2f855a11;
+  border: 1px solid #2f855a11;
+  padding: 12px 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-saldo .saldo {
+  color: #2F855A;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.campo {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo label {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.campo input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.campo input:focus {
+  border-color: #2F855A;
+  box-shadow: 0 0 0 2px #2F855A33;
+}
+
+.info {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+.aviso-validacao {
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #b00020;
+  /* vermelho de alerta */
+  text-align: center;
+  line-height: 1.4;
+}
+
+.confirmar-container {
+  display: flex;
+  justify-content: center;
+ 
+}
+
+.botao-confirmar {
+  background-color: #247a58;
+  color: white;
+  font-weight: 700;
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(36, 122, 88, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}

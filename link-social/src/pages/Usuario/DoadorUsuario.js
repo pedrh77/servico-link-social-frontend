@@ -9,16 +9,17 @@ export default function DoadorUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
   const [carteira, setCarteira] = useState(null);
 
-
-
   useEffect(() => {
     async function carregarDados() {
       if (dados?.id) {
-        const lista = await GetDoacoesByDoador(dados.id);
+       const lista = await GetDoacoesByDoador(dados.id);
         setDoacoes(lista);
 
         const c = await GetCarteiraByUsuarioId(dados.id);
         setCarteira(c);
+
+        sessionStorage.setItem("saldo", c.saldo);
+        console.log("Carteira carregada:", c.saldo);
       }
     }
     carregarDados();
@@ -32,59 +33,94 @@ export default function DoadorUsuario({ dados }) {
       return acc;
     }, {});
   }
+
   const links = [
-    { label: "Inicio", path: "/Home" }, { label: "Doe Agora", path: "/etapa-selecao" }
+    { label: "Inicio", path: "/Home" },
+    { label: "Doe Agora", path: "/etapa-selecao" },
   ];
+
   return (
     <>
       <Header links={links} />
+
       <AccordionSection title="Minha Carteira">
         {!carteira ? (
           <p>Carregando carteira...</p>
         ) : (
-          <div>
-            <div className="">
-              <p>
-                <strong>Saldo:</strong> R$ {carteira.saldo.toFixed(2)}
-              </p>
+          <div className="carteira-container">
+            {/* Card de saldo */}
+            <div className="saldo-card">
+              <p className="saldo-label">Saldo disponível</p>
+              <p className="saldo-valor">R$ {carteira.saldo.toFixed(2)}</p>
               <button
-                className="btn-escolher"
-                onClick={() => window.location.href = '/Transacao'}
+                className="btn-acao"
+                onClick={() => (window.location.href = "/transacao")}
               >
                 Usar Saldo
               </button>
             </div>
 
-            {/* Transações agrupadas */}
-            {console.log(carteira.transacoes)}
-            {Object.entries(agruparPorStatus(carteira.transacoes)).map(
-              ([status, transacoes]) => (
-                <div key={status} className="mb-4">
-                  <h4 className="font-semibold mb-2">{status}</h4>
-                  <ul className="space-y-2">
-                    {transacoes.map((t) => (
-                      <li
-                        key={t.id}
-                        className="p-2 border rounded-lg shadow-sm flex justify-between"
-                      >
-                        <span>
-                          {t.tipo === 1 ? "Crédito" : "Débito"} - R${" "}
-                          {t.valor.toFixed(2)}
-                        </span>
-                        <span>{new Date(t.data).toLocaleDateString()}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            )}
+            <div className="transacoes-container">
+              {Object.entries(agruparPorStatus(carteira.transacoes)).map(
+                ([status, transacoes]) => (
+                  <div key={status} className="transacao-grupo">
+                    <h4 className="grupo-titulo">{status}</h4>
+                    <ul className="transacao-lista">
+                      {transacoes.map((t) => (
+                        <li key={t.id} className="transacao-item">
+                          <div className="transacao-info">
+                            <span
+                              className={`tipo-transacao ${t.tipo?.toLowerCase() === "credito" || t.tipo === 1
+                                  ? "credito"
+                                  : "debito"
+                                }`}
+                            >
+                              {t.tipo?.toLowerCase() === "credito" || t.tipo === 1
+                                ? "Crédito"
+                                : "Débito"}
+                            </span>
+                            <span>- R$ {t.valor.toFixed(2)}</span>
+                          </div>
+                          <span className="transacao-data">
+                            {new Date(t.data).toLocaleDateString("pt-BR")}
+                          </span>
+
+                          {/* Botão de selecionar */}
+                          {t.tipo?.toLowerCase() === "credito" || t.tipo === 1 ? (
+                            <button
+                              className="btn-acao"
+                              onClick={() => {
+                                const transacaoSelecionada = {
+                                  id: t.id,
+                                  valor: t.valor,
+                                  data: t.data,
+                                  tipo: t.tipo,
+                                  status: t.status,
+                                  valorTotal: t.valor, // pode ser ajustado se for só parte
+                                };
+                                sessionStorage.setItem(
+                                  "transacao",
+                                  JSON.stringify(transacaoSelecionada)
+                                );
+                                window.location.href = "/transacao-validacao";
+                              }}
+                            >
+                              Aprovação
+                            </button>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              )}
+            </div>
           </div>
         )}
       </AccordionSection>
 
       <div className="ong-usuario">
         <AccordionSection title="Doações Feitas">
-
           {doacoes.length === 0 ? (
             <p>Você ainda não realizou uma doação.</p>
           ) : (
@@ -100,19 +136,16 @@ export default function DoadorUsuario({ dados }) {
                 <CardDoacao key={d.id} doacao={d} />
               ))}
             </ul>
-            
           )}
-          <div >
-            <button className="btn-escolher"
-              onClick={() => window.location.href = '/etapa-selecao'}
+          <div>
+            <button
+              className="btn-escolher"
+              onClick={() => (window.location.href = "/etapa-selecao")}
             >
               Realizar doação.
             </button>
           </div>
         </AccordionSection>
-
-        {/* Carteira */}
-
       </div>
     </>
   );
