@@ -260,9 +260,10 @@ export async function GetCarteiraByUsuarioId(id) {
   }
 }
 
-export async function GetTransacoesRecebidasByEmpresaId(id) {
+export async function GetTransacoesRecebidasByEmpresaId(id, status) {
   try {
-    const response = await fetch(`${API_URL}/api/Carteira/Transacao/Recebida?EmpresaId=${id}`, {
+    var complement = status ? `&status=${status}` : "";
+    const response = await fetch(`${API_URL}/api/Carteira/Transacao/Recebida?EmpresaId=${id}${complement}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -308,7 +309,7 @@ export async function GetTransacoesEnviadas(id, status) {
 export async function NovaTransacao(dados) {
 
   try {
-    const response = await fetch(`${API_URL}/api/Transacoes`, {
+    const response = await fetch(`${API_URL}/api/Carteira/Transacao`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -316,6 +317,31 @@ export async function NovaTransacao(dados) {
       },
       body: JSON.stringify(dados),
     });
+  }
+  catch (err) {
+    console.error("Erro na NovaTransacao:", err);
+    throw err;
+  }
+}
+
+
+export async function AprovaTransacaoWithCodigo(id, dados) {
+  try {
+    const response = await fetch(`${API_URL}/api/Carteira/Transacao/${id}/Aprovacao`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify(dados),
+    });
+     if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Erro ao aprovar transação: ${response.status} - ${text}`);
+    }
+
+
+    return { sucesso: true }; 
   }
   catch (err) {
     console.error("Erro na NovaTransacao:", err);

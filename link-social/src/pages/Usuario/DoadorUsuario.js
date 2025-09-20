@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GetDoacoesByDoador, GetCarteiraByUsuarioId } from "../../Api.js";
+import { GetDoacoesByDoador, GetCarteiraByUsuarioId, AprovaTransacaoWithCodigo } from "../../Api.js";
 import AccordionSection from "../../Components/AccordionSection.js";
 import CardDoacao from "../../Components/DoacaoCardList.js";
 import Header from "../../Components/Header.js";
@@ -9,10 +9,15 @@ export default function DoadorUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
   const [carteira, setCarteira] = useState(null);
 
+  // estados do modal
+  const [showModal, setShowModal] = useState(false);
+  const [codigo, setCodigo] = useState("");
+  const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
+
   useEffect(() => {
     async function carregarDados() {
       if (dados?.id) {
-       const lista = await GetDoacoesByDoador(dados.id);
+        const lista = await GetDoacoesByDoador(dados.id);
         setDoacoes(lista);
 
         const c = await GetCarteiraByUsuarioId(dados.id);
@@ -39,6 +44,54 @@ export default function DoadorUsuario({ dados }) {
     { label: "Doe Agora", path: "/etapa-selecao" },
   ];
 
+  const handleAbrirModal = (t) => {
+    console.log("Abrindo modal para transação:", t);
+    setTransacaoSelecionada(t);
+    setShowModal(true);
+  };
+
+  const handleValidarCodigo = async () => {
+    if (codigo.length !== 6) {
+      alert("Digite o código de 6 dígitos.");
+      return;
+    }
+
+    try {
+      const usuarioStorage = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
+
+      console.log("Dados do usuário:", usuarioStorage);
+      if (!usuarioStorage || !transacaoSelecionada) {
+        alert("Dados insuficientes para validar a transação.");
+        return;
+      }
+
+      const validacao = {
+        ClienteId: usuarioStorage.id,
+        CodigoValidacao: codigo,
+        NovoStatus: 1, 
+      };
+
+
+      const response = await AprovaTransacaoWithCodigo(transacaoSelecionada.id, validacao);
+
+      if (response && response.sucesso) {
+        alert("Transação confirmada com sucesso!");
+        setShowModal(false);
+        setCodigo("");
+        setTransacaoSelecionada(null);
+
+        const c = await GetCarteiraByUsuarioId(usuarioStorage.id);
+        setCarteira(c);
+      } else {
+        alert("Erro ao registrar a doação.");
+      }
+    } catch (error) {
+      console.error("Erro ao confirmar doação:", error);
+      alert("Ocorreu um erro ao confirmar a doação.");
+    }
+  };
+
   return (
     <>
       <Header links={links} />
@@ -48,7 +101,6 @@ export default function DoadorUsuario({ dados }) {
           <p>Carregando carteira...</p>
         ) : (
           <div className="carteira-container">
-            {/* Card de saldo */}
             <div className="saldo-card">
               <p className="saldo-label">Saldo disponível</p>
               <p className="saldo-valor">R$ {carteira.saldo.toFixed(2)}</p>
@@ -79,31 +131,17 @@ export default function DoadorUsuario({ dados }) {
                                 ? "Crédito"
                                 : "Débito"}
                             </span>
-                            <span>- R$ {t.valor.toFixed(2)}</span>
+                            <span>R$ {t.valor.toFixed(2)}</span>
                           </div>
                           <span className="transacao-data">
                             {new Date(t.data).toLocaleDateString("pt-BR")}
                           </span>
 
                           {/* Botão de selecionar */}
-                          {t.tipo?.toLowerCase() === "credito" || t.tipo === 1 ? (
+                          {(t.tipo?.toLowerCase() === "debito" || t.tipo === 2) && t.status !== "Aprovado" ? (
                             <button
                               className="btn-acao"
-                              onClick={() => {
-                                const transacaoSelecionada = {
-                                  id: t.id,
-                                  valor: t.valor,
-                                  data: t.data,
-                                  tipo: t.tipo,
-                                  status: t.status,
-                                  valorTotal: t.valor, // pode ser ajustado se for só parte
-                                };
-                                sessionStorage.setItem(
-                                  "transacao",
-                                  JSON.stringify(transacaoSelecionada)
-                                );
-                                window.location.href = "/transacao-validacao";
-                              }}
+                              onClick={() => handleAbrirModal(t)}
                             >
                               Aprovação
                             </button>
@@ -147,6 +185,38 @@ export default function DoadorUsuario({ dados }) {
           </div>
         </AccordionSection>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Digite o código de confirmação</h3>
+            <input
+              type="text"
+              maxLength="6"
+              value={codigo}
+              onChange={(e) =>
+                setCodigo(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+              }
+              placeholder="******"
+              className="input-codigo"
+            />
+            <div className="modal-botoes">
+              <button
+                className="botao-cancelar"
+                onClick={() => setShowModal(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="botao-confirmar"
+                onClick={handleValidarCodigo}
+              >
+                Validar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

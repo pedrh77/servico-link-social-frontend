@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Components/Header";
 import "./ValidacaoTransacao.css";
+import { NovaTransacao } from "../../Api";
+import { useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Inicio", path: "/Home" },
@@ -11,8 +13,9 @@ export default function ValidacaoTransacao() {
   const [transacao, setTransacao] = useState(null);
   const [empresa, setEmpresa] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [codigo, setCodigo] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -30,29 +33,31 @@ export default function ValidacaoTransacao() {
     }
   }, []);
 
-  const handleConfirmar = () => {
-    setShowModal(true);
-  };
+  const handleConfirmar = async () => {
+    try {
+      const novaDoacao = {
+        doadorId: usuario.id,
+        empresaId: empresa.id,
+        tipo: 2, // Doação
+        valor: transacao.valor,
+        valorTotal: transacao.valorTotal,
+      };
 
-  const handleValidarCodigo = () => {
-    if (codigo.length !== 6) {
-      alert("Digite o código de 6 dígitos.");
-      return;
+      console.log("Enviando nova doação:", novaDoacao);
+
+      const response = await NovaTransacao(novaDoacao);
+
+      if (response && response.sucesso) {
+        // Redireciona para /Usuario após sucesso
+        navigate("/Usuario");
+      } else {
+        alert("Erro ao registrar a doação.");
+      }
+    } catch (error) {
+      console.error("Erro ao confirmar doação:", error);
+      alert("Ocorreu um erro ao confirmar a doação.");
     }
-
-    console.log("Transação confirmada:", transacao, "Código:", codigo);
-    alert("✅ Transação confirmada com sucesso!");
-    sessionStorage.removeItem("transacao");
-    window.location.href = "/Home";
   };
-
-  if (!transacao || !empresa || !usuario) {
-    return (
-      <div className="resumo-container">
-        <p>⚠️ Nenhuma transação encontrada.</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -82,34 +87,6 @@ export default function ValidacaoTransacao() {
           </button>
         </section>
       </div>
-
-      {/* Modal para código */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Digite o código de confirmação</h3>
-            <input
-              type="text"
-              maxLength="6"
-              value={codigo}
-              onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ""))}
-              placeholder="******"
-              className="input-codigo"
-            />
-            <div className="modal-botoes">
-              <button
-                className="botao-cancelar"
-                onClick={() => setShowModal(false)}
-              >
-                Cancelar
-              </button>
-              <button className="botao-confirmar" onClick={handleValidarCodigo}>
-                Validar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
