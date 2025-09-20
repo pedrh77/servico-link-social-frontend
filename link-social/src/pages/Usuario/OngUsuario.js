@@ -29,6 +29,7 @@ const links = [
         {doacoes.length === 0 ? (
           <p>Sua ONG ainda não recebeu doações.</p>
         ) : (
+
           <ul>
             {doacoes.map((d) => (
               <CardDoacao key={d.id} doacao={d} />

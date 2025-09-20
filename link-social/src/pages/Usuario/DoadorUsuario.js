@@ -1,7 +1,12 @@
+// DoadorUsuario.js
 import React, { useState, useEffect } from "react";
-import { GetDoacoesByDoador, GetCarteiraByUsuarioId, AprovaTransacaoWithCodigo } from "../../Api.js";
+import {
+  GetDoacoesByDoador,
+  GetCarteiraByUsuarioId,
+  AprovaTransacaoWithCodigo,
+} from "../../Api.js";
 import AccordionSection from "../../Components/AccordionSection.js";
-import CardDoacao from "../../Components/DoacaoCardList.js";
+import DoacaoLista from "../../Components/DoacaoCardList.js"; // ✅ usar o componente certo
 import Header from "../../Components/Header.js";
 import "./DoadorUsuario.css";
 
@@ -45,7 +50,6 @@ export default function DoadorUsuario({ dados }) {
   ];
 
   const handleAbrirModal = (t) => {
-    console.log("Abrindo modal para transação:", t);
     setTransacaoSelecionada(t);
     setShowModal(true);
   };
@@ -59,8 +63,6 @@ export default function DoadorUsuario({ dados }) {
     try {
       const usuarioStorage = JSON.parse(sessionStorage.getItem("usuarioLogado"));
 
-
-      console.log("Dados do usuário:", usuarioStorage);
       if (!usuarioStorage || !transacaoSelecionada) {
         alert("Dados insuficientes para validar a transação.");
         return;
@@ -69,11 +71,13 @@ export default function DoadorUsuario({ dados }) {
       const validacao = {
         ClienteId: usuarioStorage.id,
         CodigoValidacao: codigo,
-        NovoStatus: 1, 
+        NovoStatus: 1,
       };
 
-
-      const response = await AprovaTransacaoWithCodigo(transacaoSelecionada.id, validacao);
+      const response = await AprovaTransacaoWithCodigo(
+        transacaoSelecionada.id,
+        validacao
+      );
 
       if (response && response.sucesso) {
         alert("Transação confirmada com sucesso!");
@@ -96,6 +100,7 @@ export default function DoadorUsuario({ dados }) {
     <>
       <Header links={links} />
 
+      {/* Minha Carteira */}
       <AccordionSection title="Minha Carteira">
         {!carteira ? (
           <p>Carregando carteira...</p>
@@ -122,10 +127,11 @@ export default function DoadorUsuario({ dados }) {
                         <li key={t.id} className="transacao-item">
                           <div className="transacao-info">
                             <span
-                              className={`tipo-transacao ${t.tipo?.toLowerCase() === "credito" || t.tipo === 1
+                              className={`tipo-transacao ${
+                                t.tipo?.toLowerCase() === "credito" || t.tipo === 1
                                   ? "credito"
                                   : "debito"
-                                }`}
+                              }`}
                             >
                               {t.tipo?.toLowerCase() === "credito" || t.tipo === 1
                                 ? "Crédito"
@@ -137,8 +143,8 @@ export default function DoadorUsuario({ dados }) {
                             {new Date(t.data).toLocaleDateString("pt-BR")}
                           </span>
 
-                          {/* Botão de selecionar */}
-                          {(t.tipo?.toLowerCase() === "debito" || t.tipo === 2) && t.status !== "Aprovado" ? (
+                          {(t.tipo?.toLowerCase() === "debito" || t.tipo === 2) &&
+                          t.status !== "Aprovado" ? (
                             <button
                               className="btn-acao"
                               onClick={() => handleAbrirModal(t)}
@@ -157,35 +163,28 @@ export default function DoadorUsuario({ dados }) {
         )}
       </AccordionSection>
 
+      {/* Doações */}
       <div className="ong-usuario">
-        <AccordionSection title="Doações Feitas">
-          {doacoes.length === 0 ? (
-            <p>Você ainda não realizou uma doação.</p>
-          ) : (
-            <ul className="lista-doacoes">
-              <li className="lista-header">
-                <span>Doador</span>
-                <span>Valor</span>
-                <span>Tipo</span>
-                <span>Status</span>
-                <span>Comentário</span>
-              </li>
-              {doacoes.map((d) => (
-                <CardDoacao key={d.id} doacao={d} />
-              ))}
-            </ul>
-          )}
-          <div>
+        <AccordionSection title="Doações">
+            <div>
             <button
               className="btn-escolher"
               onClick={() => (window.location.href = "/etapa-selecao")}
             >
-              Realizar doação.
+              Nova doação
             </button>
           </div>
+          {doacoes.length === 0 ? (
+            <p>Você ainda não realizou uma doação.</p>
+          ) : (
+            <DoacaoLista doacoes={doacoes} />
+          )}
+
+        
         </AccordionSection>
       </div>
 
+      {/* Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -207,10 +206,7 @@ export default function DoadorUsuario({ dados }) {
               >
                 Cancelar
               </button>
-              <button
-                className="botao-confirmar"
-                onClick={handleValidarCodigo}
-              >
+              <button className="botao-confirmar" onClick={handleValidarCodigo}>
                 Validar
               </button>
             </div>

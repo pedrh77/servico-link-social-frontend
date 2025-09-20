@@ -4,26 +4,25 @@ import Header from "../../Components/Header.js";
 import { GetTransacoesRecebidasByEmpresaId } from "../../Api.js";
 
 export default function EmpresaUsuario({ dados }) {
-  const [transacoes, setTransacoes] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [mostrarCodigo, setMostrarCodigo] = useState({}); 
+  const [mostrarCodigo, setMostrarCodigo] = useState({});
+
+  const [transacoesPendentes, setTransacoesPendentes] = useState([]);
+  const [transacoesAprovadas, setTransacoesAprovadas] = useState([]);
 
   useEffect(() => {
     async function carregarTransacoesEmpresa() {
       if (dados?.id) {
-        const lista = await GetTransacoesRecebidasByEmpresaId(dados.id, 1);
-        setTransacoes(lista || []);
+        const pendentes = await GetTransacoesRecebidasByEmpresaId(dados.id, '0');
+        const aprovadas = await GetTransacoesRecebidasByEmpresaId(dados.id, 1);
+
+        setTransacoesPendentes(pendentes || []);
+        setTransacoesAprovadas(aprovadas || []);
       }
     }
     carregarTransacoesEmpresa();
   }, [dados?.id]);
 
-  const transacoesFiltradas = transacoes.filter((t) =>
-    t.nomeDoador?.toLowerCase().includes(filtro.toLowerCase())
-  );
-
-  const transacoesAprovadas = transacoesFiltradas.filter((t) => t.status === "Aprovado");
-  const transacoesPendentes = transacoesFiltradas.filter((t) => t.status !== "Aprovado");
 
   const alternarCodigo = (id) => {
     setMostrarCodigo((prev) => ({
@@ -94,7 +93,7 @@ export default function EmpresaUsuario({ dados }) {
               <span>Cliente</span>
               <span>Valor</span>
               <span>Status</span>
-              <span>Código</span>
+              <span>Data</span>
             </li>
             {transacoesAprovadas.map((t) => (
               <li key={t.transacaoId} className="lista-item">
@@ -105,18 +104,15 @@ export default function EmpresaUsuario({ dados }) {
                     currency: "BRL",
                   })}
                 </span>
-                <span>{t.status}</span>
+                <span>Aprovado</span>
                 <span>
-                  {mostrarCodigo[t.transacaoId] ? (
-                    <>{t.codigo}</>
-                  ) : (
-                    <button
-                      onClick={() => alternarCodigo(t.transacaoId)}
-                      className="botao-codigo"
-                    >
-                      Mostrar
-                    </button>
-                  )}
+                  {new Date(t.dataCriacao).toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </span>
               </li>
             ))}

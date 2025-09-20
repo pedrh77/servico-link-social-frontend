@@ -75,36 +75,36 @@ export default function EtapaFinalizacao() {
   };
 
   const confirmarDoacao = async () => {
-    if (usuario?.id == null || ong?.id == null) {
-      setMensagemErro("Dados incompletos para a doação.");
-      return;
-    }
+  if (!usuario?.id || !ong?.id) {
+    setMensagemErro("Dados incompletos para a doação.");
+    return;
+  }
 
-    setLoading(true);
-    setMensagemErro("");
-    setSucesso(false);
+  setLoading(true);
+  setMensagemErro("");
+  setSucesso(false);
 
-    try {
-      console.log("Enviando doação:", doacao.mensagem);
-      await NovaDoacao({
-        DoadorId: usuario.id,
-        OngId: ong.id,
-        Valor: parseFloat(doacao.valor),
-        TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses),
-        Anonima: doacao.anonima || false,
-        Comentario:doacao.anonima || !doacao.mensagem ? null : doacao.mensagem,
-      });
+  try {
+    await NovaDoacao({
+      DoadorId: usuario.id,
+      OngId: ong.id,
+      Valor: parseFloat(doacao.valor),
+      TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses || 1),
+      Anonima: doacao.anonima || false,
+      Comentario: doacao.anonima || !doacao.mensagem ? null : doacao.mensagem,
+      PagamentoParcela: !!doacao.doacaoPrincipalId,
+      PrimeiraDoacao: doacao.numeroParcela === 1 ? 1 : null
+    });
 
-
-      setStatus("Doação registrada com sucesso!");
-      setSucesso(true);
-    } catch (err) {
-      console.log(err);
-      setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setStatus("Doação registrada com sucesso!");
+    setSucesso(true);
+  } catch (err) {
+    console.log(err);
+    setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
 

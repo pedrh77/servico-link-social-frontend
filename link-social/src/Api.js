@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = "http://localhost:5196";
+const API_URL = "https://localhost:7148";
 
 function getToken() {
   return sessionStorage.getItem("token");
