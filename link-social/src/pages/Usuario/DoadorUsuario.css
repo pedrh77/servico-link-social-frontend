@@ -67,12 +67,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 1rem;
+  padding: 1rem 1rem; /* mais espaçamento */
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
 
+  font-size: 1.1rem;  /* texto maior */
+  min-height: 60px;   /* garante altura mínima */
+}
 .transacao-info {
   display: flex;
   align-items: center;

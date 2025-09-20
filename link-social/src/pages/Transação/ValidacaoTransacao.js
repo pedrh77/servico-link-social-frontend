@@ -35,7 +35,7 @@ export default function ValidacaoTransacao() {
 
   const handleConfirmar = async () => {
     try {
-      const novaDoacao = {
+      const novaTransacao = {
         doadorId: usuario.id,
         empresaId: empresa.id,
         tipo: 2, // Doação
@@ -43,13 +43,13 @@ export default function ValidacaoTransacao() {
         valorTotal: transacao.valorTotal,
       };
 
-      console.log("Enviando nova doação:", novaDoacao);
+      console.log("Enviando nova doação:", novaTransacao);
 
-      const response = await NovaTransacao(novaDoacao);
+      const response = await NovaTransacao(novaTransacao);
 
       if (response && response.sucesso) {
-        // Redireciona para /Usuario após sucesso
-        navigate("/Usuario");
+        
+         //window.location.href("/Usuario");
       } else {
         alert("Erro ao registrar a doação.");
       }
@@ -66,23 +66,19 @@ export default function ValidacaoTransacao() {
       <div className="resumo-container">
         <h2 className="titulo-card">Resumo da Transação</h2>
 
-        <div className="card-resumo">
-          <p>
-            <b>Doador:</b> {usuario.nome}
-          </p>
-          <p>
-            <b>Empresa:</b> {empresa.nome}
-          </p>
-          <p>
-            <b>Valor da Conta:</b> R$ {transacao.valorTotal.toFixed(2)}
-          </p>
-          <p>
-            <b>Valor a Usar:</b> R$ {transacao.valor.toFixed(2)}
-          </p>
-        </div>
+        {usuario && empresa && transacao ? (
+          <div className="card-resumo">
+            <p><b>Doador:</b> {usuario.nome}</p>
+            <p><b>Empresa:</b> {empresa.nome}</p>
+            <p><b>Valor da Conta:</b> R$ {transacao.valorTotal.toFixed(2)}</p>
+            <p><b>Valor a Usar:</b> R$ {transacao.valor.toFixed(2)}</p>
+          </div>
+        ) : (
+          <p>Carregando transação...</p>
+        )}
 
         <section className="confirmar-container">
-          <button className="botao-confirmar" onClick={handleConfirmar}>
+          <button className="botao-confirmar" onClick={handleConfirmar} disabled={!usuario || !empresa || !transacao}>
             Confirmar Transação
           </button>
         </section>

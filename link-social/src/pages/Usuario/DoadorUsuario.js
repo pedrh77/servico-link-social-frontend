@@ -6,7 +6,7 @@ import {
   AprovaTransacaoWithCodigo,
 } from "../../Api.js";
 import AccordionSection from "../../Components/AccordionSection.js";
-import DoacaoLista from "../../Components/DoacaoCardList.js"; // ✅ usar o componente certo
+import DoacaoLista from "../../Components/DoacaoCardList.js";
 import Header from "../../Components/Header.js";
 import "./DoadorUsuario.css";
 
@@ -101,7 +101,7 @@ export default function DoadorUsuario({ dados }) {
       <Header links={links} />
 
       {/* Minha Carteira */}
-      <AccordionSection title="Minha Carteira">
+      <AccordionSection title="Carteira">
         {!carteira ? (
           <p>Carregando carteira...</p>
         ) : (
@@ -129,19 +129,20 @@ export default function DoadorUsuario({ dados }) {
                             <span
                               className={`tipo-transacao ${
                                 t.tipo?.toLowerCase() === "credito" || t.tipo === 1
-                                  ? "credito"
-                                  : "debito"
+                                ? "credito"
+                                : "debito"
                               }`}
-                            >
+                              >
                               {t.tipo?.toLowerCase() === "credito" || t.tipo === 1
                                 ? "Crédito"
                                 : "Débito"}
                             </span>
+                                <span>{t.nomeTransacao} </span>
                             <span>R$ {t.valor.toFixed(2)}</span>
-                          </div>
                           <span className="transacao-data">
                             {new Date(t.data).toLocaleDateString("pt-BR")}
                           </span>
+                          </div>
 
                           {(t.tipo?.toLowerCase() === "debito" || t.tipo === 2) &&
                           t.status !== "Aprovado" ? (
@@ -165,7 +166,7 @@ export default function DoadorUsuario({ dados }) {
 
       {/* Doações */}
       <div className="ong-usuario">
-        <AccordionSection title="Doações">
+        <AccordionSection title="Suas Doações">
             <div>
             <button
               className="btn-escolher"
@@ -177,7 +178,7 @@ export default function DoadorUsuario({ dados }) {
           {doacoes.length === 0 ? (
             <p>Você ainda não realizou uma doação.</p>
           ) : (
-            <DoacaoLista doacoes={doacoes} />
+            <DoacaoLista doacoes={doacoes} tipoUsuario='doador' />
           )}
 
         

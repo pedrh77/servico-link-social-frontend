@@ -3,56 +3,78 @@
   padding: 0;
   margin: 0 auto;
   width: 100%;
-  max-width: 900px;
   font-family: 'Manjari', sans-serif;
-  border: 1px solid #276749; /* verde escuro */
+  border: 1px solid #276749;
+  /* verde escuro */
   border-radius: 8px;
   overflow: hidden;
+  margin: 20px 0;
 }
 
-.lista-header,
+.parcela-existente:hover {
+  background-color: #3d9e712d;
+}
+
+.lista-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* talvez 5 colunas para doador */
+  padding: 12px 16px;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+  font-weight: 700;
+  color: #276749;
+  background-color: #f0fdf4;
+}
+
+.lista-header {
+  font-weight: 700;
+  color: #276749;
+  background-color: #f0fdf4;
+}
+
+.lista-item.principal-item {
+  font-weight: 600;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
 .lista-item {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 3fr;
+  grid-template-columns: auto auto auto auto auto;
   padding: 12px 16px;
   align-items: center;
   text-align: center;
 }
 
-.lista-header {
-  font-weight: 700;
-  color: #276749; /* verde escuro do título */
-}
-
-
-
-.lista-item.principal-item {
-  font-weight: 600;
-  transition: background 0.2s;
-}
-.botao-item {
-  display: flex;     
-  justify-content: center; 
+.lista-item.parcela-item {
+  padding-left: 32px;
+  font-style: italic;
+  background-color: #f9faf9;
 }
 
 .botao-item {
   display: flex;
   justify-content: center;
-  align-items: center; /* centraliza verticalmente */
+  align-items: center;
+  grid-column: 1 / -1;
+  /* ocupa todas as colunas da grid */
+  padding: 12px 0;
 }
-.parcela-item {
-  padding-left: 32px;
-  font-style: italic;
-}
-
 
 .btn-acao {
-  padding: 10px 8px;
-  background-color: #276749; /* botão verde escuro */
+  padding: 10px 16px;
+  background-color: #276749;
+  /* botão verde escuro */
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.2s;
 }
 
+.btn-acao:hover {
+  background-color: #1e5238;
+}

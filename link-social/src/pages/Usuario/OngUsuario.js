@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GetDoacoesByOngId } from "../../Api.js";
 import Header from "../../Components/Header.js";
 import AccordionSection from "../../Components/AccordionSection.js";
-import CardDoacao from "../../Components/DoacaoCardList.js";
+import DoacaoLista from "../../Components/DoacaoCardList.js";
 
 export default function OngUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
@@ -17,24 +17,21 @@ export default function OngUsuario({ dados }) {
     carregarDoacoes();
   }, [dados?.id]);
 
-const links = [
+  const links = [
     { label: "Inicio", path: "/Home" }
   ];
 
   return (
-  <>
+    <>
       <Header links={links} />
 
       <AccordionSection title="Doações Recebidas">
         {doacoes.length === 0 ? (
           <p>Sua ONG ainda não recebeu doações.</p>
         ) : (
+          console.log(doacoes, "doacoes"),
+             <DoacaoLista doacoes={doacoes} tipoUsuario='ong' />
 
-          <ul>
-            {doacoes.map((d) => (
-              <CardDoacao key={d.id} doacao={d} />
-            ))}
-          </ul>
         )}
       </AccordionSection>
     </>
