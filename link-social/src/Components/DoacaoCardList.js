@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./DoacaoCardList.css";
 
 export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
   const [expandido, setExpandido] = useState({});
+  const [comentarioAberto, setComentarioAberto] = useState(null);
 
   const agruparDoacoes = (lista) => {
     if (!Array.isArray(lista)) return [];
-
     const mapa = {};
     lista.forEach((d) => {
       if (d.doacaoPrincipalId) {
@@ -17,41 +17,28 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
         mapa[d.id] = { ...d, parcelas: [] };
       }
     });
-
     return Object.values(mapa).filter((d) => d.valor !== undefined);
   };
 
   const tipoDoacaoTexto = (tipo) => {
     switch (tipo) {
-      case 0:
-        return "Parcela";
-      case 1:
-        return "Única";
-      case 2:
-        return "Mensal 6x";
-      case 3:
-        return "Mensal 12x";
-      default:
-        return "-";
+      case 0: return "Parcela";
+      case 1: return "Única";
+      case 2: return "Mensal 6x";
+      case 3: return "Mensal 12x";
+      default: return "-";
     }
   };
 
   const statusDoacaoTexto = (status) => {
     switch (status) {
-      case 0:
-        return "Pendente";
-      case 1:
-        return "Aprovado";
-      case 2:
-        return "Rejeitado";
-      case 3:
-        return "Pago";
-      case 4:
-        return "Cancelado";
-      case 5:
-        return "Concluído";
-      default:
-        return "-";
+      case 0: return "Pendente";
+      case 1: return "Aprovado";
+      case 2: return "Rejeitado";
+      case 3: return "Pago";
+      case 4: return "Cancelado";
+      case 5: return "Concluído";
+      default: return "-";
     }
   };
 
@@ -62,25 +49,19 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
 
   const doacoesAgrupadas = agruparDoacoes(doacoes);
 
-  useEffect(() => {
-    const inicial = {};
-    doacoesAgrupadas.forEach((d) => {
-      if (d.tipoDoacao === 2 || d.tipoDoacao === 3) {
-        inicial[d.id] = true;
-      }
-    });
-    setExpandido(inicial);
-  }, [doacoesAgrupadas]);
-
-  const toggleExpandido = (id) =>
-    setExpandido((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleExpandido = (doacaoId, tipo) => {
+    if (tipo === 2 || tipo === 3) {
+      setExpandido((prev) => ({
+        ...prev,
+        [doacaoId]: !prev[doacaoId],
+      }));
+    }
+  };
 
   return (
     <ul className="lista-doacoes">
       <li
-        className={`lista-header ${
-          tipoUsuario === "ong" ? "onglista" : "doadorlista"
-        }`}
+        className={`lista-header ${tipoUsuario === "ong" ? "onglista" : "doadorlista"}`}
       >
         {tipoUsuario === "ong" && <span>Doador</span>}
         <span>Valor</span>
@@ -103,64 +84,93 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
           <React.Fragment key={doacao.id}>
             <li
               className={`lista-item principal-item ${
-                doacao.tipoDoacao===2 ||doacao.tipoDoacao===3 ? "parcela-existente" : ""
+                doacao.tipoDoacao === 2 || doacao.tipoDoacao === 3
+                  ? "parcela-existente"
+                  : ""
               }`}
-              onClick={() => toggleExpandido(doacao.id)}
+              onClick={() => toggleExpandido(doacao.id, doacao.tipoDoacao)}
               style={{
-                cursor: parcelasOrdenadas.length ? "pointer" : "default",
+                cursor:
+                  doacao.tipoDoacao === 2 || doacao.tipoDoacao === 3
+                    ? "pointer"
+                    : "default",
               }}
             >
+              {tipoUsuario === "ong" && (
+                <span>
+                  {doacao.anonima ||
+                  doacao.nomeDoador === "True" ||
+                  doacao.nomeDoador === "False"
+                    ? "Anônimo"
+                    : doacao.nomeDoador}
+                </span>
+              )}
+
               <span>R$ {doacao.valor?.toFixed(2) || "-"}</span>
               <span>{tipoDoacaoTexto(doacao.tipoDoacao)}</span>
               <span>{statusDoacaoTexto(doacao.statusPagamento)}</span>
-              <span>{doacao.comentario || "-"}</span>
+
+              <span
+                className="comentario-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setComentarioAberto(
+                    comentarioAberto === doacao.id ? null : doacao.id
+                  );
+                }}
+              >
+                {doacao.comentario ? "Ver comentário" : "-"}
+              </span>
 
               {tipoUsuario === "doador" && (
                 <span>
-                  <input
-                    type="checkbox"
-                    checked={doacao.anonima}
-                    readOnly 
-                  />
+                  <input type="checkbox" checked={doacao.anonima} readOnly />
                 </span>
               )}
             </li>
 
-            {parcelasOrdenadas.length > 0 && expandido[doacao.id] && (
-              <>
-                {parcelasOrdenadas.map((parcela) => (
-                  <li key={parcela.id} className="lista-item parcela-item">
-                    {tipoUsuario === "ong" && (
-                      <span>
-                        {parcela.anonima ||
-                        parcela.nomeDoador === "True" ||
-                        parcela.nomeDoador === "False"
-                          ? "Anônimo"
-                          : parcela.nomeDoador}
-                      </span>
-                    )}
-
-                    <span>R$ {parcela.valor?.toFixed(2) || "-"}</span>
-                    <span>{tipoDoacaoTexto(parcela.tipoDoacao)}</span>
-                    <span>{statusDoacaoTexto(parcela.statusPagamento)}</span>
-                    <span>
-                      Parcela {parcela.numeroParcela}/{parcela.totalParcelas}
-                    </span>
-                  </li>
-                ))}
-
-                {proximaParcela && tipoUsuario === "doador" && (
-                  <li className="lista-item parcela-item botao-item">
-                    <button
-                      className="btn-acao"
-                      onClick={() => handlePagarParcela(proximaParcela)}
-                    >
-                      Realizar próximo pagamento
-                    </button>
-                  </li>
-                )}
-              </>
+            {/* Comentário expandido */}
+            {comentarioAberto === doacao.id && doacao.comentario && (
+              <li className="comentario-expandido">
+                <span>{doacao.comentario}</span>
+              </li>
             )}
+
+            {/* EXPANDIR parcelas */}
+            {expandido[doacao.id] &&
+              parcelasOrdenadas.map((parcela) => (
+                <li key={parcela.id} className="lista-item parcela-item">
+                  {tipoUsuario === "ong" && (
+                    <span>
+                      {parcela.anonima ||
+                      parcela.nomeDoador === "True" ||
+                      parcela.nomeDoador === "False"
+                        ? "Anônimo"
+                        : parcela.nomeDoador}
+                    </span>
+                  )}
+
+                  <span>R$ {parcela.valor?.toFixed(2) || "-"}</span>
+                  <span>{tipoDoacaoTexto(parcela.tipoDoacao)}</span>
+                  <span>{statusDoacaoTexto(parcela.statusPagamento)}</span>
+                  <span>
+                    Parcela {parcela.numeroParcela}/{parcela.totalParcelas}
+                  </span>
+                </li>
+              ))}
+
+            {proximaParcela &&
+              tipoUsuario === "doador" &&
+              (doacao.tipoDoacao === 2 || doacao.tipoDoacao === 3) && (
+                <li className="lista-item parcela-item botao-item">
+                  <button
+                    className="btn-acao"
+                    onClick={() => handlePagarParcela(proximaParcela)}
+                  >
+                    Realizar próximo pagamento
+                  </button>
+                </li>
+              )}
           </React.Fragment>
         );
       })}

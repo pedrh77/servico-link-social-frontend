@@ -3,22 +3,17 @@
   padding: 0;
   margin: 0 auto;
   width: 100%;
+  max-width: 900px;
   font-family: 'Manjari', sans-serif;
   border: 1px solid #276749;
-  /* verde escuro */
   border-radius: 8px;
   overflow: hidden;
   margin: 20px 0;
 }
 
-.parcela-existente:hover {
-  background-color: #3d9e712d;
-}
-
 .lista-header {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  /* talvez 5 colunas para doador */
   padding: 12px 16px;
   align-items: center;
   text-align: center;
@@ -28,24 +23,22 @@
   background-color: #f0fdf4;
 }
 
-.lista-header {
-  font-weight: 700;
-  color: #276749;
-  background-color: #f0fdf4;
+.lista-item {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 12px 16px;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
 }
 
 .lista-item.principal-item {
   font-weight: 600;
   transition: background 0.2s;
-  cursor: pointer;
 }
 
-.lista-item {
-  display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  padding: 12px 16px;
-  align-items: center;
-  text-align: center;
+.parcela-existente:hover {
+  background-color: #3d9e712d;
 }
 
 .lista-item.parcela-item {
@@ -59,14 +52,12 @@
   justify-content: center;
   align-items: center;
   grid-column: 1 / -1;
-  /* ocupa todas as colunas da grid */
   padding: 12px 0;
 }
 
 .btn-acao {
   padding: 10px 16px;
   background-color: #276749;
-  /* botão verde escuro */
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -77,4 +68,24 @@
 
 .btn-acao:hover {
   background-color: #1e5238;
+}
+
+/* Toggle do comentário */
+.comentario-toggle {
+  color: #276749;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Comentário expandido estilo */
+.comentario-expandido {
+  grid-column: 1 / -1;
+  background-color: #e6f4ea;
+  border-radius: 6px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  fonr-weight: 900;
 }
