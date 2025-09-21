@@ -165,7 +165,7 @@ export default function DoadorUsuario({ dados }) {
       </AccordionSection>
 
       {/* Doações */}
-      <div className="ong-usuario">
+      <div className="doacoes">
         <AccordionSection title="Suas Doações">
             <div>
             <button
