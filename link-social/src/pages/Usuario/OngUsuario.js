@@ -22,13 +22,11 @@ export default function OngUsuario({ dados }) {
   if (!doacoes || doacoes.length === 0)
     return <p>Nenhuma doação registrada.</p>;
 
-  // --- Cálculos do relatório ---
   const totalArrecadado = doacoes.reduce((soma, d) => soma + d.valor, 0);
   const doadoresUnicos = new Set(doacoes.map(d => d.doadorId)).size;
   const media = (totalArrecadado / doacoes.length).toFixed(2);
   const anonimas = doacoes.filter(d => d.anonima).length;
 
-  // Separar tipos de doações
   const tipoResumo = doacoes.reduce(
     (acc, d) => {
       if (d.tipoDoacao === 1) acc.avulsa += d.valor;
@@ -84,7 +82,6 @@ export default function OngUsuario({ dados }) {
   );
 }
 
-// --- Estilos simples ---
 const cardStyle = {
   background: "#f5f5f5",
   padding: "1rem",

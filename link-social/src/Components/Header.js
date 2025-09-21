@@ -12,7 +12,6 @@ export default function Header({ links = [] }) {
     const isLogado = !!token;
     setLogado(isLogado);
 
-    // Se estiver logado e na home, redireciona para /usuario
     if (isLogado && currentPath === "/") {
       window.location.href = "/usuario";
     }

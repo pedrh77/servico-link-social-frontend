@@ -20,14 +20,14 @@ export default function TransacaoValores() {
 
   const handleValorConta = (e) => {
     let valor = Number(e.target.value);
-    if (valor < 0) valor = 0; // bloqueia negativos
+    if (valor < 0) valor = 0;
     setValorConta(valor);
     setValorUsar("");
   };
 
   const handleValorUsar = (e) => {
     let valor = Number(e.target.value);
-    if (valor < 0) valor = 0; // bloqueia negativos
+    if (valor < 0) valor = 0;
 
     const limite = Math.min(saldo, (Number(valorConta) || 0) / 2);
     if (valor <= limite) {
@@ -48,7 +48,6 @@ export default function TransacaoValores() {
     }
 
     setLoading(true);
-    // pegando doador e empresa do storage
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
     const empresaSelecionada = JSON.parse(sessionStorage.getItem("empresaSelecionada"));
 

@@ -3,7 +3,6 @@ import React from "react";
 export default function TipoDoacaoRadios({ tipoDoacao, setTipoDoacao, meses, setMeses, index }) {
   return (
     <div style={{ marginTop: "10px" }} onClick={(e) => e.stopPropagation()}>
-      {/* Única / Mensal */}
       <input
         type="radio"
         id={`unica-${index}`}
@@ -27,7 +26,6 @@ export default function TipoDoacaoRadios({ tipoDoacao, setTipoDoacao, meses, set
       />
       <label htmlFor={`mensal-${index}`}>Mensal</label>
 
-      {/* Meses */}
       {tipoDoacao === "Mensal" && (
         <div style={{ marginTop: "10px" }}>
           <input

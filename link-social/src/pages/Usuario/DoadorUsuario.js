@@ -1,4 +1,3 @@
-// DoadorUsuario.js
 import React, { useState, useEffect } from "react";
 import {
   GetDoacoesByDoador,
@@ -13,7 +12,6 @@ export default function DoadorUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
   const [carteira, setCarteira] = useState(null);
 
-  // estados do modal
   const [showModal, setShowModal] = useState(false);
   const [codigo, setCodigo] = useState("");
   const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
@@ -99,7 +97,6 @@ export default function DoadorUsuario({ dados }) {
     <>
       <Header links={links} />
 
-      {/* Minha Carteira */}
       <AccordionSection title="Carteira">
         {!carteira ? (
           <p>Carregando carteira...</p>
@@ -166,7 +163,6 @@ export default function DoadorUsuario({ dados }) {
         )}
       </AccordionSection>
 
-      {/* Doações */}
       <div className="doacoes">
         <AccordionSection title="Suas Doações">
           <div>
@@ -187,7 +183,6 @@ export default function DoadorUsuario({ dados }) {
         </AccordionSection>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">

@@ -6,7 +6,6 @@ function getToken() {
   return sessionStorage.getItem("token");
 }
 
-// USUARIO
 export async function login(email, senha) {
   const response = await fetch(`${API_URL}/api/Auth/login`, {
     method: "POST",
@@ -102,7 +101,6 @@ export async function getEmpresas() {
 }
 
 
-// BENEFICIOS
 
 export async function criarBeneficio(dados) {
   try {
@@ -171,7 +169,6 @@ export async function getBeneficiosPorOngId(idOng) {
 
 
 
-// DOAÇÕES
 
 export async function NovaDoacao(dados) {
   try {
@@ -237,7 +234,6 @@ export async function GetDoacoesByOngId(id) {
 }
 
 
-//Carteira
 export async function GetCarteiraByUsuarioId(id) {
 
   try {
@@ -303,7 +299,6 @@ export async function GetTransacoesEnviadas(id, status) {
 
 
 
-//Transações
 export async function NovaTransacao(dados) {
 
   try {

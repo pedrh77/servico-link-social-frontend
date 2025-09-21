@@ -17,7 +17,7 @@ export default function DoacaoCard({
   return (
     <div
       className={`card-doacao ${selecionado ? "selecionado" : ""}`}
-      onClick={() => selecionarValor(valor)} // atualiza o pai
+      onClick={() => selecionarValor(valor)}
     >
       <h3>{item.label}</h3>
 

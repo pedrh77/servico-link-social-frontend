@@ -38,7 +38,7 @@ export default function ValidacaoTransacao() {
       const novaTransacao = {
         doadorId: usuario.id,
         empresaId: empresa.id,
-        tipo: 2, // Doação
+        tipo: 2,
         valor: transacao.valor,
         valorTotal: transacao.valorTotal,
       };
@@ -48,8 +48,8 @@ export default function ValidacaoTransacao() {
       const response = await NovaTransacao(novaTransacao);
 
       if (response && response.sucesso) {
-        
-      window.location.href("/Usuario");
+
+        window.location.href("/Usuario");
       } else {
         alert("Erro ao registrar a doação.");
       }

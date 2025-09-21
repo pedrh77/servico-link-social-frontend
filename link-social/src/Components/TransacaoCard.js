@@ -24,7 +24,7 @@ export default function TransacaoCard({ transacao }) {
     Concluido: "concluido",
   };
 
-  // Converte status da API para label
+  
   const statusText = typeof transacao.status === "number" 
     ? statusLabels[transacao.status] 
     : transacao.status;

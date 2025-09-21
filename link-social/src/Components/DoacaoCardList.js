@@ -95,14 +95,14 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
               )}
             </li>
 
-            {/* Comentário expandido */}
+            
             {comentarioAberto === doacao.id && doacao.comentario && (
               <li className="comentario-expandido">
                 <span>{doacao.comentario}</span>
               </li>
             )}
 
-            {/* Parcelas detalhadas */}
+            
             {isMensal && aberto && parcelasOrdenadas.map((parcela) => (
               <li key={parcela.id} className="lista-item parcela-item">
                 {tipoUsuario === "ong" && (
@@ -115,7 +115,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
               </li>
             ))}
 
-            {/* Botão pagar próxima parcela */}
+            
             {isMensal && aberto && tipoUsuario === "doador" && (
               <li className="lista-item parcela-item botao-item">
                 {doacao.parcelas.filter(p => p.tipoDoacao === 0).length >= doacao.totalParcelas ? (
