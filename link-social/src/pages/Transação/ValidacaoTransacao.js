@@ -49,7 +49,7 @@ export default function ValidacaoTransacao() {
 
       if (response && response.sucesso) {
         
-         //window.location.href("/Usuario");
+      window.location.href("/Usuario");
       } else {
         alert("Erro ao registrar a doação.");
       }

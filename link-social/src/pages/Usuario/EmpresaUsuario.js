@@ -4,7 +4,8 @@ import Header from "../../Components/Header.js";
 import { GetTransacoesRecebidasByEmpresaId } from "../../Api.js";
 
 export default function EmpresaUsuario({ dados }) {
-  const [filtro, setFiltro] = useState("");
+  const [filtroDoador, setFiltroDoador] = useState("");
+  const [filtroIdentificador, setFiltroIdentificador] = useState("");
   const [mostrarCodigo, setMostrarCodigo] = useState({});
 
   const [transacoesPendentes, setTransacoesPendentes] = useState([]);
@@ -23,12 +24,20 @@ export default function EmpresaUsuario({ dados }) {
     carregarTransacoesEmpresa();
   }, [dados?.id]);
 
-
   const alternarCodigo = (id) => {
     setMostrarCodigo((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
+  };
+
+  // Função para filtrar transações pendentes
+  const filtrarTransacoes = (lista) => {
+    return lista.filter(
+      (t) =>
+        t.nomeDoador.toLowerCase().includes(filtroDoador.toLowerCase()) &&
+        t.nomeTransacao.toLowerCase().includes(filtroIdentificador.toLowerCase())
+    );
   };
 
   return (
@@ -40,25 +49,34 @@ export default function EmpresaUsuario({ dados }) {
           <input
             type="text"
             placeholder="Buscar por doador..."
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
+            value={filtroDoador}
+            onChange={(e) => setFiltroDoador(e.target.value)}
+            className="filtro-input"
+          />
+          <input
+            type="text"
+            placeholder="Buscar por identificador..."
+            value={filtroIdentificador}
+            onChange={(e) => setFiltroIdentificador(e.target.value)}
             className="filtro-input"
           />
         </div>
 
-        {transacoesPendentes.length === 0 ? (
+        {filtrarTransacoes(transacoesPendentes).length === 0 ? (
           <p>Nenhuma transação pendente encontrada...</p>
         ) : (
           <ul className="lista-transacao">
             <li className="lista-header">
               <span>Cliente</span>
+              <span>Identificador</span>
               <span>Valor</span>
               <span>Status</span>
               <span>Código</span>
             </li>
-            {transacoesPendentes.map((t) => (
+            {filtrarTransacoes(transacoesPendentes).map((t) => (
               <li key={t.transacaoId} className="lista-item">
                 <span>{t.nomeDoador}</span>
+                <span>{t.nomeTransacao}</span>
                 <span>
                   {t.valor.toLocaleString("pt-BR", {
                     style: "currency",
@@ -68,7 +86,7 @@ export default function EmpresaUsuario({ dados }) {
                 <span>{t.status}</span>
                 <span>
                   {mostrarCodigo[t.transacaoId] ? (
-                    <>{t.codigo}</>
+                    t.codigo
                   ) : (
                     <button
                       onClick={() => alternarCodigo(t.transacaoId)}
