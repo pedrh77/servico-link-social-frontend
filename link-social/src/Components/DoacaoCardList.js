@@ -47,7 +47,8 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
 
   const handlePagarParcela = (doacao) => {
     sessionStorage.setItem("doacaoParcela", JSON.stringify(doacao));
-    window.location.href = "/etapa-final";
+
+    //window.location.href = "/etapa-final";
   };
 
   const doacoesAgrupadas = agruparDoacoes(doacoes);
@@ -115,14 +116,18 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
             {/* Botão pagar próxima parcela */}
             {isMensal && aberto && tipoUsuario === "doador" && (
               <li className="lista-item parcela-item botao-item">
-                <button className="btn-acao" onClick={() => handlePagarParcela(doacao)}>
-                  Realizar pagamento da parcela
-                </button>
+                {doacao.parcelas.filter(p => p.tipoDoacao === 0).length >= doacao.totalParcelas ? (
+                  <span className="concluido">Doação parcelada concluída</span>
+                ) : (
+                  <button className="btn-acao" onClick={() => handlePagarParcela(doacao)}>
+                    Realizar pagamento da parcela
+                  </button>
+                )}
               </li>
             )}
           </React.Fragment>
         );
       })}
-    </ul>
+    </ul >
   );
 }

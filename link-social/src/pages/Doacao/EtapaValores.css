@@ -159,6 +159,7 @@
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(36,122,88,0.5);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: 20px;
 }
 
 .botao-avancar:hover {

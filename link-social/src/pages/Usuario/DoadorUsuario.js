@@ -8,7 +8,6 @@ import {
 import AccordionSection from "../../Components/AccordionSection.js";
 import DoacaoLista from "../../Components/DoacaoCardList.js";
 import Header from "../../Components/Header.js";
-import "./DoadorUsuario.css";
 
 export default function DoadorUsuario({ dados }) {
   const [doacoes, setDoacoes] = useState([]);
@@ -109,6 +108,10 @@ export default function DoadorUsuario({ dados }) {
             <div className="saldo-card">
               <p className="saldo-label">Saldo disponível</p>
               <p className="saldo-valor">R$ {carteira.saldo.toFixed(2)}</p>
+
+              <p className="saldo-label">Saldo Pendente</p>
+              <p className="saldo-valor pendente">R$ {carteira.saldoPendente?.toFixed(2) || "0.00"}</p>
+
               <button
                 className="btn-acao"
                 onClick={() => (window.location.href = "/transacao")}
@@ -127,25 +130,24 @@ export default function DoadorUsuario({ dados }) {
                         <li key={t.id} className="transacao-item">
                           <div className="transacao-info">
                             <span
-                              className={`tipo-transacao ${
-                                t.tipo?.toLowerCase() === "credito" || t.tipo === 1
-                                ? "credito"
-                                : "debito"
-                              }`}
-                              >
+                              className={`tipo-transacao ${t.tipo?.toLowerCase() === "credito" || t.tipo === 1
+                                  ? "credito"
+                                  : "debito"
+                                }`}
+                            >
                               {t.tipo?.toLowerCase() === "credito" || t.tipo === 1
                                 ? "Crédito"
                                 : "Débito"}
                             </span>
-                                <span>{t.nomeTransacao} </span>
+                            <span>{t.nomeTransacao} </span>
                             <span>R$ {t.valor.toFixed(2)}</span>
-                          <span className="transacao-data">
-                            {new Date(t.data).toLocaleDateString("pt-BR")}
-                          </span>
+                            <span className="transacao-data">
+                              {new Date(t.data).toLocaleDateString("pt-BR")}
+                            </span>
                           </div>
 
                           {(t.tipo?.toLowerCase() === "debito" || t.tipo === 2) &&
-                          t.status !== "Aprovado" ? (
+                            t.status !== "Aprovado" ? (
                             <button
                               className="btn-acao"
                               onClick={() => handleAbrirModal(t)}
@@ -167,7 +169,7 @@ export default function DoadorUsuario({ dados }) {
       {/* Doações */}
       <div className="doacoes">
         <AccordionSection title="Suas Doações">
-            <div>
+          <div>
             <button
               className="btn-escolher"
               onClick={() => (window.location.href = "/etapa-selecao")}
@@ -181,7 +183,7 @@ export default function DoadorUsuario({ dados }) {
             <DoacaoLista doacoes={doacoes} tipoUsuario='doador' />
           )}
 
-        
+
         </AccordionSection>
       </div>
 

@@ -103,10 +103,6 @@ export default function EtapaFinalizacao() {
 
       <main className="final-container">
         <h2 className="final-titulo">Resumo da Doação</h2>
-
-        {/* Debug completo do objeto doação */}
-        <pre>{JSON.stringify(doacao, null, 2)}</pre>
-
         <div className="resumo-cards">
           <div className="card">
             <div className="logo-ong">{doacao.nomeOng}</div>
@@ -120,7 +116,7 @@ export default function EtapaFinalizacao() {
                 Parcela {doacao.numeroParcela + 1} de {doacao.totalParcelas}
               </div>
             )}
-            {!doacao.numeroParcela && (
+            {doacao.numeroParcela && (
               <button className="btn-editar" onClick={editarDoacao}>
                 Editar
               </button>
