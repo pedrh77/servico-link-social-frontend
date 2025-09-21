@@ -202,7 +202,6 @@ export async function GetDoacoesByDoador(id) {
         Authorization: `Bearer ${getToken()}`,
       },
     });
-    console.log("Response doações:", response);
 
     if (!response.ok) {
       throw new Error("Erro ao buscar doações");
@@ -225,7 +224,6 @@ export async function GetDoacoesByOngId(id) {
         Authorization: `Bearer ${getToken()}`,
       },
     });
-    console.log("Response doações:", response);
 
     if (!response.ok) {
       throw new Error("Erro ao buscar doações");

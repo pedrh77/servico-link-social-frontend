@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // corrigido
+import { jwtDecode } from "jwt-decode";
 import "./EtapaFinalizacao.css";
 import { NovaDoacao } from "../../Api";
 import Header from "../../Components/Header";
@@ -14,16 +14,16 @@ export default function EtapaFinalizacao() {
   const [mensagemErro, setMensagemErro] = useState("");
 
   const [usuario, setUsuario] = useState(null);
-  const [ong, setOng] = useState(null);
   const [doacao, setDoacao] = useState(null);
-
   const [logado, setLogado] = useState(false);
 
+  
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setLogado(!!token);
   }, []);
 
+  
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
@@ -31,7 +31,6 @@ export default function EtapaFinalizacao() {
       if (logado && token) {
         const decoded = jwtDecode(token);
         const now = Date.now() / 1000;
-
         if (decoded.exp && decoded.exp < now) {
           sessionStorage.clear();
           setMensagemErro("Sua sessão expirou. Redirecionando para login...");
@@ -39,101 +38,95 @@ export default function EtapaFinalizacao() {
           return;
         }
       }
-    } catch (err) {
+    } catch {
       sessionStorage.clear();
       navigate("/login");
       return;
     }
 
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
-    const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada") || "null");
+    const doacaoParcela = JSON.parse(sessionStorage.getItem("doacaoParcela") || "null");
     const doacaoSelecionada = JSON.parse(sessionStorage.getItem("doacaoSelecionada") || "null");
 
-    if (!usuarioLogado || !ongSelecionada || !doacaoSelecionada) {
+    if (doacaoParcela) {
+      setDoacao(doacaoParcela);
+      setUsuario(usuarioLogado || null);
+    } else if (!usuarioLogado || !doacaoSelecionada) {
       navigate("/etapa-selecao");
+    } else {
+      setDoacao(doacaoSelecionada);
+      setUsuario(usuarioLogado);
+    }
+  }, [navigate, logado]);
+
+  const editarDoacao = () => navigate("/etapa-valores");
+
+  const confirmarDoacao = async () => {
+    if (!usuario?.id || !doacao) {
+      setMensagemErro("Dados incompletos para a doação.");
       return;
     }
 
-    setUsuario(usuarioLogado);
-    setOng(ongSelecionada);
-    setDoacao(doacaoSelecionada);
-  }, [navigate, logado]);
+    setLoading(true);
+    setMensagemErro("");
+    setSucesso(false);
 
-  const sair = () => {
-    sessionStorage.clear();
-    navigate("/login");
+    try {
+      await NovaDoacao({
+        DoadorId: doacao.doadorId || usuario.id,
+        OngId: doacao.ongId,
+        Valor: parseFloat(doacao.valor),
+        TipoDoacao: doacao.tipoDoacao || 0,
+        Anonima: doacao.anonima || false,
+        Comentario: doacao.anonima || !doacao.comentario ? null : doacao.comentario,
+        PagamentoParcela: true,
+        PrimeiraDoacao: doacao.id || null,
+      });
+
+      setStatus("Doação registrada com sucesso!");
+      setSucesso(true);
+    } catch (err) {
+      console.log(err);
+      setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const editarOng = () => navigate("/etapa-selecao");
-  const editarValor = () => navigate("/etapa-valores");
-
-  const tipoDoacaoParaNumero = (tipo, meses) => {
-    if (tipo === "Unica") return 1;
-    if (tipo === "Mensal" && meses === 6) return 2;
-    if (tipo === "Mensal" && meses === 12) return 3;
-    return 1;
-  };
-
-  const confirmarDoacao = async () => {
-  if (!usuario?.id || !ong?.id) {
-    setMensagemErro("Dados incompletos para a doação.");
-    return;
+  if (!usuario || !doacao) {
+    return <div className="loading">Carregando...</div>;
   }
 
-  setLoading(true);
-  setMensagemErro("");
-  setSucesso(false);
-
-  try {
-    await NovaDoacao({
-      DoadorId: usuario.id,
-      OngId: ong.id,
-      Valor: parseFloat(doacao.valor),
-      TipoDoacao: tipoDoacaoParaNumero(doacao.tipo, doacao.meses || 1),
-      Anonima: doacao.anonima || false,
-      Comentario: doacao.anonima || !doacao.mensagem ? null : doacao.mensagem,
-      PagamentoParcela: !!doacao.doacaoPrincipalId,
-      PrimeiraDoacao: doacao.numeroParcela === 1 ? 1 : null
-    });
-
-    setStatus("Doação registrada com sucesso!");
-    setSucesso(true);
-  } catch (err) {
-    console.log(err);
-    setMensagemErro("Erro ao confirmar a doação. Tente novamente.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-  if (!usuario || !ong || !doacao) return <div className="loading">Carregando...</div>;
-
-  const links = [
-    { label: "Inicio", path: "/Home" },
-    { label: "Meu Perfil", path: "/Usuario" }
-  ];
   return (
     <div className="container">
-      <Header links={links} />
+      <Header links={[{ label: "Inicio", path: "/Home" }, { label: "Meu Perfil", path: "/Usuario" }]} />
 
       <main className="final-container">
         <h2 className="final-titulo">Resumo da Doação</h2>
 
+        {/* Debug completo do objeto doação */}
+        <pre>{JSON.stringify(doacao, null, 2)}</pre>
+
         <div className="resumo-cards">
           <div className="card">
-            <div className="logo-ong">{ong.nome}</div>
-            <button className="btn-editar" onClick={editarOng}>
-              Editar
-            </button>
+            <div className="logo-ong">{doacao.nomeOng}</div>
           </div>
 
           <div className="card">
             <div className="valor">{`R$ ${doacao.valor}`}</div>
-            <div className="tipo-doacao">{doacao.tipo}</div>
-            {doacao.tipo === "Mensal" && <div className="meses">Duração: {doacao.meses} meses</div>}
-            <button className="btn-editar" onClick={editarValor}>
-              Editar
-            </button>
+            <div className="tipo-doacao">{doacao.tipoDoacao === 1 ? "Única" : "Mensal"}</div>
+            {doacao.tipoDoacao !== 1 && (
+              <div className="meses">
+                Parcela {doacao.numeroParcela + 1} de {doacao.totalParcelas}
+              </div>
+            )}
+            {!doacao.numeroParcela && (
+              <button className="btn-editar" onClick={editarDoacao}>
+                Editar
+              </button>
+            )
+
+            }
           </div>
         </div>
 
@@ -155,19 +148,20 @@ export default function EtapaFinalizacao() {
           </div>
         </div>
 
-        {!doacao.anonima && (<>
-          <label htmlFor="comentario">Mensagem (opcional)</label>
-          <div className="comentario-container">
-            <textarea
-              id="comentario"
-              className="comentario-textarea"
-              value={doacao.mensagem || ""}
-              onChange={(e) => setDoacao({ ...doacao, mensagem: e.target.value })}
-              placeholder="Escreva uma mensagem para a ONG..."
-              rows={4}
-            />
-          </div>
-        </>
+        {!doacao.anonima && (
+          <>
+            <label htmlFor="comentario">Mensagem (opcional)</label>
+            <div className="comentario-container">
+              <textarea
+                id="comentario"
+                className="comentario-textarea"
+                value={doacao.comentario || ""}
+                onChange={(e) => setDoacao({ ...doacao, comentario: e.target.value })}
+                placeholder="Escreva uma mensagem para a ONG..."
+                rows={4}
+              />
+            </div>
+          </>
         )}
 
         {mensagemErro && <div className="status-erro">{mensagemErro}</div>}
@@ -177,7 +171,7 @@ export default function EtapaFinalizacao() {
             <div className="finalizacao-sucesso">
               <h3>🎉 {status}</h3>
               <p>
-                Obrigado por apoiar a ONG <strong>{ong.nome}</strong>.
+                Obrigado por apoiar a ONG <strong>{doacao.nomeOng}</strong>.
               </p>
               <p className="info-pagamento">
                 No momento ainda não temos meios de pagamento integrados.

@@ -4,8 +4,6 @@ import "./DoacaoCardList.css";
 export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
   const [comentarioAberto, setComentarioAberto] = useState(null);
   const [parcelasAberta, setParcelasAberta] = useState(null); // único estado de expansão
-
-  // Agrupa doações e parcelas
   const agruparDoacoes = (lista) => {
     if (!Array.isArray(lista)) return [];
     const mapa = {};
@@ -43,9 +41,11 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
     }
   };
 
-  const handlePagarParcela = (parcela) => {
-    sessionStorage.setItem("doacaoSelecionada", JSON.stringify(parcela));
-    window.location.href = "/transacao-validacao";
+  const handlePagarParcela = (doacao) => {
+    sessionStorage.setItem("doacaoParcela", JSON.stringify(doacao));
+    console.log(doacao);
+    alert();
+    window.location.href = "/etapa-final";
   };
 
   const doacoesAgrupadas = agruparDoacoes(doacoes);
@@ -66,24 +66,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
           (a, b) => a.numeroParcela - b.numeroParcela
         );
 
-        // Tenta achar a próxima parcela pendente
-        let proximaParcela = parcelasOrdenadas.find(
-          (p) => p.statusPagamento !== 3
-        );
-
-        // Se não existir nenhuma -> cria a primeira parcela manualmente
-        if (!proximaParcela && (doacao.tipoDoacao === 2 || doacao.tipoDoacao === 3)) {
-          proximaParcela = {
-            id: `nova-${doacao.id}-1`,
-            numeroParcela: 1,
-            totalParcelas: doacao.tipoDoacao === 2 ? 6 : 12,
-            valor: doacao.valor,
-            tipoDoacao: doacao.tipoDoacao,
-            statusPagamento: 0, // pendente
-            anonima: doacao.anonima,
-            nomeDoador: doacao.nomeDoador,
-          };
-        }
+        
 
         const isMensal = doacao.tipoDoacao === 2 || doacao.tipoDoacao === 3;
         const aberto = parcelasAberta === doacao.id;
@@ -155,7 +138,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
                   <span>{tipoDoacaoTexto(parcela.tipoDoacao)}</span>
                   <span>{statusDoacaoTexto(parcela.statusPagamento)}</span>
                   <span>
-                    Parcela {parcela.numeroParcela}/{parcela.totalParcelas}
+                    Parcela {parcela.numeroParcela+1}/{parcela.totalParcelas}
                   </span>
                 </li>
               ))
@@ -168,13 +151,13 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
                   className="btn-acao"
                   onClick={() => {
                     if (!aberto) {
-                      setParcelasAberta(doacao.id); // força abrir antes de pagar
+                      setParcelasAberta(doacao.id); 
                     }
-                    handlePagarParcela(proximaParcela);
+                    handlePagarParcela(doacao);
                   }}
                 >
-                  Realizar pagamento da parcela{" "}
-                  {proximaParcela.numeroParcela}/{proximaParcela.totalParcelas}
+                  Realizar pagamento da parcela
+               
                 </button>
               </li>
             )}
