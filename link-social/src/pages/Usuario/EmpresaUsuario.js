@@ -7,7 +7,6 @@ export default function EmpresaUsuario({ dados }) {
   const [filtroDoador, setFiltroDoador] = useState("");
   const [filtroIdentificador, setFiltroIdentificador] = useState("");
   const [mostrarCodigo, setMostrarCodigo] = useState({});
-
   const [transacoesPendentes, setTransacoesPendentes] = useState([]);
   const [transacoesAprovadas, setTransacoesAprovadas] = useState([]);
 
@@ -25,13 +24,9 @@ export default function EmpresaUsuario({ dados }) {
   }, [dados?.id]);
 
   const alternarCodigo = (id) => {
-    setMostrarCodigo((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setMostrarCodigo((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Função para filtrar transações pendentes
   const filtrarTransacoes = (lista) => {
     return lista.filter(
       (t) =>
@@ -40,9 +35,81 @@ export default function EmpresaUsuario({ dados }) {
     );
   };
 
+  // --- Métricas ---
+  const totalRecebido = transacoesAprovadas.reduce((s, t) => s + t.valor, 0);
+  const totalPendentes = transacoesPendentes.reduce((s, t) => s + t.valor, 0);
+  const clientesUnicos = new Set(transacoesAprovadas.map(t => t.nomeDoador)).size;
+
+  // Média de tempo entre criação e aprovação (em dias)
+  const mediasDias = transacoesAprovadas
+    .filter(t => t.dataAprovacao)
+    .map(t => (new Date(t.dataAprovacao) - new Date(t.dataCriacao)) / (1000*60*60*24));
+  const mediaAprovacao = mediasDias.length ? (mediasDias.reduce((a,b)=>a+b,0)/mediasDias.length).toFixed(1) : 0;
+
+  // Top 3 clientes que mais pagaram
+  const topClientesObj = transacoesAprovadas.reduce((acc, t) => {
+    acc[t.nomeDoador] = (acc[t.nomeDoador] || 0) + t.valor;
+    return acc;
+  }, {});
+  const top3Clientes = Object.entries(topClientesObj)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0,3);
+
+  // Transações pendentes antigas (mais de 7 dias)
+  const hoje = new Date();
+  const pendentesAntigas = transacoesPendentes.filter(t => {
+    const dataCriacao = new Date(t.dataCriacao);
+    const diffDias = (hoje - dataCriacao)/(1000*60*60*24);
+    return diffDias > 7;
+  });
+
   return (
     <>
       <Header />
+
+      <AccordionSection title="Resumo de Transações">
+  <div
+    style={{
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center", // centraliza horizontalmente
+      alignItems: "center",     // centraliza verticalmente
+      gap: "1rem",
+      marginBottom: "1rem"      // dá um espacinho embaixo
+    }}
+  >
+    <Card title="Total Recebido" valor={`R$ ${totalRecebido}`} cor="#4caf50" />
+    <Card title="Total a Receber" valor={`R$ ${totalPendentes}`} cor="#ff9800" />
+    <Card title="Clientes Únicos" valor={clientesUnicos} cor="#2196f3" />
+  </div>
+
+  <h4 style={{ textAlign: "center", marginTop: "1rem" }}>Top 3 Clientes que mais pagaram</h4>
+  <ul style={{ listStyle: "none", padding: 0, textAlign: "center" }}>
+    {top3Clientes.map(([nome, valor]) => (
+      <li key={nome} style={{ marginBottom: "4px" }}>
+        {nome}: R$ {valor.toLocaleString("pt-BR")}
+      </li>
+    ))}
+  </ul>
+
+  <h4
+    style={{
+      textAlign: "center",
+      marginTop: "1rem",
+      color: pendentesAntigas.length ? "red" : "black"
+    }}
+  >
+    Transações Pendentes Antigas ({pendentesAntigas.length})
+  </h4>
+  <ul style={{ listStyle: "none", padding: 0, textAlign: "center" }}>
+    {pendentesAntigas.map(t => (
+      <li key={t.transacaoId} style={{ marginBottom: "4px" }}>
+        {t.nomeDoador} - {t.nomeTransacao} - R$ {t.valor.toLocaleString("pt-BR")}
+      </li>
+    ))}
+  </ul>
+</AccordionSection>
+
 
       <AccordionSection title="Transações Pendentes de Aprovação">
         <div className="filtro-container">
@@ -78,20 +145,14 @@ export default function EmpresaUsuario({ dados }) {
                 <span>{t.nomeDoador}</span>
                 <span>{t.nomeTransacao}</span>
                 <span>
-                  {t.valor.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {t.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                 </span>
                 <span>{t.status}</span>
                 <span>
                   {mostrarCodigo[t.transacaoId] ? (
                     t.codigo
                   ) : (
-                    <button
-                      onClick={() => alternarCodigo(t.transacaoId)}
-                      className="botao-codigo"
-                    >
+                    <button onClick={() => alternarCodigo(t.transacaoId)} className="botao-codigo">
                       Mostrar
                     </button>
                   )}
@@ -117,10 +178,7 @@ export default function EmpresaUsuario({ dados }) {
               <li key={t.transacaoId} className="lista-item">
                 <span>{t.nomeDoador}</span>
                 <span>
-                  {t.valor.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {t.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                 </span>
                 <span>Aprovado</span>
                 <span>
@@ -132,11 +190,37 @@ export default function EmpresaUsuario({ dados }) {
                     minute: "2-digit",
                   })}
                 </span>
+               
               </li>
             ))}
           </ul>
         )}
       </AccordionSection>
     </>
+  );
+}
+
+function Card({ title, valor, cor }) {
+  return (
+    <div
+      style={{
+        background: cor,
+        padding: "1rem",
+        borderRadius: "8px",
+        minWidth: "150px",
+        color: "#fff",
+        fontWeight: "bold",
+        textAlign: "center",
+        display: "flex",          
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+        margin:"20px 0"
+      }}
+    >
+      <div>{title}</div>
+      <div style={{ fontSize: "1.2rem", marginTop: "0.5rem" }}>{valor}</div>
+    </div>
   );
 }
