@@ -58,16 +58,30 @@ export default function EtapaDoacao() {
 
     const ongSelecionada = JSON.parse(sessionStorage.getItem("ongSelecionada"));
 
+    
+    let tipoDoacaoEnum;
+    if (tipoDoacao === "Única") {
+      tipoDoacaoEnum = 1;
+    } else if (tipoDoacao === "Mensal" && meses === 6) {
+      tipoDoacaoEnum = 2;
+    } else if (tipoDoacao === "Mensal" && meses === 12) {
+      tipoDoacaoEnum = 3;
+    } else {
+      tipoDoacaoEnum = 0; 
+    }
+
     const doacao = {
-      ong: ongSelecionada.nome,
+      nomeOng: ongSelecionada.nome,
       ongId: ongSelecionada.id,
+      descricaoOng: ongSelecionada.comentario,
       valor: valorSelecionado.toFixed(2),
-      tipo: tipoDoacao,
-      meses: tipoDoacao === "Mensal" ? meses : null,
+      tipoDoacao: tipoDoacaoEnum,
+      tipoDescricao: tipoDoacao,
       doadorId: usuarioLogado.id,
     };
 
     sessionStorage.setItem("doacaoSelecionada", JSON.stringify(doacao));
+    sessionStorage.setItem("doacaoParcela", null);
     navigate("/etapa-final");
   }
 
@@ -78,7 +92,7 @@ export default function EtapaDoacao() {
 
   return (
     <div className="container">
-        <Header links={links} />
+      <Header links={links} />
       <h1 className="titulo">Selecione o Valor da Doação</h1>
       <div className="grid-cards">
         {valoresFixos.map((valor, index) => (
@@ -88,8 +102,8 @@ export default function EtapaDoacao() {
             key={index}
             valor={valor}
             index={index}
-            selecionado={valorSelecionado === valor}  // só um card será true
-            selecionarValor={setValorSelecionado}      // atualiza o pai
+            selecionado={valorSelecionado === valor}
+            selecionarValor={setValorSelecionado}
             tipoDoacao={tipoDoacao}
             setTipoDoacao={setTipoDoacao}
             meses={meses}

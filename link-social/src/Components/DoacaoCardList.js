@@ -5,7 +5,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
   const [comentarioAberto, setComentarioAberto] = useState(null);
   const [parcelasAberta, setParcelasAberta] = useState(null);
 
-  // Agrupa doações por doacaoPrincipalId
+
   const agruparDoacoes = (lista) => {
     if (!Array.isArray(lista)) return [];
 
@@ -46,9 +46,11 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
   };
 
   const handlePagarParcela = (doacao) => {
-    sessionStorage.setItem("doacaoParcela", JSON.stringify(doacao));
 
-    //window.location.href = "/etapa-final";
+    sessionStorage.setItem("doacaoParcela", JSON.stringify(doacao));
+    sessionStorage.setItem("doacaoSelecionada", null);
+   
+    window.location.href = "/etapa-final";
   };
 
   const doacoesAgrupadas = agruparDoacoes(doacoes);

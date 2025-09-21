@@ -12,18 +12,19 @@ export default function EtapaFinalizacao() {
   const [status, setStatus] = useState("");
   const [sucesso, setSucesso] = useState(false);
   const [mensagemErro, setMensagemErro] = useState("");
+  const [isParcela, setParcela] = useState("");
 
   const [usuario, setUsuario] = useState(null);
   const [doacao, setDoacao] = useState(null);
   const [logado, setLogado] = useState(false);
 
-  
+
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setLogado(!!token);
   }, []);
 
-  
+
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
@@ -47,20 +48,46 @@ export default function EtapaFinalizacao() {
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || "null");
     const doacaoParcela = JSON.parse(sessionStorage.getItem("doacaoParcela") || "null");
     const doacaoSelecionada = JSON.parse(sessionStorage.getItem("doacaoSelecionada") || "null");
+    const parcela = !!doacaoParcela;
 
-    if (doacaoParcela) {
+
+
+
+    if (!usuarioLogado) {
+      navigate("/login");
+    }
+
+    setUsuario(usuarioLogado);
+    if (parcela) {
       setDoacao(doacaoParcela);
-      setUsuario(usuarioLogado || null);
-    } else if (!usuarioLogado || !doacaoSelecionada) {
-      navigate("/etapa-selecao");
+      setParcela(true);
     } else {
       setDoacao(doacaoSelecionada);
-      setUsuario(usuarioLogado);
+      setParcela(false);
     }
+
+    console.log(doacao);
+    console.log(isParcela);
+
   }, [navigate, logado]);
 
   const editarDoacao = () => navigate("/etapa-valores");
-
+  const editarOng = () => navigate("/etapa-selecao");
+  const getTipoDoacaoTexto = (tipo) => {
+    console.log(tipo)
+    switch (tipo) {
+      case 0:
+        return "Parcela";
+      case 1:
+        return "Única";
+      case 2:
+        return "Mensal (6x)";
+      case 3:
+        return "Mensal (12x)";
+      default:
+        return "Desconhecido";
+    }
+  };
   const confirmarDoacao = async () => {
     if (!usuario?.id || !doacao) {
       setMensagemErro("Dados incompletos para a doação.");
@@ -72,15 +99,16 @@ export default function EtapaFinalizacao() {
     setSucesso(false);
 
     try {
+
       await NovaDoacao({
-        DoadorId: doacao.doadorId || usuario.id,
+        DoadorId: doacao.doadorId,
         OngId: doacao.ongId,
         Valor: parseFloat(doacao.valor),
-        TipoDoacao: doacao.tipoDoacao || 0,
+        TipoDoacao: doacao.tipoDoacao,
         Anonima: doacao.anonima || false,
         Comentario: doacao.anonima || !doacao.comentario ? null : doacao.comentario,
-        PagamentoParcela: true,
-        PrimeiraDoacao: doacao.id || null,
+        PagamentoParcela: isParcela,
+        PrimeiraDoacao: isParcela ? doacao.id : null,
       });
 
       setStatus("Doação registrada com sucesso!");
@@ -106,23 +134,32 @@ export default function EtapaFinalizacao() {
         <div className="resumo-cards">
           <div className="card">
             <div className="logo-ong">{doacao.nomeOng}</div>
+            {(<p>{doacao.descricaoOng}</p>
+            )}{!isParcela && (
+              <button className="btn-editar" onClick={editarOng}>
+                Editar
+              </button>
+            )}
           </div>
 
           <div className="card">
             <div className="valor">{`R$ ${doacao.valor}`}</div>
-            <div className="tipo-doacao">{doacao.tipoDoacao === 1 ? "Única" : "Mensal"}</div>
-            {doacao.tipoDoacao !== 1 && (
+            <div className="tipo-doacao">{getTipoDoacaoTexto(doacao.tipoDoacao)}</div>
+
+
+
+
+            {isParcela && (
               <div className="meses">
-                Parcela {doacao.numeroParcela + 1} de {doacao.totalParcelas}
+                Parcela {(doacao.numeroParcela ?? 0) + 1} de {doacao.totalParcelas}
               </div>
             )}
-            {doacao.numeroParcela && (
+
+            {!isParcela && (
               <button className="btn-editar" onClick={editarDoacao}>
                 Editar
               </button>
-            )
-
-            }
+            )}
           </div>
         </div>
 
