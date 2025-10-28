@@ -5,6 +5,9 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
   const [comentarioAberto, setComentarioAberto] = useState(null);
   const [parcelasAberta, setParcelasAberta] = useState(null);
 
+  if (!doacoes || doacoes.length === 0)
+    return <p>Nenhuma doação registrada.</p>;
+
 
   const agruparDoacoes = (lista) => {
     if (!Array.isArray(lista)) return [];
@@ -49,7 +52,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
 
     sessionStorage.setItem("doacaoParcela", JSON.stringify(doacao));
     sessionStorage.setItem("doacaoSelecionada", null);
-   
+
     window.location.href = "/etapa-final";
   };
 
@@ -95,14 +98,14 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
               )}
             </li>
 
-            
+
             {comentarioAberto === doacao.id && doacao.comentario && (
               <li className="comentario-expandido">
                 <span>{doacao.comentario}</span>
               </li>
             )}
 
-            
+
             {isMensal && aberto && parcelasOrdenadas.map((parcela) => (
               <li key={parcela.id} className="lista-item parcela-item">
                 {tipoUsuario === "ong" && (
@@ -115,7 +118,7 @@ export default function DoacaoLista({ doacoes = [], tipoUsuario = "doador" }) {
               </li>
             ))}
 
-            
+
             {isMensal && aberto && tipoUsuario === "doador" && (
               <li className="lista-item parcela-item botao-item">
                 {doacao.parcelas.filter(p => p.tipoDoacao === 0).length >= doacao.totalParcelas ? (

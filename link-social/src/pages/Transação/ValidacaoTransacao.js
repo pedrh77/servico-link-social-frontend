@@ -43,19 +43,21 @@ export default function ValidacaoTransacao() {
         valorTotal: transacao.valorTotal,
       };
 
-      console.log("Enviando nova doação:", novaTransacao);
+      console.log("Enviando nova transacao:", novaTransacao);
 
       const response = await NovaTransacao(novaTransacao);
-
-      if (response && response.sucesso) {
+      console.log(response);
+      
+      if (response) {
 
         window.location.href("/Usuario");
       } else {
-        alert("Erro ao registrar a doação.");
+        window.location.href("/Usuario");
+        
       }
     } catch (error) {
-      console.error("Erro ao confirmar doação:", error);
-      alert("Ocorreu um erro ao confirmar a doação.");
+      console.error("Erro ao confirmar transacao:", error);
+      window.location.href("/Usuario");
     }
   };
 

@@ -19,8 +19,7 @@ export default function OngUsuario({ dados }) {
 
   const links = [{ label: "Início", path: "/Home" }];
 
-  if (!doacoes || doacoes.length === 0)
-    return <p>Nenhuma doação registrada.</p>;
+  
 
   const totalArrecadado = doacoes.reduce((soma, d) => soma + d.valor, 0);
   const doadoresUnicos = new Set(doacoes.map(d => d.doadorId)).size;
